@@ -1,1 +1,670 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>DFFDF Admin</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+
+      background: #08090d;
+
+      color: #fff;
+
+      font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    .login,
+    .dashboard {
+      max-width: 900px;
+
+      margin: auto;
+
+      padding: 45px 20px;
+    }
+
+    .login {
+      max-width: 430px;
+
+      min-height: 100vh;
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+    }
+
+    h1 {
+      font-size: 42px;
+    }
+
+    h2 {
+      margin-top: 35px;
+    }
+
+    .muted {
+      color: #9699a5;
+    }
+
+    .panel {
+      background: #11131a;
+
+      border: 1px solid #292c36;
+
+      border-radius: 18px;
+
+      padding: 30px;
+
+      margin-top: 25px;
+    }
+
+    label {
+      display: block;
+
+      margin: 18px 0 7px;
+
+      color: #bbb;
+
+      font-size: 14px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+
+      padding: 13px;
+
+      background: #08090d;
+
+      color: white;
+
+      border: 1px solid #30333e;
+
+      border-radius: 10px;
+
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 110px;
+
+      resize: vertical;
+    }
+
+    button {
+      padding: 13px 20px;
+
+      border: 0;
+
+      border-radius: 10px;
+
+      background: #7658ff;
+
+      color: white;
+
+      font-weight: 700;
+
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #6548ee;
+    }
+
+    .danger {
+      background: #a83245;
+    }
+
+    .topbar {
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 20px;
+    }
+
+    .service {
+      margin-top: 15px;
+
+      padding: 20px;
+
+      background: #090a0e;
+
+      border: 1px solid #292c36;
+
+      border-radius: 12px;
+    }
+
+    .actions {
+      display: flex;
+
+      gap: 10px;
+
+      margin-top: 30px;
+
+      flex-wrap: wrap;
+    }
+
+    #message {
+      margin-top: 20px;
+
+      color: #83efaa;
+    }
+
+    #login-message {
+      margin-top: 15px;
+
+      color: #ff7787;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div id="login" class="login">
+
+  <h1>Admin Panel</h1>
+
+  <p class="muted">
+    Sign in to manage your website.
+  </p>
+
+  <div class="panel">
+
+    <label>Username</label>
+
+    <input
+      id="username"
+      autocomplete="username"
+    >
+
+    <label>Password</label>
+
+    <input
+      id="password"
+      type="password"
+      autocomplete="current-password"
+    >
+
+    <div class="actions">
+
+      <button onclick="login()">
+        Sign In
+      </button>
+
+    </div>
+
+    <div id="login-message"></div>
+
+  </div>
+
+</div>
+
+<div
+  id="dashboard"
+  class="dashboard"
+  style="display:none"
+>
+
+  <div class="topbar">
+
+    <div>
+
+      <h1>Dashboard</h1>
+
+      <p class="muted">
+        Manage your website.
+      </p>
+
+    </div>
+
+    <button
+      class="danger"
+      onclick="logout()"
+    >
+      Logout
+    </button>
+
+  </div>
+
+  <div class="panel">
+
+    <h2>Website</h2>
+
+    <label>Site Name</label>
+    <input id="siteName">
+
+    <h2>Hero</h2>
+
+    <label>Title</label>
+    <input id="heroTitle">
+
+    <label>Description</label>
+    <textarea id="heroText"></textarea>
+
+    <label>Button</label>
+    <input id="heroButton">
+
+    <h2>About</h2>
+
+    <label>Title</label>
+    <input id="aboutTitle">
+
+    <label>Text</label>
+    <textarea id="aboutText"></textarea>
+
+    <h2>Services</h2>
+
+    <div id="services"></div>
+
+    <button
+      onclick="addService()"
+      type="button"
+    >
+      + Add Service
+    </button>
+
+    <h2>Contact</h2>
+
+    <label>Title</label>
+    <input id="contactTitle">
+
+    <label>Description</label>
+    <textarea id="contactText"></textarea>
+
+    <label>Email</label>
+    <input id="contactEmail">
+
+    <h2>Footer</h2>
+
+    <input id="footer">
+
+    <div class="actions">
+
+      <button onclick="save()">
+        Publish Changes
+      </button>
+
+      <a href="/" target="_blank">
+        <button type="button">
+          View Website
+        </button>
+      </a>
+
+    </div>
+
+    <div id="message"></div>
+
+  </div>
+
+</div>
+
+<script>
+
+let siteData;
+
+async function checkSession() {
+
+  const response =
+    await fetch("/api/admin/session");
+
+  const data =
+    await response.json();
+
+  if (data.authenticated) {
+
+    showDashboard();
+
+  }
+
+}
+
+async function login() {
+
+  const username =
+    document.getElementById(
+      "username"
+    ).value;
+
+  const password =
+    document.getElementById(
+      "password"
+    ).value;
+
+  const response =
+    await fetch("/api/login", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        username,
+        password
+      })
+
+    });
+
+  const data =
+    await response.json();
+
+  if (!data.success) {
+
+    document.getElementById(
+      "login-message"
+    ).textContent =
+      data.error;
+
+    return;
+
+  }
+
+  showDashboard();
+
+}
+
+async function showDashboard() {
+
+  const response =
+    await fetch(
+      "/api/admin/content"
+    );
+
+  if (!response.ok) {
+
+    return;
+
+  }
+
+  siteData =
+    await response.json();
+
+  document.getElementById(
+    "login"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "dashboard"
+  ).style.display =
+    "block";
+
+  populate();
+
+}
+
+function populate() {
+
+  document.getElementById(
+    "siteName"
+  ).value =
+    siteData.siteName || "";
+
+  document.getElementById(
+    "heroTitle"
+  ).value =
+    siteData.heroTitle || "";
+
+  document.getElementById(
+    "heroText"
+  ).value =
+    siteData.heroText || "";
+
+  document.getElementById(
+    "heroButton"
+  ).value =
+    siteData.heroButton || "";
+
+  document.getElementById(
+    "aboutTitle"
+  ).value =
+    siteData.aboutTitle || "";
+
+  document.getElementById(
+    "aboutText"
+  ).value =
+    siteData.aboutText || "";
+
+  document.getElementById(
+    "contactTitle"
+  ).value =
+    siteData.contactTitle || "";
+
+  document.getElementById(
+    "contactText"
+  ).value =
+    siteData.contactText || "";
+
+  document.getElementById(
+    "contactEmail"
+  ).value =
+    siteData.contactEmail || "";
+
+  document.getElementById(
+    "footer"
+  ).value =
+    siteData.footer || "";
+
+  renderServices();
+
+}
+
+function renderServices() {
+
+  const container =
+    document.getElementById(
+      "services"
+    );
+
+  container.innerHTML = "";
+
+  siteData.services.forEach(
+    (service, index) => {
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+      div.className =
+        "service";
+
+      div.innerHTML = `
+
+        <label>Service Title</label>
+
+        <input
+          value="${escapeHTML(service.title)}"
+          oninput="siteData.services[${index}].title=this.value"
+        >
+
+        <label>Service Description</label>
+
+        <textarea
+          oninput="siteData.services[${index}].text=this.value"
+        >${escapeHTML(service.text)}</textarea>
+
+        <button
+          class="danger"
+          onclick="removeService(${index})"
+          type="button"
+        >
+          Remove
+        </button>
+
+      `;
+
+      container.appendChild(div);
+
+    }
+  );
+
+}
+
+function escapeHTML(value) {
+
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+function addService() {
+
+  siteData.services.push({
+
+    title: "New Service",
+
+    text: "Describe your service."
+
+  });
+
+  renderServices();
+
+}
+
+function removeService(index) {
+
+  siteData.services.splice(
+    index,
+    1
+  );
+
+  renderServices();
+
+}
+
+async function save() {
+
+  siteData.siteName =
+    document.getElementById(
+      "siteName"
+    ).value;
+
+  siteData.heroTitle =
+    document.getElementById(
+      "heroTitle"
+    ).value;
+
+  siteData.heroText =
+    document.getElementById(
+      "heroText"
+    ).value;
+
+  siteData.heroButton =
+    document.getElementById(
+      "heroButton"
+    ).value;
+
+  siteData.aboutTitle =
+    document.getElementById(
+      "aboutTitle"
+    ).value;
+
+  siteData.aboutText =
+    document.getElementById(
+      "aboutText"
+    ).value;
+
+  siteData.contactTitle =
+    document.getElementById(
+      "contactTitle"
+    ).value;
+
+  siteData.contactText =
+    document.getElementById(
+      "contactText"
+    ).value;
+
+  siteData.contactEmail =
+    document.getElementById(
+      "contactEmail"
+    ).value;
+
+  siteData.footer =
+    document.getElementById(
+      "footer"
+    ).value;
+
+  const response =
+    await fetch(
+      "/api/admin/save",
+      {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+          content: siteData
+        })
+
+      }
+    );
+
+  const data =
+    await response.json();
+
+  document.getElementById(
+    "message"
+  ).textContent =
+    data.success
+      ? "✓ Changes published successfully!"
+      : "Error: " + data.error;
+
+}
+
+async function logout() {
+
+  await fetch(
+    "/api/logout",
+    {
+      method: "POST"
+    }
+  );
+
+  location.reload();
+
+}
+
+checkSession();
+
+</script>
+
+</body>
+
+</html>
+```
