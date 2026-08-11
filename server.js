@@ -838,43 +838,400 @@ app.post(
     }
   }
 );
-
 /* -------------------------
-   AI BUILDER
+   AI BUILDER - MULTI PROVIDER
 ------------------------- */
+
+function getAIConfig(preference = "auto") {
+  const providers = [];
+
+  if (process.env.OPENAI_API_KEY) {
+    providers.push({
+      id: "openai",
+      name: "OpenAI",
+      model:
+        process.env.OPENAI_MODEL ||
+        "gpt-5-mini",
+      cost: "medium",
+      speed: "fast"
+    });
+  }
+
+  if (process.env.GEMINI_API_KEY) {
+    providers.push({
+      id: "gemini",
+      name: "Google Gemini",
+      model:
+        process.env.GEMINI_MODEL ||
+        "gemini-2.5-flash",
+      cost: "low",
+      speed: "fast"
+    });
+  }
+
+  if (process.env.ANTHROPIC_API_KEY) {
+    providers.push({
+      id: "anthropic",
+      name: "Anthropic Claude",
+      model:
+        process.env.ANTHROPIC_MODEL ||
+        "claude-3-5-haiku-latest",
+      cost: "low",
+      speed: "fast"
+    });
+  }
+
+  if (!providers.length) {
+    return null;
+  }
+
+  if (
+    preference !== "auto" &&
+    preference !== "low-cost" &&
+    preference !== "fast" &&
+    preference !== "best"
+  ) {
+    const selected =
+      providers.find(
+        p => p.id === preference
+      );
+
+    if (selected) return selected;
+  }
+
+  if (preference === "low-cost") {
+    return (
+      providers.find(
+        p => p.cost === "low"
+      ) ||
+      providers[0]
+    );
+  }
+
+  if (preference === "fast") {
+    return (
+      providers.find(
+        p => p.speed === "fast"
+      ) ||
+      providers[0]
+    );
+  }
+
+  if (preference === "best") {
+    return (
+      providers.find(
+        p => p.id === "openai"
+      ) ||
+      providers[0]
+    );
+  }
+
+  return providers[0];
+}
+
+
+async function callOpenAI(
+  provider,
+  system,
+  prompt
+) {
+  const response = await fetch(
+    "https://api.openai.com/v1/responses",
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type":
+          "application/json",
+
+        Authorization:
+          `Bearer ${process.env.OPENAI_API_KEY}`
+      },
+
+      body: JSON.stringify({
+        model: provider.model,
+        instructions: system,
+        input: prompt,
+        text: {
+          format: {
+            type: "json_object"
+          }
+        },
+        store: false
+      })
+    }
+  );
+
+  const text =
+    await response.text();
+
+  if (!response.ok) {
+    throw new Error(
+      `OpenAI: ${text}`
+    );
+  }
+
+  const data =
+    JSON.parse(text);
+
+  const output =
+    data.output_text ||
+    data.output
+      ?.flatMap(x => x.content || [])
+      ?.map(x => x.text || "")
+      ?.join("") ||
+    "";
+
+  return output;
+}
+
+
+async function callGemini(
+  provider,
+  system,
+  prompt
+) {
+  const url =
+    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(provider.model)}:generateContent?key=${encodeURIComponent(process.env.GEMINI_API_KEY)}`;
+
+  const response = await fetch(
+    url,
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type":
+          "application/json"
+      },
+
+      body: JSON.stringify({
+        systemInstruction: {
+          parts: [
+            {
+              text: system
+            }
+          ]
+        },
+
+        contents: [
+          {
+            role: "user",
+            parts: [
+              {
+                text: prompt
+              }
+            ]
+          }
+        ],
+
+        generationConfig: {
+          responseMimeType:
+            "application/json"
+        }
+      })
+    }
+  );
+
+  const text =
+    await response.text();
+
+  if (!response.ok) {
+    throw new Error(
+      `Gemini: ${text}`
+    );
+  }
+
+  const data =
+    JSON.parse(text);
+
+  return (
+    data.candidates?.[0]
+      ?.content?.parts?.[0]
+      ?.text || ""
+  );
+}
+
+
+async function callAnthropic(
+  provider,
+  system,
+  prompt
+) {
+  const response = await fetch(
+    "https://api.anthropic.com/v1/messages",
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type":
+          "application/json",
+
+        "x-api-key":
+          process.env.ANTHROPIC_API_KEY,
+
+        "anthropic-version":
+          "2023-06-01"
+      },
+
+      body: JSON.stringify({
+        model: provider.model,
+
+        max_tokens: 8000,
+
+        system,
+
+        messages: [
+          {
+            role: "user",
+            content: prompt
+          }
+        ]
+      })
+    }
+  );
+
+  const text =
+    await response.text();
+
+  if (!response.ok) {
+    throw new Error(
+      `Anthropic: ${text}`
+    );
+  }
+
+  const data =
+    JSON.parse(text);
+
+  return (
+    data.content
+      ?.map(x => x.text || "")
+      .join("") || ""
+  );
+}
+
+
+async function runAI(
+  provider,
+  system,
+  prompt
+) {
+  if (provider.id === "openai") {
+    return callOpenAI(
+      provider,
+      system,
+      prompt
+    );
+  }
+
+  if (provider.id === "gemini") {
+    return callGemini(
+      provider,
+      system,
+      prompt
+    );
+  }
+
+  if (provider.id === "anthropic") {
+    return callAnthropic(
+      provider,
+      system,
+      prompt
+    );
+  }
+
+  throw new Error(
+    "Unsupported AI provider"
+  );
+}
+
+
+app.get(
+  "/api/admin/ai/providers",
+  requireAdmin,
+  async (req, res) => {
+    const providers = [];
+
+    if (process.env.OPENAI_API_KEY) {
+      providers.push({
+        id: "openai",
+        name: "OpenAI",
+        configured: true
+      });
+    }
+
+    if (process.env.GEMINI_API_KEY) {
+      providers.push({
+        id: "gemini",
+        name: "Google Gemini",
+        configured: true
+      });
+    }
+
+    if (process.env.ANTHROPIC_API_KEY) {
+      providers.push({
+        id: "anthropic",
+        name: "Anthropic Claude",
+        configured: true
+      });
+    }
+
+    res.json({
+      providers,
+      auto: providers.length > 0
+    });
+  }
+);
+
 
 app.post(
   "/api/admin/ai",
   requireAdmin,
   async (req, res) => {
     try {
-      if (!process.env.OPENAI_API_KEY) {
-        return res.status(503).json({
-          error:
-            "AI is not configured. Add OPENAI_API_KEY in Render."
-        });
-      }
-
       const message =
-        String(req.body.message || "")
-          .trim();
+        String(
+          req.body.message || ""
+        ).trim();
 
       if (!message) {
         return res.status(400).json({
-          error: "Enter an AI request."
+          error:
+            "Enter an AI request."
+        });
+      }
+
+      const preference =
+        String(
+          req.body.preference ||
+          "auto"
+        );
+
+      const provider =
+        getAIConfig(
+          preference
+        );
+
+      if (!provider) {
+        return res.status(503).json({
+          error:
+            "No AI provider is configured. Add an AI API key in Render Environment Variables."
         });
       }
 
       const page =
-        req.body.page || defaultHome;
+        req.body.page ||
+        defaultHome;
 
       const site =
-        req.body.site || defaultSite;
+        req.body.site ||
+        defaultSite;
 
       const system = `
-You are the DFFDF Liquid Glass website builder.
+You are the DFFDF Liquid Glass
+website builder.
 
-You modify website content, not server code.
+You modify website content,
+not server code.
 
 Design language:
 - Liquid Glass
@@ -887,131 +1244,121 @@ Design language:
 
 Return ONLY valid JSON.
 
-Return this exact structure:
+Return exactly:
+
 {
   "reply": "short explanation",
-  "page": { ...updated page JSON... }
+  "page": {}
 }
 
 Never return JavaScript.
 Never return HTML.
-Never include Markdown.
-Preserve the page slug.
-Use sections with these types:
-hero, text, image, cards, contact.
+Never return Markdown.
 
-For cards use:
+Preserve the page slug.
+
+Allowed section types:
+hero
+text
+image
+cards
+contact
+
+Cards must use:
+
 {
   "type": "cards",
   "title": "...",
   "text": "...",
   "cards": [
-    {"title":"...","text":"..."}
+    {
+      "title": "...",
+      "text": "..."
+    }
   ]
 }
 
-For images use an image URL in "image".
+Keep existing content unless
+the user asks you to change it.
 `;
 
       const prompt = `
 CURRENT SITE:
+
 ${JSON.stringify(site)}
 
 CURRENT PAGE:
+
 ${JSON.stringify(page)}
 
 USER REQUEST:
+
 ${message}
 
-Update the page to satisfy the request.
-Keep existing content that the request does not ask to change.
+Update the page to satisfy
+the user's request.
+
+Return valid JSON only.
 `;
 
-      const response =
-        await fetch(
-          "https://api.openai.com/v1/responses",
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json",
-
-              Authorization:
-                `Bearer ${process.env.OPENAI_API_KEY}`
-            },
-
-            body: JSON.stringify({
-              model:
-                process.env.OPENAI_MODEL ||
-                "gpt-5-mini",
-
-              instructions: system,
-
-              input: prompt,
-
-              text: {
-                format: {
-                  type: "json_object"
-                }
-              },
-
-              store: false
-            })
-          }
+      const raw =
+        await runAI(
+          provider,
+          system,
+          prompt
         );
 
-      const raw =
-        await response.text();
-
-      let data;
+      let result;
 
       try {
-        data = JSON.parse(raw);
+        result =
+          JSON.parse(raw);
       } catch {
         throw new Error(
-          "Invalid AI response."
+          "AI returned invalid JSON."
         );
       }
 
-      if (!response.ok) {
+      if (
+        !result.page ||
+        typeof result.page !==
+          "object"
+      ) {
         throw new Error(
-          data.error?.message ||
-          "AI request failed."
+          "AI did not return a valid page."
         );
       }
 
-      const outputText =
-        data.output
-          ?.flatMap(item =>
-            item.content || []
-          )
-          .filter(item =>
-            item.type === "output_text"
-          )
-          .map(item => item.text)
-          .join("") ||
-        data.output_text;
+      result.page.slug =
+        page.slug;
 
-      if (!outputText) {
-        throw new Error(
-          "AI returned no text."
-        );
-      }
+      res.json({
+        success: true,
 
-      const result =
-        JSON.parse(outputText);
+        provider: {
+          id: provider.id,
+          name: provider.name,
+          model: provider.model
+        },
 
-      res.json(result);
+        reply:
+          result.reply ||
+          "Page updated.",
+
+        page:
+          result.page
+      });
 
     } catch (error) {
       console.error(
-        "AI builder:",
+        "AI Builder:",
         error
       );
 
       res.status(500).json({
-        error: error.message
+        error:
+          error.message ||
+          "AI request failed."
       });
     }
   }
