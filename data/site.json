@@ -1,6 +1,6 @@
 {
   "siteName": "DFFDF",
-  "defaultTheme": "custom",
+  "defaultTheme": "light",
   "themes": {
     "midnight": {
       "background": "#07070b",
