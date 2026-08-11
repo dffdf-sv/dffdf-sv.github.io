@@ -527,52 +527,64 @@ footer{
 
 let site;
 let page;
-
 const themes = {
-  midnight:{
-    background:"#07070b",
-    surface:"#11121a",
-    text:"#fff",
-    muted:"#999baa",
-    accent:"#8065ff",
-    accent2:"#b19cff"
+  midnight: {
+    background: "#07070b",
+    surface: "#11121a",
+    text: "#ffffff",
+    muted: "#999baa",
+    accent: "#8065ff",
+    accent2: "#b19cff",
+    border: "rgba(255,255,255,.12)"
   },
 
-  aurora:{
-    background:"#06100e",
-    surface:"#0d1c19",
-    text:"#fff",
-    muted:"#9bb8af",
-    accent:"#48e6b2",
-    accent2:"#9bffe0"
+  aurora: {
+    background: "#06100e",
+    surface: "#0d1c19",
+    text: "#ffffff",
+    muted: "#9bb8af",
+    accent: "#48e6b2",
+    accent2: "#9bffe0",
+    border: "rgba(72,230,178,.18)"
   },
 
-  ocean:{
-    background:"#06101a",
-    surface:"#0d1925",
-    text:"#fff",
-    muted:"#9bb2c7",
-    accent:"#38a9ff",
-    accent2:"#8bd1ff"
+  ocean: {
+    background: "#06101a",
+    surface: "#0d1925",
+    text: "#ffffff",
+    muted: "#9bb2c7",
+    accent: "#38a9ff",
+    accent2: "#8bd1ff",
+    border: "rgba(56,169,255,.18)"
   },
 
-  sunset:{
-    background:"#13090d",
-    surface:"#211117",
-    text:"#fff",
-    muted:"#c4a1aa",
-    accent:"#ff6b7a",
-    accent2:"#ffb36b"
+  sunset: {
+    background: "#13090d",
+    surface: "#211117",
+    text: "#ffffff",
+    muted: "#c4a1aa",
+    accent: "#ff6b7a",
+    accent2: "#ffb36b",
+    border: "rgba(255,107,122,.18)"
   },
 
-  light:{
-    background:"#f4f5f8",
-    surface:"#fff",
-    text:"#101015",
-    muted:"#686975",
-    accent:"#6246e8",
-    accent2:"#927cff"
+  light: {
+    background: "#f4f5f8",
+    surface: "#ffffff",
+    text: "#101015",
+    muted: "#686975",
+    accent: "#6246e8",
+    accent2: "#927cff",
+    border: "rgba(20,20,30,.12)"
   }
+};
+
+const themeLabels = {
+  midnight: "🌑 Midnight",
+  aurora: "🌌 Aurora",
+  ocean: "🌊 Ocean",
+  sunset: "🌅 Sunset",
+  light: "☀️ Light"
 };
 
 
