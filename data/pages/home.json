@@ -1,0 +1,47 @@
+{
+  "slug": "home",
+  "title": "Home",
+  "theme": "inherit",
+  "sections": [
+    {
+      "type": "hero",
+      "badge": "WELCOME TO DFFDF",
+      "title": "Create something people remember.",
+      "text": "A modern Liquid Glass experience built to look beautiful, feel fast and work everywhere.",
+      "buttonText": "Explore",
+      "buttonUrl": "#features",
+      "image": ""
+    },
+    {
+      "type": "text",
+      "title": "Built with purpose.",
+      "text": "DFFDF is a modern website platform with a powerful admin panel, flexible themes and AI-assisted editing.",
+      "image": ""
+    },
+    {
+      "type": "cards",
+      "title": "What we do",
+      "text": "Everything you need to create something remarkable.",
+      "cards": [
+        {
+          "title": "Creative",
+          "text": "Beautiful interfaces designed around your brand."
+        },
+        {
+          "title": "Fast",
+          "text": "Responsive experiences for every device."
+        },
+        {
+          "title": "Simple",
+          "text": "Manage your website without editing code."
+        }
+      ]
+    },
+    {
+      "type": "contact",
+      "title": "Let's build something.",
+      "text": "Have an idea, question or project? We'd love to hear from you.",
+      "email": "hello@example.com"
+    }
+  ]
+}
