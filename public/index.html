@@ -1,1 +1,269 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>DFFDF</title>
+
+  <meta
+    name="description"
+    content="DFFDF - Build something amazing."
+  >
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<header class="navbar">
+
+  <a href="/" class="logo" id="site-name">
+    DFFDF
+  </a>
+
+  <nav>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+    <a href="/admin" class="admin-link">Admin</a>
+  </nav>
+
+</header>
+
+<main>
+
+<section class="hero">
+
+  <div class="hero-content">
+
+    <span class="eyebrow">
+      WELCOME
+    </span>
+
+    <h1 id="hero-title">
+      Build something amazing.
+    </h1>
+
+    <p id="hero-text">
+      A modern website built for the future.
+    </p>
+
+    <a
+      href="#contact"
+      class="button"
+      id="hero-button"
+    >
+      Get Started
+    </a>
+
+  </div>
+
+</section>
+
+<section id="about" class="section">
+
+  <div class="container">
+
+    <span class="eyebrow">
+      ABOUT
+    </span>
+
+    <h2 id="about-title">
+      About Us
+    </h2>
+
+    <p
+      class="large-text"
+      id="about-text"
+    ></p>
+
+  </div>
+
+</section>
+
+<section
+  id="services"
+  class="section services"
+>
+
+  <div class="container">
+
+    <span class="eyebrow">
+      WHAT WE DO
+    </span>
+
+    <h2>Services</h2>
+
+    <div
+      id="services-list"
+      class="cards"
+    ></div>
+
+  </div>
+
+</section>
+
+<section
+  id="contact"
+  class="section contact"
+>
+
+  <div class="container">
+
+    <span class="eyebrow">
+      CONTACT
+    </span>
+
+    <h2 id="contact-title">
+      Let's connect
+    </h2>
+
+    <p id="contact-text"></p>
+
+    <a
+      id="contact-email"
+      class="button"
+    >
+      Contact
+    </a>
+
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+
+  <p id="footer"></p>
+
+</footer>
+
+<script>
+
+async function loadSite() {
+
+  try {
+
+    const response =
+      await fetch("/api/content");
+
+    const data =
+      await response.json();
+
+    document.title =
+      data.siteName;
+
+    document.getElementById(
+      "site-name"
+    ).textContent =
+      data.siteName;
+
+    document.getElementById(
+      "hero-title"
+    ).textContent =
+      data.heroTitle;
+
+    document.getElementById(
+      "hero-text"
+    ).textContent =
+      data.heroText;
+
+    document.getElementById(
+      "hero-button"
+    ).textContent =
+      data.heroButton;
+
+    document.getElementById(
+      "about-title"
+    ).textContent =
+      data.aboutTitle;
+
+    document.getElementById(
+      "about-text"
+    ).textContent =
+      data.aboutText;
+
+    document.getElementById(
+      "contact-title"
+    ).textContent =
+      data.contactTitle;
+
+    document.getElementById(
+      "contact-text"
+    ).textContent =
+      data.contactText;
+
+    const email =
+      document.getElementById(
+        "contact-email"
+      );
+
+    email.textContent =
+      data.contactEmail;
+
+    email.href =
+      "mailto:" + data.contactEmail;
+
+    document.getElementById(
+      "footer"
+    ).textContent =
+      data.footer;
+
+    const services =
+      document.getElementById(
+        "services-list"
+      );
+
+    services.innerHTML = "";
+
+    data.services.forEach(service => {
+
+      const card =
+        document.createElement("article");
+
+      card.className = "card";
+
+      const icon =
+        document.createElement("div");
+
+      icon.className = "card-icon";
+      icon.textContent = "✦";
+
+      const title =
+        document.createElement("h3");
+
+      title.textContent =
+        service.title;
+
+      const text =
+        document.createElement("p");
+
+      text.textContent =
+        service.text;
+
+      card.appendChild(icon);
+      card.appendChild(title);
+      card.appendChild(text);
+
+      services.appendChild(card);
+
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
+}
+
+loadSite();
+
+</script>
+
+</body>
+</html>
+```
