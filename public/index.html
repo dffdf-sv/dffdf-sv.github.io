@@ -501,17 +501,22 @@ const themes = {
     border:"rgba(255,107,122,.18)"
   },
 
-  light: {
-    background:"#f4f5f8",
-    surface:"#ffffff",
-    text:"#101015",
-    muted:"#686975",
-    accent:"#6246e8",
-    accent2:"#927cff",
-    border:"rgba(20,20,30,.12)"
-  }
-};
+[data-theme="light"] {
+  --background: #ffffff;
+  --surface: rgba(255, 255, 255, 0.72);
+  --text: #171717;
+  --muted: #6b6b6b;
+  --accent: #f5c400;
+  --accent2: #ffd83d;
+}
 
+[data-theme="light"] .glass {
+  background: rgba(255, 255, 255, 0.68);
+  border-color: rgba(245, 196, 0, 0.28);
+  box-shadow:
+    0 12px 40px rgba(245, 196, 0, 0.10),
+    0 4px 20px rgba(0, 0, 0, 0.06);
+}
 let site = {};
 let page = {};
 
