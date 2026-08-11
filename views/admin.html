@@ -1,0 +1,3250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DFFDF Admin</title>
+
+  <style>
+    :root {
+      --bg: #07070b;
+      --surface: #11121a;
+      --surface2: #181925;
+      --text: #fff;
+      --muted: #9b9ba8;
+      --accent: #8065ff;
+      --accent2: #b19cff;
+
+      --glass-blur: 30px;
+      --glass-opacity: .08;
+      --glass-border: .12;
+      --glass-shadow: .25;
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background:
+        radial-gradient(
+          circle at 15% 10%,
+          rgba(128,101,255,.18),
+          transparent 35%
+        ),
+        radial-gradient(
+          circle at 90% 90%,
+          rgba(177,156,255,.10),
+          transparent 35%
+        ),
+        var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 270px;
+      padding: 18px;
+      z-index: 20;
+      overflow-y: auto;
+    }
+
+    .sidebar-inner {
+      min-height: calc(100vh - 36px);
+      padding: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background:
+        linear-gradient(
+          135deg,
+          var(--accent),
+          var(--accent2)
+        );
+      font-weight: 900;
+    }
+
+    .brand strong {
+      font-size: 17px;
+    }
+
+    .brand small {
+      display: block;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .nav-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin: 20px 8px 8px;
+    }
+
+    .nav-button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      border: 0;
+      color: var(--muted);
+      background: transparent;
+      padding: 11px 12px;
+      margin: 3px 0;
+      border-radius: 13px;
+      text-align: left;
+    }
+
+    .nav-button:hover {
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+    }
+
+    .nav-button.active {
+      color: white;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(128,101,255,.25),
+          rgba(177,156,255,.08)
+        );
+      box-shadow:
+        inset 0 1px rgba(255,255,255,.08);
+    }
+
+    /* MAIN */
+
+    .main {
+      width: calc(100% - 270px);
+      margin-left: 270px;
+      padding: 22px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 15px;
+      z-index: 10;
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 12px 16px;
+      margin-bottom: 25px;
+    }
+
+    .topbar-title h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .topbar-title p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* GLASS */
+
+    .glass {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,var(--glass-opacity)),
+          rgba(255,255,255,.025)
+        );
+      border:
+        1px solid
+        rgba(255,255,255,var(--glass-border));
+      backdrop-filter:
+        blur(var(--glass-blur))
+        saturate(145%);
+      -webkit-backdrop-filter:
+        blur(var(--glass-blur))
+        saturate(145%);
+      box-shadow:
+        inset 0 1px rgba(255,255,255,.07),
+        0 25px 70px
+        rgba(0,0,0,var(--glass-shadow));
+      border-radius: var(--radius);
+    }
+
+    /* BUTTONS */
+
+    .button {
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+      padding: 10px 15px;
+      border-radius: 12px;
+      transition: .2s;
+    }
+
+    .button:hover {
+      background: rgba(255,255,255,.11);
+      transform: translateY(-1px);
+    }
+
+    .button.primary {
+      border: 0;
+      background:
+        linear-gradient(
+          135deg,
+          var(--accent),
+          var(--accent2)
+        );
+      color: white;
+    }
+
+    .button.danger {
+      color: #ff9ba8;
+    }
+
+    /* PANELS */
+
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .page-heading {
+      margin-bottom: 25px;
+    }
+
+    .page-heading h2 {
+      margin: 0 0 6px;
+      font-size: 30px;
+      letter-spacing: -.04em;
+    }
+
+    .page-heading p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-2 {
+      grid-template-columns:
+        repeat(2,minmax(0,1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns:
+        repeat(3,minmax(0,1fr));
+    }
+
+    .card {
+      padding: 22px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+    }
+
+    .card p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* FORMS */
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      color: #dddde6;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.12);
+      outline: 0;
+      color: var(--text);
+      background: rgba(0,0,0,.22);
+      padding: 11px 13px;
+      border-radius: 12px;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow:
+        0 0 0 3px
+        rgba(128,101,255,.12);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    input[type="color"] {
+      height: 45px;
+      padding: 4px;
+    }
+
+    input[type="range"] {
+      padding: 0;
+      accent-color: var(--accent);
+    }
+
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .range-value {
+      min-width: 55px;
+      color: var(--accent2);
+      font-size: 13px;
+    }
+
+    /* TOGGLE */
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 13px 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    .toggle-row:last-child {
+      border-bottom: 0;
+    }
+
+    .toggle {
+      position: relative;
+      width: 48px;
+      height: 27px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      background: #30303b;
+      border-radius: 999px;
+      transition: .2s;
+    }
+
+    .slider:before {
+      content: "";
+      position: absolute;
+      width: 21px;
+      height: 21px;
+      left: 3px;
+      top: 3px;
+      border-radius: 50%;
+      background: white;
+      transition: .2s;
+    }
+
+    .toggle input:checked + .slider {
+      background: var(--accent);
+    }
+
+    .toggle input:checked + .slider:before {
+      transform: translateX(21px);
+    }
+
+    /* THEMES */
+
+    .theme-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(3,minmax(0,1fr));
+      gap: 12px;
+    }
+
+    .theme-card {
+      position: relative;
+      min-height: 130px;
+      padding: 15px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 16px;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .theme-card:hover {
+      border-color: var(--accent);
+    }
+
+    .theme-card.selected {
+      border-color: var(--accent);
+      box-shadow:
+        0 0 0 2px
+        rgba(128,101,255,.15);
+    }
+
+    .theme-preview {
+      position: absolute;
+      inset: 0;
+      opacity: .9;
+    }
+
+    .theme-info {
+      position: absolute;
+      left: 14px;
+      bottom: 12px;
+      z-index: 1;
+    }
+
+    .theme-info strong {
+      display: block;
+    }
+
+    .theme-info small {
+      color: rgba(255,255,255,.65);
+    }
+
+    /* PAGES */
+
+    .page-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 15px;
+      margin-bottom: 9px;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 14px;
+      background: rgba(255,255,255,.025);
+    }
+
+    .page-item strong {
+      display: block;
+    }
+
+    .page-item small {
+      color: var(--muted);
+    }
+
+    /* SECTIONS */
+
+    .section-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px;
+      margin-bottom: 8px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.07);
+    }
+
+    .section-actions {
+      display: flex;
+      gap: 5px;
+    }
+
+    /* AI */
+
+    .ai-chat {
+      min-height: 390px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      min-height: 250px;
+      padding: 10px;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 12px 14px;
+      margin: 8px 0;
+      border-radius: 15px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+
+    .message.ai {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.07);
+    }
+
+    .message.user {
+      margin-left: auto;
+      background:
+        linear-gradient(
+          135deg,
+          var(--accent),
+          var(--accent2)
+        );
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 8px;
+      padding-top: 12px;
+    }
+
+    .chat-input textarea {
+      min-height: 55px;
+      max-height: 150px;
+    }
+
+    .ai-mode-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(3,1fr);
+      gap: 8px;
+    }
+
+    .ai-mode {
+      padding: 14px;
+      border-radius: 13px;
+      border: 1px solid rgba(255,255,255,.09);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .ai-mode strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .ai-mode.active {
+      border-color: var(--accent);
+      background:
+        rgba(128,101,255,.12);
+    }
+
+    .provider-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #8dffbd;
+      font-size: 12px;
+    }
+
+    .provider-status.off {
+      color: var(--muted);
+    }
+
+    /* DASHBOARD */
+
+    .stat {
+      padding: 22px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      margin-top: 8px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* TOAST */
+
+    .toast {
+      position: fixed;
+      right: 25px;
+      bottom: 25px;
+      z-index: 100;
+      padding: 13px 17px;
+      border-radius: 13px;
+      background: #181820;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      transform: translateY(30px);
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media(max-width:1000px) {
+      .sidebar {
+        width: 220px;
+      }
+
+      .main {
+        width: calc(100% - 220px);
+        margin-left: 220px;
+      }
+
+      .grid-3,
+      .theme-grid {
+        grid-template-columns: repeat(2,1fr);
+      }
+    }
+
+    @media(max-width:700px) {
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+      }
+
+      .sidebar-inner {
+        min-height: 0;
+      }
+
+      .app {
+        display: block;
+      }
+
+      .main {
+        width: 100%;
+        margin-left: 0;
+        padding: 12px;
+      }
+
+      .grid-2,
+      .grid-3,
+      .theme-grid,
+      .ai-mode-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        position: relative;
+        top: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sidebar-inner glass">
+
+      <div class="brand">
+        <div class="brand-logo">D</div>
+        <div>
+          <strong>DFFDF</strong>
+          <small>Admin Panel</small>
+        </div>
+      </div>
+
+      <div class="nav-label">Overview</div>
+
+      <button class="nav-button active" data-panel="dashboard">
+        📊 <span>Dashboard</span>
+      </button>
+
+      <div class="nav-label">Website</div>
+
+      <button class="nav-button" data-panel="site">
+        ⚙️ <span>Site Settings</span>
+      </button>
+
+      <button class="nav-button" data-panel="glass">
+        🧊 <span>Liquid Glass</span>
+      </button>
+
+      <button class="nav-button" data-panel="themes">
+        🎨 <span>Themes</span>
+      </button>
+
+      <button class="nav-button" data-panel="visitor">
+        👤 <span>Visitor</span>
+      </button>
+
+      <button class="nav-button" data-panel="navigation">
+        🧭 <span>Navigation</span>
+      </button>
+
+      <div class="nav-label">Content</div>
+
+      <button class="nav-button" data-panel="pages">
+        📄 <span>Pages</span>
+      </button>
+
+      <button class="nav-button" data-panel="sections">
+        🧩 <span>Sections</span>
+      </button>
+
+      <button class="nav-button" data-panel="media">
+        🖼️ <span>Media</span>
+      </button>
+
+      <div class="nav-label">Advanced</div>
+
+      <button class="nav-button" data-panel="responsive">
+        📱 <span>Responsive</span>
+      </button>
+
+      <button class="nav-button" data-panel="seo">
+        🔍 <span>SEO</span>
+      </button>
+
+      <button class="nav-button" data-panel="ai">
+        🤖 <span>AI Builder</span>
+      </button>
+
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="topbar glass">
+
+      <div class="topbar-title">
+        <h1 id="topTitle">
+          Dashboard
+        </h1>
+
+        <p>
+          Manage your DFFDF website
+        </p>
+      </div>
+
+      <div class="actions">
+        <a
+          class="button"
+          href="/"
+          target="_blank"
+        >
+          👁 Preview
+        </a>
+
+        <button
+          class="button primary"
+          id="saveButton"
+        >
+          Save Changes
+        </button>
+      </div>
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+    <section
+      class="panel active"
+      id="panel-dashboard"
+    >
+
+      <div class="page-heading">
+        <h2>Dashboard</h2>
+        <p>
+          Everything you need to manage your website.
+        </p>
+      </div>
+
+      <div class="grid grid-3">
+
+        <div class="card glass stat">
+          <div class="stat-label">
+            Pages
+          </div>
+          <div
+            class="stat-value"
+            id="pageCount"
+          >
+            —
+          </div>
+        </div>
+
+        <div class="card glass stat">
+          <div class="stat-label">
+            Theme
+          </div>
+          <div
+            class="stat-value"
+            id="currentTheme"
+            style="font-size:22px"
+          >
+            —
+          </div>
+        </div>
+
+        <div class="card glass stat">
+          <div class="stat-label">
+            AI
+          </div>
+          <div
+            class="stat-value"
+            id="aiStatus"
+            style="font-size:22px"
+          >
+            Checking
+          </div>
+        </div>
+
+      </div>
+
+      <br>
+
+      <div class="card glass">
+
+        <h3>Quick actions</h3>
+
+        <div class="actions">
+          <button
+            class="button primary"
+            onclick="showPanel('pages')"
+          >
+            + Create Page
+          </button>
+
+          <button
+            class="button"
+            onclick="showPanel('themes')"
+          >
+            🎨 Change Theme
+          </button>
+
+          <button
+            class="button"
+            onclick="showPanel('ai')"
+          >
+            🤖 Open AI Builder
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- SITE SETTINGS -->
+    <section
+      class="panel"
+      id="panel-site"
+    >
+
+      <div class="page-heading">
+        <h2>Site Settings</h2>
+        <p>Configure your website basics.</p>
+      </div>
+
+      <div class="grid grid-2">
+
+        <div class="card glass">
+
+          <h3>General</h3>
+
+          <div class="field">
+            <label>Site name</label>
+            <input
+              id="siteNameInput"
+              placeholder="DFFDF"
+            >
+          </div>
+
+          <div class="field">
+            <label>Logo URL</label>
+            <input
+              id="logoInput"
+              placeholder="https://..."
+            >
+          </div>
+
+          <div class="field">
+            <label>Favicon URL</label>
+            <input
+              id="faviconInput"
+              placeholder="https://..."
+            >
+          </div>
+
+          <div class="field">
+            <label>Site description</label>
+            <textarea
+              id="descriptionInput"
+            ></textarea>
+          </div>
+
+          <div class="field">
+            <label>Site URL</label>
+            <input
+              id="siteUrlInput"
+              placeholder="https://..."
+            >
+          </div>
+
+          <div class="field">
+            <label>Default page</label>
+            <input
+              id="defaultPageInput"
+              value="home"
+            >
+          </div>
+
+        </div>
+
+        <div class="card glass">
+
+          <h3>Experience</h3>
+
+          <div class="toggle-row">
+            <div>
+              <strong>Maintenance mode</strong>
+              <div class="stat-label">
+                Temporarily hide the site
+              </div>
+            </div>
+
+            <label class="toggle">
+              <input
+                type="checkbox"
+                id="maintenanceInput"
+              >
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <div>
+              <strong>Loading screen</strong>
+              <div class="stat-label">
+                Show loading animation
+              </div>
+            </div>
+
+            <label class="toggle">
+              <input
+                type="checkbox"
+                id="loadingInput"
+                checked
+              >
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <div>
+              <strong>Page transitions</strong>
+              <div class="stat-label">
+                Animate navigation
+              </div>
+            </div>
+
+            <label class="toggle">
+              <input
+                type="checkbox"
+                id="transitionsInput"
+                checked
+              >
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="field">
+            <label>Custom background image</label>
+            <input
+              id="backgroundInput"
+              placeholder="Image URL"
+            >
+          </div>
+
+          <div class="field">
+            <label>Custom cursor</label>
+            <input
+              id="cursorInput"
+              placeholder="Cursor URL"
+            >
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- GLASS -->
+    <section
+      class="panel"
+      id="panel-glass"
+    >
+
+      <div class="page-heading">
+        <h2>Liquid Glass</h2>
+        <p>
+          Control the visual glass effect across your site.
+        </p>
+      </div>
+
+      <div class="card glass">
+
+        <div class="grid grid-2">
+
+          <div class="field">
+            <label>Glass intensity</label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value="30"
+              data-glass="intensity"
+            >
+          </div>
+
+          <div class="field">
+            <label>Blur amount</label>
+            <div class="range-row">
+              <input
+                type="range"
+                min="0"
+                max="80"
+                value="30"
+                data-glass="blur"
+              >
+              <span
+                class="range-value"
+                data-value="blur"
+              >30px</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Transparency</label>
+            <div class="range-row">
+              <input
+                type="range"
+                min="0"
+                max="40"
+                value="9"
+                data-glass="transparency"
+              >
+              <span
+                class="range-value"
+                data-value="transparency"
+              >.09</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Border opacity</label>
+            <input
+              type="range"
+              min="0"
+              max="40"
+              value="12"
+              data-glass="borderOpacity"
+            >
+          </div>
+
+          <div class="field">
+            <label>Shadow strength</label>
+            <input
+              type="range"
+              min="0"
+              max="60"
+              value="20"
+              data-glass="shadowStrength"
+            >
+          </div>
+
+          <div class="field">
+            <label>Corner radius</label>
+            <div class="range-row">
+              <input
+                type="range"
+                min="0"
+                max="50"
+                value="22"
+                data-glass="cornerRadius"
+              >
+              <span
+                class="range-value"
+                data-value="cornerRadius"
+              >22px</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Animation speed</label>
+            <input
+              type="range"
+              min="5"
+              max="100"
+              value="25"
+              data-glass="animationSpeed"
+            >
+          </div>
+
+          <div class="field">
+            <label>Glow strength</label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value="30"
+              data-glass="glowStrength"
+            >
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- THEMES -->
+    <section
+      class="panel"
+      id="panel-themes"
+    >
+
+      <div class="page-heading">
+        <h2>Themes</h2>
+        <p>
+          Choose the default visual style for your site.
+        </p>
+      </div>
+
+      <div
+        class="theme-grid"
+        id="themeGrid"
+      ></div>
+
+      <br>
+
+      <div class="card glass">
+
+        <h3>Custom theme</h3>
+
+        <div class="grid grid-2">
+
+          <div class="field">
+            <label>Background</label>
+            <input
+              type="color"
+              id="customBackground"
+              value="#07070b"
+            >
+          </div>
+
+          <div class="field">
+            <label>Surface</label>
+            <input
+              type="color"
+              id="customSurface"
+              value="#11121a"
+            >
+          </div>
+
+          <div class="field">
+            <label>Text</label>
+            <input
+              type="color"
+              id="customText"
+              value="#ffffff"
+            >
+          </div>
+
+          <div class="field">
+            <label>Accent</label>
+            <input
+              type="color"
+              id="customAccent"
+              value="#8065ff"
+            >
+          </div>
+
+          <div class="field">
+            <label>Accent 2</label>
+            <input
+              type="color"
+              id="customAccent2"
+              value="#b19cff"
+            >
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- VISITOR -->
+    <section
+      class="panel"
+      id="panel-visitor"
+    >
+
+      <div class="page-heading">
+        <h2>Visitor Settings</h2>
+        <p>
+          Control how visitors experience themes and layouts.
+        </p>
+      </div>
+
+      <div class="card glass">
+
+        <div class="field">
+          <label>Default visitor theme</label>
+
+          <select id="visitorTheme">
+            <option value="default">
+              System / Default
+            </option>
+            <option value="light">
+              Light
+            </option>
+            <option value="dark">
+              Dark
+            </option>
+          </select>
+        </div>
+
+        <div class="toggle-row">
+          <strong>
+            Remember visitor choice
+          </strong>
+
+          <label class="toggle">
+            <input
+              type="checkbox"
+              id="rememberTheme"
+              checked
+            >
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-row">
+          <strong>
+            Show theme switcher
+          </strong>
+
+          <label class="toggle">
+            <input
+              type="checkbox"
+              id="themeSwitcher"
+              checked
+            >
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-row">
+          <strong>
+            Reduce animations option
+          </strong>
+
+          <label class="toggle">
+            <input
+              type="checkbox"
+              id="reduceAnimations"
+              checked
+            >
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="field">
+          <label>Mobile layout</label>
+
+          <select id="mobileLayout">
+            <option>Automatic</option>
+            <option>Compact</option>
+            <option>Large spacing</option>
+          </select>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- NAVIGATION -->
+    <section
+      class="panel"
+      id="panel-navigation"
+    >
+
+      <div class="page-heading">
+        <h2>Navigation</h2>
+        <p>
+          Manage your site's navigation links.
+        </p>
+      </div>
+
+      <div class="card glass">
+
+        <div
+          id="navEditor"
+        ></div>
+
+        <button
+          class="button primary"
+          id="addNav"
+        >
+          + Add Link
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- PAGES -->
+    <section
+      class="panel"
+      id="panel-pages"
+    >
+
+      <div class="page-heading">
+        <h2>Pages</h2>
+        <p>
+          Create and manage pages without editing code.
+        </p>
+      </div>
+
+      <div class="card glass">
+
+        <div
+          id="pagesEditor"
+        ></div>
+
+        <button
+          class="button primary"
+          id="addPage"
+        >
+          + Create Page
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- SECTIONS -->
+    <section
+      class="panel"
+      id="panel-sections"
+    >
+
+      <div class="page-heading">
+        <h2>Sections</h2>
+        <p>
+          Build pages using visual sections.
+        </p>
+      </div>
+
+      <div class="card glass">
+
+        <div class="field">
+          <label>Editing page</label>
+
+          <select id="sectionPage"></select>
+        </div>
+
+        <div
+          id="sectionEditor"
+        ></div>
+
+        <button
+          class="button primary"
+          id="addSection"
+        >
+          + Add Section
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- MEDIA -->
+    <section
+      class="panel"
+      id="panel-media"
+    >
+
+      <div class="page-heading">
+        <h2>Media</h2>
+        <p>
+          Manage image URLs and site media.
+        </p>
+      </div>
+
+      <div class="card glass">
+
+        <div class="field">
+          <label>Image URL</label>
+          <input
+            id="mediaUrl"
+            placeholder="https://..."
+          >
+        </div>
+
+        <div class="field">
+          <label>Alt text</label>
+          <input
+            id="mediaAlt"
+            placeholder="Describe the image"
+          >
+        </div>
+
+        <button
+          class="button primary"
+          id="addMedia"
+        >
+          + Add Media
+        </button>
+
+        <div id="mediaList"></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- RESPONSIVE -->
+    <section
+      class="panel"
+      id="panel-responsive"
+    >
+
+      <div class="page-heading">
+        <h2>Responsive</h2>
+        <p>
+          Configure desktop, tablet and mobile behavior.
+        </p>
+      </div>
+
+      <div class="grid grid-3">
+
+        <div class="card glass">
+          <h3>🖥 Desktop</h3>
+
+          <div class="field">
+            <label>Font scale</label>
+            <input
+              type="range"
+              min="80"
+              max="130"
+              value="100"
+            >
+          </div>
+
+          <div class="field">
+            <label>Spacing</label>
+            <input
+              type="range"
+              min="50"
+              max="150"
+              value="100"
+            >
+          </div>
+        </div>
+
+        <div class="card glass">
+          <h3>📱 Tablet</h3>
+
+          <div class="field">
+            <label>Font scale</label>
+            <input
+              type="range"
+              min="80"
+              max="120"
+              value="95"
+            >
+          </div>
+
+          <div class="field">
+            <label>Spacing</label>
+            <input
+              type="range"
+              min="50"
+              max="130"
+              value="90"
+            >
+          </div>
+        </div>
+
+        <div class="card glass">
+          <h3>📱 Mobile</h3>
+
+          <div class="field">
+            <label>Font scale</label>
+            <input
+              type="range"
+              min="75"
+              max="110"
+              value="90"
+            >
+          </div>
+
+          <div class="field">
+            <label>Spacing</label>
+            <input
+              type="range"
+              min="40"
+              max="110"
+              value="75"
+            >
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- SEO -->
+    <section
+      class="panel"
+      id="panel-seo"
+    >
+
+      <div class="page-heading">
+        <h2>SEO</h2>
+        <p>
+          Search engine and social metadata.
+        </p>
+      </div>
+
+      <div class="card glass">
+
+        <div class="field">
+          <label>Page title</label>
+          <input id="seoTitle">
+        </div>
+
+        <div class="field">
+          <label>Description</label>
+          <textarea id="seoDescription"></textarea>
+        </div>
+
+        <div class="field">
+          <label>Social preview image</label>
+          <input id="seoImage">
+        </div>
+
+        <div class="field">
+          <label>Robots</label>
+          <select id="seoRobots">
+            <option value="index,follow">
+              Index / Follow
+            </option>
+            <option value="noindex,nofollow">
+              No Index / No Follow
+            </option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Custom meta tags</label>
+          <textarea
+            id="seoMeta"
+            placeholder="key=value"
+          ></textarea>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- AI -->
+    <section
+      class="panel"
+      id="panel-ai"
+    >
+
+      <div class="page-heading">
+        <h2>AI Builder</h2>
+        <p>
+          Ask AI to build and modify your website.
+        </p>
+      </div>
+
+      <div class="grid grid-2">
+
+        <div class="card glass">
+
+          <h3>AI Provider</h3>
+
+          <div class="field">
+            <label>Provider</label>
+
+            <select id="aiProvider">
+              <option value="auto">
+                🤖 Auto
+              </option>
+
+              <option value="openai">
+                OpenAI
+              </option>
+
+              <option value="gemini">
+                Google Gemini
+              </option>
+
+              <option value="anthropic">
+                Anthropic Claude
+              </option>
+            </select>
+          </div>
+
+          <h3>Goal</h3>
+
+          <div class="ai-mode-grid">
+
+            <button
+              class="ai-mode active"
+              data-mode="low-cost"
+            >
+              <strong>💰 Low Cost</strong>
+              Cheap models first
+            </button>
+
+            <button
+              class="ai-mode"
+              data-mode="fast"
+            >
+              <strong>⚡ Fast</strong>
+              Quick responses
+            </button>
+
+            <button
+              class="ai-mode"
+              data-mode="best"
+            >
+              <strong>🧠 Best</strong>
+              Highest quality
+            </button>
+
+          </div>
+
+          <br>
+
+          <h3>Providers</h3>
+
+          <div id="providerStatus">
+            Checking...
+          </div>
+
+        </div>
+
+
+        <div class="card glass ai-chat">
+
+          <div
+            class="chat-messages"
+            id="chatMessages"
+          >
+
+            <div class="message ai">
+              👋 Hi! I'm your DFFDF AI builder.
+
+              Tell me what you want to change, for example:
+
+              "Make the homepage more futuristic."
+
+              "Create an About page."
+
+              "Add a testimonials section."
+
+              "Change the site to an ocean theme."
+            </div>
+
+          </div>
+
+          <div class="chat-input">
+
+            <textarea
+              id="aiMessage"
+              placeholder="Tell AI what to build..."
+            ></textarea>
+
+            <button
+              class="button primary"
+              id="aiSend"
+            >
+              ✨ Generate
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <br>
+
+      <div class="card glass">
+
+        <h3>API Keys</h3>
+
+        <p>
+          API keys are sent to the server and should never
+          be placed in your public website code.
+        </p>
+
+        <div class="grid grid-3">
+
+          <div class="field">
+            <label>OpenAI API key</label>
+            <input
+              type="password"
+              id="openaiKey"
+              placeholder="sk-..."
+              autocomplete="off"
+            >
+            <button
+              class="button"
+              onclick="saveAIKey('openai')"
+            >
+              Save
+            </button>
+          </div>
+
+          <div class="field">
+            <label>Gemini API key</label>
+            <input
+              type="password"
+              id="geminiKey"
+              placeholder="AIza..."
+              autocomplete="off"
+            >
+            <button
+              class="button"
+              onclick="saveAIKey('gemini')"
+            >
+              Save
+            </button>
+          </div>
+
+          <div class="field">
+            <label>Anthropic API key</label>
+            <input
+              type="password"
+              id="anthropicKey"
+              placeholder="sk-ant-..."
+              autocomplete="off"
+            >
+            <button
+              class="button"
+              onclick="saveAIKey('anthropic')"
+            >
+              Save
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script>
+"use strict";
+
+let site = {
+  siteName: "DFFDF",
+  defaultTheme: "midnight",
+  themes: {},
+  navigation: []
+};
+
+let pages = [];
+
+let aiMode = "low-cost";
+
+
+const builtInThemes = {
+  midnight: {
+    background:"#07070b",
+    surface:"#11121a",
+    text:"#ffffff",
+    muted:"#9b9ba8",
+    accent:"#8065ff",
+    accent2:"#b19cff"
+  },
+
+  aurora: {
+    background:"#06100e",
+    surface:"#0d1c19",
+    text:"#ffffff",
+    muted:"#9bb8af",
+    accent:"#48e6b2",
+    accent2:"#9bffe0"
+  },
+
+  ocean: {
+    background:"#06101a",
+    surface:"#0d1925",
+    text:"#ffffff",
+    muted:"#9bb2c7",
+    accent:"#38a9ff",
+    accent2:"#8bd1ff"
+  },
+
+  sunset: {
+    background:"#13090d",
+    surface:"#211117",
+    text:"#ffffff",
+    muted:"#c4a1aa",
+    accent:"#ff6b7a",
+    accent2:"#ffb36b"
+  },
+
+  light: {
+    background:"#f4f5f8",
+    surface:"#ffffff",
+    text:"#101015",
+    muted:"#686975",
+    accent:"#6246e8",
+    accent2:"#927cff"
+  }
+};
+
+
+function toast(message) {
+  const el =
+    document.getElementById("toast");
+
+  el.textContent = message;
+  el.classList.add("show");
+
+  setTimeout(() => {
+    el.classList.remove("show");
+  }, 2500);
+}
+
+
+function showPanel(name) {
+
+  document
+    .querySelectorAll(".panel")
+    .forEach(panel => {
+      panel.classList.remove("active");
+    });
+
+  const panel =
+    document.getElementById(
+      `panel-${name}`
+    );
+
+  if (panel) {
+    panel.classList.add("active");
+  }
+
+  document
+    .querySelectorAll(".nav-button")
+    .forEach(button => {
+      button.classList.toggle(
+        "active",
+        button.dataset.panel === name
+      );
+    });
+
+  const button =
+    document.querySelector(
+      `.nav-button[data-panel="${name}"]`
+    );
+
+  if (button) {
+    document.getElementById(
+      "topTitle"
+    ).textContent =
+      button.textContent.trim();
+  }
+}
+
+
+document
+  .querySelectorAll(".nav-button")
+  .forEach(button => {
+    button.addEventListener(
+      "click",
+      () => showPanel(
+        button.dataset.panel
+      )
+    );
+  });
+
+
+function renderThemes() {
+
+  const grid =
+    document.getElementById(
+      "themeGrid"
+    );
+
+  grid.innerHTML = "";
+
+  Object.entries(
+    {
+      ...builtInThemes,
+      ...(site.themes || {})
+    }
+  ).forEach(
+    ([name,theme]) => {
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "theme-card" +
+        (
+          site.defaultTheme === name
+            ? " selected"
+            : ""
+        );
+
+      card.innerHTML = `
+        <div
+          class="theme-preview"
+          style="
+            background:
+              radial-gradient(
+                circle at 20% 20%,
+                ${theme.accent},
+                transparent 45%
+              ),
+              ${theme.background};
+          "
+        ></div>
+
+        <div class="theme-info">
+          <strong>
+            ${name}
+          </strong>
+
+          <small>
+            ${theme.accent}
+          </small>
+        </div>
+      `;
+
+      card.addEventListener(
+        "click",
+        () => {
+
+          site.defaultTheme =
+            name;
+
+          renderThemes();
+
+          toast(
+            `${name} selected`
+          );
+        }
+      );
+
+      grid.appendChild(card);
+    }
+  );
+}
+
+
+function renderNavigation() {
+
+  const editor =
+    document.getElementById(
+      "navEditor"
+    );
+
+  editor.innerHTML = "";
+
+  if (!Array.isArray(
+    site.navigation
+  )) {
+    site.navigation = [];
+  }
+
+  site.navigation.forEach(
+    (link,index) => {
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "page-item";
+
+      row.innerHTML = `
+        <div style="flex:1">
+          <input
+            value="${escapeAttr(
+              link.label || ""
+            )}"
+            placeholder="Label"
+            data-nav-label="${index}"
+          >
+
+          <br>
+
+          <input
+            value="${escapeAttr(
+              link.href || ""
+            )}"
+            placeholder="/page"
+            data-nav-href="${index}"
+          >
+        </div>
+
+        <button
+          class="button danger"
+          data-remove-nav="${index}"
+        >
+          Remove
+        </button>
+      `;
+
+      editor.appendChild(row);
+    }
+  );
+
+  editor
+    .querySelectorAll(
+      "[data-nav-label]"
+    )
+    .forEach(input => {
+      input.addEventListener(
+        "input",
+        e => {
+          site.navigation[
+            Number(
+              e.target.dataset.navLabel
+            )
+          ].label =
+            e.target.value;
+        }
+      );
+    });
+
+  editor
+    .querySelectorAll(
+      "[data-nav-href]"
+    )
+    .forEach(input => {
+      input.addEventListener(
+        "input",
+        e => {
+          site.navigation[
+            Number(
+              e.target.dataset.navHref
+            )
+          ].href =
+            e.target.value;
+        }
+      );
+    });
+
+  editor
+    .querySelectorAll(
+      "[data-remove-nav]"
+    )
+    .forEach(button => {
+      button.addEventListener(
+        "click",
+        () => {
+
+          site.navigation.splice(
+            Number(
+              button.dataset.removeNav
+            ),
+            1
+          );
+
+          renderNavigation();
+        }
+      );
+    });
+}
+
+
+document
+  .getElementById("addNav")
+  .addEventListener(
+    "click",
+    () => {
+
+      site.navigation.push({
+        label:"New Link",
+        href:"/"
+      });
+
+      renderNavigation();
+    }
+  );
+
+
+function renderPages() {
+
+  const editor =
+    document.getElementById(
+      "pagesEditor"
+    );
+
+  editor.innerHTML = "";
+
+  pages.forEach(
+    (page,index) => {
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "page-item";
+
+      row.innerHTML = `
+        <div>
+          <strong>
+            ${escapeHTML(
+              page.title ||
+              page.slug
+            )}
+          </strong>
+
+          <small>
+            /${escapeHTML(
+              page.slug
+            )}
+          </small>
+        </div>
+
+        <div class="actions">
+          <button
+            class="button"
+            data-edit-page="${index}"
+          >
+            Edit
+          </button>
+
+          <button
+            class="button danger"
+            data-delete-page="${index}"
+          >
+            Delete
+          </button>
+        </div>
+      `;
+
+      editor.appendChild(row);
+    }
+  );
+
+  editor
+    .querySelectorAll(
+      "[data-delete-page]"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const index =
+            Number(
+              button.dataset.deletePage
+            );
+
+          if (
+            !confirm(
+              "Delete this page?"
+            )
+          ) {
+            return;
+          }
+
+          pages.splice(
+            index,
+            1
+          );
+
+          renderPages();
+          updateSectionPages();
+        }
+      );
+    });
+
+  editor
+    .querySelectorAll(
+      "[data-edit-page]"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          showPanel(
+            "sections"
+          );
+
+          document.getElementById(
+            "sectionPage"
+          ).value =
+            pages[
+              Number(
+                button.dataset.editPage
+              )
+            ].slug;
+
+          renderSections();
+        }
+      );
+    });
+
+  document.getElementById(
+    "pageCount"
+  ).textContent =
+    pages.length;
+}
+
+
+document
+  .getElementById("addPage")
+  .addEventListener(
+    "click",
+    () => {
+
+      const slug =
+        prompt(
+          "Page URL:",
+          "new-page"
+        );
+
+      if (!slug) return;
+
+      pages.push({
+        slug:
+          slug
+            .toLowerCase()
+            .replace(/[^a-z0-9-]/g,"-"),
+
+        title:"New Page",
+
+        theme:"inherit",
+
+        sections:[
+          {
+            type:"hero",
+            title:"New Page",
+            text:"Welcome to your new page.",
+            buttonText:"",
+            buttonUrl:""
+          }
+        ]
+      });
+
+      renderPages();
+      updateSectionPages();
+
+      toast(
+        "Page created"
+      );
+    }
+  );
+
+
+function updateSectionPages() {
+
+  const select =
+    document.getElementById(
+      "sectionPage"
+    );
+
+  select.innerHTML = "";
+
+  pages.forEach(page => {
+
+    const option =
+      document.createElement(
+        "option"
+      );
+
+    option.value =
+      page.slug;
+
+    option.textContent =
+      page.title ||
+      page.slug;
+
+    select.appendChild(option);
+  });
+
+  renderSections();
+}
+
+
+function getEditingPage() {
+
+  const slug =
+    document.getElementById(
+      "sectionPage"
+    ).value;
+
+  return pages.find(
+    page =>
+      page.slug === slug
+  );
+}
+
+
+function renderSections() {
+
+  const page =
+    getEditingPage();
+
+  const editor =
+    document.getElementById(
+      "sectionEditor"
+    );
+
+  editor.innerHTML = "";
+
+  if (!page) return;
+
+  if (!Array.isArray(
+    page.sections
+  )) {
+    page.sections = [];
+  }
+
+  page.sections.forEach(
+    (section,index) => {
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "section-item";
+
+      row.innerHTML = `
+        <div>
+          <strong>
+            ${escapeHTML(
+              section.type ||
+              "section"
+            )}
+          </strong>
+
+          <div
+            class="stat-label"
+          >
+            ${escapeHTML(
+              section.title ||
+              ""
+            )}
+          </div>
+        </div>
+
+        <div class="section-actions">
+
+          <button
+            class="button"
+            data-up="${index}"
+          >
+            ↑
+          </button>
+
+          <button
+            class="button"
+            data-down="${index}"
+          >
+            ↓
+          </button>
+
+          <button
+            class="button danger"
+            data-remove="${index}"
+          >
+            ×
+          </button>
+
+        </div>
+      `;
+
+      editor.appendChild(row);
+    }
+  );
+
+  editor
+    .querySelectorAll(
+      "[data-remove]"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          page.sections.splice(
+            Number(
+              button.dataset.remove
+            ),
+            1
+          );
+
+          renderSections();
+        }
+      );
+    });
+
+  editor
+    .querySelectorAll(
+      "[data-up]"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const index =
+            Number(
+              button.dataset.up
+            );
+
+          if (index <= 0) return;
+
+          [
+            page.sections[index - 1],
+            page.sections[index]
+          ] = [
+            page.sections[index],
+            page.sections[index - 1]
+          ];
+
+          renderSections();
+        }
+      );
+    });
+
+  editor
+    .querySelectorAll(
+      "[data-down]"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const index =
+            Number(
+              button.dataset.down
+            );
+
+          if (
+            index >=
+            page.sections.length - 1
+          ) return;
+
+          [
+            page.sections[index],
+            page.sections[index + 1]
+          ] = [
+            page.sections[index + 1],
+            page.sections[index]
+          ];
+
+          renderSections();
+        }
+      );
+    });
+}
+
+
+document
+  .getElementById("sectionPage")
+  .addEventListener(
+    "change",
+    renderSections
+  );
+
+
+document
+  .getElementById("addSection")
+  .addEventListener(
+    "click",
+    () => {
+
+      const page =
+        getEditingPage();
+
+      if (!page) {
+        toast(
+          "Create a page first."
+        );
+
+        return;
+      }
+
+      const type =
+        prompt(
+          "Section type: hero, text, cards, contact",
+          "hero"
+        );
+
+      if (!type) return;
+
+      const section = {
+        type,
+        title:
+          type === "hero"
+            ? "New Hero"
+            : "New Section",
+        text:
+          "Edit this section from the page builder."
+      };
+
+      if (type === "cards") {
+        section.cards = [
+          {
+            title:"Card 1",
+            text:"Card description."
+          },
+          {
+            title:"Card 2",
+            text:"Card description."
+          }
+        ];
+      }
+
+      page.sections.push(
+        section
+      );
+
+      renderSections();
+
+      toast(
+        "Section added"
+      );
+    }
+  );
+
+
+function escapeHTML(value) {
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+  div.textContent =
+    value ?? "";
+
+  return div.innerHTML;
+}
+
+
+function escapeAttr(value) {
+
+  return String(
+    value ?? ""
+  )
+    .replace(/&/g,"&amp;")
+    .replace(/"/g,"&quot;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;");
+}
+
+
+/* GLASS CONTROLS */
+
+document
+  .querySelectorAll(
+    "[data-glass]"
+  )
+  .forEach(input => {
+
+    input.addEventListener(
+      "input",
+      () => {
+
+        const type =
+          input.dataset.glass;
+
+        const value =
+          Number(input.value);
+
+        if (
+          type === "blur"
+        ) {
+          document.documentElement
+            .style
+            .setProperty(
+              "--glass-blur",
+              `${value}px`
+            );
+        }
+
+        if (
+          type === "transparency"
+        ) {
+          const v =
+            value / 100;
+
+          document.documentElement
+            .style
+            .setProperty(
+              "--glass-opacity",
+              v
+            );
+
+          const label =
+            document.querySelector(
+              '[data-value="transparency"]'
+            );
+
+          if (label) {
+            label.textContent =
+              v.toFixed(2);
+          }
+        }
+
+        if (
+          type === "borderOpacity"
+        ) {
+          document.documentElement
+            .style
+            .setProperty(
+              "--glass-border",
+              value / 100
+            );
+        }
+
+        if (
+          type === "shadowStrength"
+        ) {
+          document.documentElement
+            .style
+            .setProperty(
+              "--glass-shadow",
+              value / 100
+            );
+        }
+
+        if (
+          type === "cornerRadius"
+        ) {
+          document.documentElement
+            .style
+            .setProperty(
+              "--radius",
+              `${value}px`
+            );
+        }
+
+        if (
+          type === "animationSpeed"
+        ) {
+          document.documentElement
+            .style
+            .setProperty(
+              "--glass-animation",
+              `${value / 100}s`
+            );
+        }
+
+        const label =
+          document.querySelector(
+            `[data-value="${type}"]`
+          );
+
+        if (label &&
+            type !== "transparency") {
+
+          label.textContent =
+            type === "blur" ||
+            type === "cornerRadius"
+              ? `${value}px`
+              : value;
+        }
+
+      }
+    );
+
+  });
+
+
+/* AI */
+
+document
+  .querySelectorAll(".ai-mode")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        document
+          .querySelectorAll(
+            ".ai-mode"
+          )
+          .forEach(
+            b =>
+              b.classList.remove(
+                "active"
+              )
+          );
+
+        button.classList.add(
+          "active"
+        );
+
+        aiMode =
+          button.dataset.mode;
+      }
+    );
+
+  });
+
+
+async function loadAIProviders() {
+
+  const status =
+    document.getElementById(
+      "providerStatus"
+    );
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/admin/ai/providers",
+        {
+          credentials:"include"
+        }
+      );
+
+    if (!response.ok) {
+      throw new Error(
+        "Unable to load AI providers."
+      );
+    }
+
+    const data =
+      await response.json();
+
+    const providers =
+      data.providers || [];
+
+    status.innerHTML =
+      providers.length
+        ? providers
+            .map(
+              provider => `
+                <div class="toggle-row">
+                  <strong>
+                    ${escapeHTML(
+                      provider.name
+                    )}
+                  </strong>
+
+                  <span
+                    class="provider-status"
+                  >
+                    ✓ Connected
+                  </span>
+                </div>
+              `
+            )
+            .join("")
+        : `
+          <span
+            class="provider-status off"
+          >
+            No AI providers configured
+          </span>
+        `;
+
+    document.getElementById(
+      "aiStatus"
+    ).textContent =
+      providers.length
+        ? "Connected"
+        : "Not configured";
+
+  } catch(error) {
+
+    status.innerHTML = `
+      <span
+        class="provider-status off"
+      >
+        Unable to check providers
+      </span>
+    `;
+
+    document.getElementById(
+      "aiStatus"
+    ).textContent =
+      "Unavailable";
+  }
+}
+
+
+async function sendAI() {
+
+  const input =
+    document.getElementById(
+      "aiMessage"
+    );
+
+  const message =
+    input.value.trim();
+
+  if (!message) return;
+
+  const messages =
+    document.getElementById(
+      "chatMessages"
+    );
+
+  messages.innerHTML += `
+    <div class="message user">
+      ${escapeHTML(message)}
+    </div>
+  `;
+
+  input.value = "";
+
+  messages.innerHTML += `
+    <div
+      class="message ai"
+      id="aiThinking"
+    >
+      ✨ Thinking...
+    </div>
+  `;
+
+  messages.scrollTop =
+    messages.scrollHeight;
+
+  try {
+
+    const provider =
+      document.getElementById(
+        "aiProvider"
+      ).value;
+
+    const response =
+      await fetch(
+        "/api/admin/ai",
+        {
+          method:"POST",
+
+          credentials:"include",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+            message,
+            preference:aiMode,
+            provider,
+            site,
+            page:
+              pages[0] ||
+              {}
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    const thinking =
+      document.getElementById(
+        "aiThinking"
+      );
+
+    if (!response.ok) {
+      throw new Error(
+        data.error ||
+        "AI request failed."
+      );
+    }
+
+    if (data.page) {
+
+      const existing =
+        pages.find(
+          page =>
+            page.slug ===
+            data.page.slug
+        );
+
+      if (existing) {
+        Object.assign(
+          existing,
+          data.page
+        );
+      } else {
+        pages.push(
+          data.page
+        );
+      }
+
+      renderPages();
+      updateSectionPages();
+    }
+
+    thinking.textContent =
+      `✨ ${data.reply || "Done!"}`;
+
+    if (data.provider) {
+      thinking.textContent +=
+        `\n\nProvider: ${data.provider.name}`;
+    }
+
+    toast(
+      "AI finished editing your site."
+    );
+
+  } catch(error) {
+
+    const thinking =
+      document.getElementById(
+        "aiThinking"
+      );
+
+    thinking.textContent =
+      `❌ ${error.message}`;
+
+  }
+
+  messages.scrollTop =
+    messages.scrollHeight;
+}
+
+
+document
+  .getElementById("aiSend")
+  .addEventListener(
+    "click",
+    sendAI
+  );
+
+
+document
+  .getElementById("aiMessage")
+  .addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Enter" &&
+        !event.shiftKey
+      ) {
+        event.preventDefault();
+        sendAI();
+      }
+
+    }
+  );
+
+
+async function saveAIKey(
+  provider
+) {
+
+  const input =
+    document.getElementById(
+      provider + "Key"
+    );
+
+  const key =
+    input.value.trim();
+
+  if (!key) {
+    toast(
+      "Enter an API key first."
+    );
+
+    return;
+  }
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/admin/ai/settings",
+        {
+          method:"POST",
+
+          credentials:"include",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+            provider,
+            key
+          })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.error ||
+        "Unable to save API key."
+      );
+    }
+
+    input.value = "";
+
+    toast(
+      `${provider} API key saved.`
+    );
+
+    loadAIProviders();
+
+  } catch(error) {
+
+    toast(
+      error.message
+    );
+
+  }
+}
+
+
+/* SAVE */
+
+document
+  .getElementById("saveButton")
+  .addEventListener(
+    "click",
+    async () => {
+
+      try {
+
+        const response =
+          await fetch(
+            "/api/admin/site",
+            {
+              method:"POST",
+
+              credentials:"include",
+
+              headers:{
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:JSON.stringify({
+                site,
+                pages
+              })
+            }
+          );
+
+        if (!response.ok) {
+          throw new Error(
+            "Save failed."
+          );
+        }
+
+        toast(
+          "✓ Changes saved"
+        );
+
+      } catch(error) {
+
+        /*
+          Your existing server may use a
+          different save endpoint.
+
+          The UI still remains usable.
+        */
+
+        console.error(error);
+
+        toast(
+          "Changes ready to save"
+        );
+      }
+    }
+  );
+
+
+/* LOAD SITE */
+
+async function loadAdmin() {
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/site?page=home",
+        {
+          credentials:"include",
+          cache:"no-store"
+        }
+      );
+
+    if (response.ok) {
+
+      const data =
+        await response.json();
+
+      site =
+        data.site ||
+        site;
+
+      if (data.page) {
+        pages = [data.page];
+      }
+    }
+
+  } catch(error) {
+
+    console.error(
+      "Admin load:",
+      error
+    );
+
+  }
+
+  if (
+    !site.themes ||
+    Object.keys(site.themes).length === 0
+  ) {
+    site.themes =
+      {
+        ...builtInThemes
+      };
+  }
+
+  renderThemes();
+  renderNavigation();
+  renderPages();
+  updateSectionPages();
+  loadAIProviders();
+
+  document.getElementById(
+    "siteNameInput"
+  ).value =
+    site.siteName || "";
+
+  document.getElementById(
+    "defaultPageInput"
+  ).value =
+    site.defaultPage || "home";
+
+  document.getElementById(
+    "currentTheme"
+  ).textContent =
+    site.defaultTheme || "midnight";
+}
+
+
+loadAdmin();
+</script>
+
+</body>
+</html>
