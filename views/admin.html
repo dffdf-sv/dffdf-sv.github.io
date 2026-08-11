@@ -1,363 +1,432 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DFFDF Admin</title>
 
   <style>
-
     * {
       box-sizing: border-box;
     }
 
     body {
       margin: 0;
-
-      background: #08090d;
-
-      color: #fff;
-
-      font-family:
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-    }
-
-    .login,
-    .dashboard {
-      max-width: 900px;
-
-      margin: auto;
-
-      padding: 45px 20px;
-    }
-
-    .login {
-      max-width: 430px;
-
       min-height: 100vh;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(124, 92, 255, .2), transparent 35%),
+        radial-gradient(circle at 90% 80%, rgba(0, 200, 255, .08), transparent 30%),
+        #07070b;
+      color: #fff;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
 
-      display: flex;
+    button, input, textarea {
+      font: inherit;
+    }
 
-      flex-direction: column;
+    .login-page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
 
-      justify-content: center;
+    .login-card {
+      width: 100%;
+      max-width: 430px;
+      padding: 38px;
+      background: rgba(18, 18, 27, .88);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 24px;
+      box-shadow: 0 30px 100px rgba(0,0,0,.5);
+      backdrop-filter: blur(20px);
+    }
+
+    .brand {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 25px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #8065ff, #4c36d9);
+      font-weight: 900;
+      font-size: 20px;
     }
 
     h1 {
-      font-size: 42px;
+      margin: 0 0 8px;
+      font-size: 32px;
+      letter-spacing: -1.5px;
     }
 
-    h2 {
-      margin-top: 35px;
-    }
-
-    .muted {
-      color: #9699a5;
-    }
-
-    .panel {
-      background: #11131a;
-
-      border: 1px solid #292c36;
-
-      border-radius: 18px;
-
-      padding: 30px;
-
-      margin-top: 25px;
+    .subtitle {
+      margin: 0 0 30px;
+      color: #9496a5;
     }
 
     label {
       display: block;
-
-      margin: 18px 0 7px;
-
-      color: #bbb;
-
-      font-size: 14px;
+      margin: 18px 0 8px;
+      color: #c8c9d1;
+      font-size: 13px;
+      font-weight: 600;
     }
 
-    input,
-    textarea {
+    input, textarea {
       width: 100%;
+      padding: 14px 15px;
+      color: #fff;
+      background: #0b0c11;
+      border: 1px solid #292b36;
+      border-radius: 12px;
+      outline: none;
+      transition: .2s;
+    }
 
-      padding: 13px;
-
-      background: #08090d;
-
-      color: white;
-
-      border: 1px solid #30333e;
-
-      border-radius: 10px;
-
-      font: inherit;
+    input:focus, textarea:focus {
+      border-color: #8065ff;
+      box-shadow: 0 0 0 3px rgba(128,101,255,.12);
     }
 
     textarea {
       min-height: 110px;
-
       resize: vertical;
     }
 
-    button {
-      padding: 13px 20px;
-
+    .primary {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px;
       border: 0;
-
-      border-radius: 10px;
-
-      background: #7658ff;
-
+      border-radius: 12px;
+      background: linear-gradient(135deg, #8065ff, #5c42e8);
       color: white;
-
-      font-weight: 700;
-
+      font-weight: 800;
       cursor: pointer;
+      transition: .2s;
     }
 
-    button:hover {
-      background: #6548ee;
+    .primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(92,66,232,.3);
     }
 
-    .danger {
-      background: #a83245;
+    .primary:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .error {
+      margin-top: 15px;
+      color: #ff7788;
+      font-size: 14px;
+    }
+
+    .success {
+      margin-top: 15px;
+      color: #69e59a;
+      font-size: 14px;
+    }
+
+    .dashboard {
+      display: none;
+      max-width: 1050px;
+      margin: auto;
+      padding: 35px 22px 80px;
     }
 
     .topbar {
       display: flex;
-
-      align-items: center;
-
       justify-content: space-between;
-
+      align-items: center;
       gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .topbar h1 {
+      font-size: 38px;
+    }
+
+    .logout {
+      padding: 11px 16px;
+      border: 1px solid #30323d;
+      border-radius: 10px;
+      background: #11121a;
+      color: white;
+      cursor: pointer;
+    }
+
+    .panel {
+      padding: 30px;
+      margin-bottom: 20px;
+      background: rgba(17,18,26,.9);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 20px;
+    }
+
+    .panel h2 {
+      margin: 0 0 20px;
+      font-size: 21px;
     }
 
     .service {
-      margin-top: 15px;
-
       padding: 20px;
+      margin-bottom: 15px;
+      background: #0b0c11;
+      border: 1px solid #272a35;
+      border-radius: 14px;
+    }
 
-      background: #090a0e;
-
-      border: 1px solid #292c36;
-
-      border-radius: 12px;
+    .remove {
+      margin-top: 12px;
+      padding: 9px 13px;
+      border: 0;
+      border-radius: 9px;
+      background: #8e2e42;
+      color: white;
+      cursor: pointer;
     }
 
     .actions {
       display: flex;
-
-      gap: 10px;
-
-      margin-top: 30px;
-
+      gap: 12px;
       flex-wrap: wrap;
+      margin-top: 25px;
     }
 
-    #message {
-      margin-top: 20px;
-
-      color: #83efaa;
+    .save {
+      padding: 13px 20px;
+      border: 0;
+      border-radius: 11px;
+      background: #8065ff;
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
     }
 
-    #login-message {
-      margin-top: 15px;
-
-      color: #ff7787;
+    .view {
+      display: inline-flex;
+      align-items: center;
+      padding: 13px 20px;
+      border: 1px solid #30323d;
+      border-radius: 11px;
+      color: white;
     }
 
+    @media (max-width: 600px) {
+      .login-card {
+        padding: 28px 22px;
+      }
+
+      .panel {
+        padding: 22px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
   </style>
-
 </head>
 
 <body>
 
-<div id="login" class="login">
+  <section id="loginPage" class="login-page">
+    <div class="login-card">
 
-  <h1>Admin Panel</h1>
+      <div class="brand">D</div>
 
-  <p class="muted">
-    Sign in to manage your website.
-  </p>
+      <h1>Welcome back</h1>
 
-  <div class="panel">
-
-    <label>Username</label>
-
-    <input
-      id="username"
-      autocomplete="username"
-    >
-
-    <label>Password</label>
-
-    <input
-      id="password"
-      type="password"
-      autocomplete="current-password"
-    >
-
-    <div class="actions">
-
-      <button onclick="login()">
-        Sign In
-      </button>
-
-    </div>
-
-    <div id="login-message"></div>
-
-  </div>
-
-</div>
-
-<div
-  id="dashboard"
-  class="dashboard"
-  style="display:none"
->
-
-  <div class="topbar">
-
-    <div>
-
-      <h1>Dashboard</h1>
-
-      <p class="muted">
-        Manage your website.
+      <p class="subtitle">
+        Sign in to manage your DFFDF website.
       </p>
 
+      <form id="loginForm">
+
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          autocomplete="username"
+          required
+        >
+
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          autocomplete="current-password"
+          required
+        >
+
+        <button
+          id="loginButton"
+          class="primary"
+          type="submit"
+        >
+          Sign In
+        </button>
+
+        <div id="loginMessage"></div>
+
+      </form>
     </div>
+  </section>
 
-    <button
-      class="danger"
-      onclick="logout()"
-    >
-      Logout
-    </button>
 
-  </div>
+  <main id="dashboard" class="dashboard">
 
-  <div class="panel">
+    <div class="topbar">
 
-    <h2>Website</h2>
+      <div>
+        <h1>Dashboard</h1>
+        <p class="subtitle">Manage your website content.</p>
+      </div>
 
-    <label>Site Name</label>
-    <input id="siteName">
-
-    <h2>Hero</h2>
-
-    <label>Title</label>
-    <input id="heroTitle">
-
-    <label>Description</label>
-    <textarea id="heroText"></textarea>
-
-    <label>Button</label>
-    <input id="heroButton">
-
-    <h2>About</h2>
-
-    <label>Title</label>
-    <input id="aboutTitle">
-
-    <label>Text</label>
-    <textarea id="aboutText"></textarea>
-
-    <h2>Services</h2>
-
-    <div id="services"></div>
-
-    <button
-      onclick="addService()"
-      type="button"
-    >
-      + Add Service
-    </button>
-
-    <h2>Contact</h2>
-
-    <label>Title</label>
-    <input id="contactTitle">
-
-    <label>Description</label>
-    <textarea id="contactText"></textarea>
-
-    <label>Email</label>
-    <input id="contactEmail">
-
-    <h2>Footer</h2>
-
-    <input id="footer">
-
-    <div class="actions">
-
-      <button onclick="save()">
-        Publish Changes
+      <button id="logoutButton" class="logout">
+        Log out
       </button>
 
-      <a href="/" target="_blank">
-        <button type="button">
-          View Website
-        </button>
-      </a>
-
     </div>
 
-    <div id="message"></div>
 
-  </div>
+    <section class="panel">
 
-</div>
+      <h2>Website</h2>
+
+      <label>Site Name</label>
+      <input id="siteName">
+
+    </section>
+
+
+    <section class="panel">
+
+      <h2>Hero Section</h2>
+
+      <label>Title</label>
+      <input id="heroTitle">
+
+      <label>Description</label>
+      <textarea id="heroText"></textarea>
+
+      <label>Button Text</label>
+      <input id="heroButton">
+
+    </section>
+
+
+    <section class="panel">
+
+      <h2>About</h2>
+
+      <label>Title</label>
+      <input id="aboutTitle">
+
+      <label>Description</label>
+      <textarea id="aboutText"></textarea>
+
+    </section>
+
+
+    <section class="panel">
+
+      <h2>Services</h2>
+
+      <div id="services"></div>
+
+      <button id="addService" class="save" type="button">
+        + Add Service
+      </button>
+
+    </section>
+
+
+    <section class="panel">
+
+      <h2>Contact</h2>
+
+      <label>Title</label>
+      <input id="contactTitle">
+
+      <label>Description</label>
+      <textarea id="contactText"></textarea>
+
+      <label>Email</label>
+      <input id="contactEmail" type="email">
+
+    </section>
+
+
+    <section class="panel">
+
+      <h2>Footer</h2>
+
+      <input id="footer">
+
+      <div class="actions">
+
+        <button id="saveButton" class="save">
+          Publish Changes
+        </button>
+
+        <a href="/" target="_blank" class="view">
+          View Website ↗
+        </a>
+
+      </div>
+
+      <div id="message"></div>
+
+    </section>
+
+  </main>
+
 
 <script>
 
-let siteData;
+let siteData = null;
+
+const $ = id => document.getElementById(id);
+
 
 async function checkSession() {
 
-  const response =
-    await fetch("/api/admin/session");
+  try {
 
-  const data =
-    await response.json();
+    const response = await fetch("/api/admin/session");
+    const data = await response.json();
 
-  if (data.authenticated) {
+    if (data.authenticated) {
+      await showDashboard();
+    }
 
-    showDashboard();
-
+  } catch (error) {
+    console.error(error);
   }
 
 }
 
-async function login() {
 
-  const username =
-    document.getElementById(
-      "username"
-    ).value;
+$("loginForm").addEventListener("submit", async function(event) {
 
-  const password =
-    document.getElementById(
-      "password"
-    ).value;
+  event.preventDefault();
 
-  const response =
-    await fetch("/api/login", {
+  const button = $("loginButton");
+  const message = $("loginMessage");
+
+  button.disabled = true;
+  button.textContent = "Signing in...";
+  message.className = "";
+  message.textContent = "";
+
+  try {
+
+    const response = await fetch("/api/login", {
 
       method: "POST",
 
@@ -366,38 +435,51 @@ async function login() {
       },
 
       body: JSON.stringify({
-        username,
-        password
+        username: $("username").value.trim(),
+        password: $("password").value
       })
 
     });
 
-  const data =
-    await response.json();
+    const data = await response.json();
 
-  if (!data.success) {
+    if (!response.ok || !data.success) {
 
-    document.getElementById(
-      "login-message"
-    ).textContent =
-      data.error;
+      message.className = "error";
+      message.textContent =
+        data.error || "Login failed.";
 
-    return;
+      button.disabled = false;
+      button.textContent = "Sign In";
+
+      return;
+    }
+
+    await showDashboard();
+
+  } catch (error) {
+
+    message.className = "error";
+    message.textContent =
+      "Unable to connect to the server.";
+
+    button.disabled = false;
+    button.textContent = "Sign In";
 
   }
 
-  showDashboard();
+});
 
-}
 
 async function showDashboard() {
 
   const response =
-    await fetch(
-      "/api/admin/content"
-    );
+    await fetch("/api/admin/content");
 
   if (!response.ok) {
+
+    $("loginMessage").textContent =
+      "Unable to load the dashboard.";
 
     return;
 
@@ -406,265 +488,254 @@ async function showDashboard() {
   siteData =
     await response.json();
 
-  document.getElementById(
-    "login"
-  ).style.display =
-    "none";
-
-  document.getElementById(
-    "dashboard"
-  ).style.display =
-    "block";
+  $("loginPage").style.display = "none";
+  $("dashboard").style.display = "block";
 
   populate();
 
 }
 
+
 function populate() {
 
-  document.getElementById(
-    "siteName"
-  ).value =
+  $("siteName").value =
     siteData.siteName || "";
 
-  document.getElementById(
-    "heroTitle"
-  ).value =
+  $("heroTitle").value =
     siteData.heroTitle || "";
 
-  document.getElementById(
-    "heroText"
-  ).value =
+  $("heroText").value =
     siteData.heroText || "";
 
-  document.getElementById(
-    "heroButton"
-  ).value =
+  $("heroButton").value =
     siteData.heroButton || "";
 
-  document.getElementById(
-    "aboutTitle"
-  ).value =
+  $("aboutTitle").value =
     siteData.aboutTitle || "";
 
-  document.getElementById(
-    "aboutText"
-  ).value =
+  $("aboutText").value =
     siteData.aboutText || "";
 
-  document.getElementById(
-    "contactTitle"
-  ).value =
+  $("contactTitle").value =
     siteData.contactTitle || "";
 
-  document.getElementById(
-    "contactText"
-  ).value =
+  $("contactText").value =
     siteData.contactText || "";
 
-  document.getElementById(
-    "contactEmail"
-  ).value =
+  $("contactEmail").value =
     siteData.contactEmail || "";
 
-  document.getElementById(
-    "footer"
-  ).value =
+  $("footer").value =
     siteData.footer || "";
 
   renderServices();
 
 }
 
+
 function renderServices() {
 
-  const container =
-    document.getElementById(
-      "services"
-    );
+  const container = $("services");
 
   container.innerHTML = "";
 
-  siteData.services.forEach(
-    (service, index) => {
+  siteData.services.forEach((service, index) => {
 
-      const div =
-        document.createElement(
-          "div"
-        );
+    const wrapper =
+      document.createElement("div");
 
-      div.className =
-        "service";
+    wrapper.className = "service";
 
-      div.innerHTML = `
+    const title =
+      document.createElement("input");
 
-        <label>Service Title</label>
+    title.value =
+      service.title || "";
 
-        <input
-          value="${escapeHTML(service.title)}"
-          oninput="siteData.services[${index}].title=this.value"
-        >
+    title.placeholder =
+      "Service title";
 
-        <label>Service Description</label>
+    title.addEventListener("input", () => {
+      siteData.services[index].title =
+        title.value;
+    });
 
-        <textarea
-          oninput="siteData.services[${index}].text=this.value"
-        >${escapeHTML(service.text)}</textarea>
 
-        <button
-          class="danger"
-          onclick="removeService(${index})"
-          type="button"
-        >
-          Remove
-        </button>
+    const text =
+      document.createElement("textarea");
 
-      `;
+    text.value =
+      service.text || "";
 
-      container.appendChild(div);
+    text.placeholder =
+      "Service description";
 
-    }
-  );
+    text.addEventListener("input", () => {
+      siteData.services[index].text =
+        text.value;
+    });
+
+
+    const remove =
+      document.createElement("button");
+
+    remove.type = "button";
+    remove.className = "remove";
+    remove.textContent = "Remove";
+
+    remove.addEventListener("click", () => {
+
+      siteData.services.splice(index, 1);
+
+      renderServices();
+
+    });
+
+
+    const titleLabel =
+      document.createElement("label");
+
+    titleLabel.textContent =
+      "Title";
+
+
+    const textLabel =
+      document.createElement("label");
+
+    textLabel.textContent =
+      "Description";
+
+
+    wrapper.appendChild(titleLabel);
+    wrapper.appendChild(title);
+    wrapper.appendChild(textLabel);
+    wrapper.appendChild(text);
+    wrapper.appendChild(remove);
+
+    container.appendChild(wrapper);
+
+  });
 
 }
 
-function escapeHTML(value) {
 
-  return String(value || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-}
-
-function addService() {
+$("addService").addEventListener("click", () => {
 
   siteData.services.push({
-
     title: "New Service",
-
-    text: "Describe your service."
-
+    text: "Describe this service."
   });
 
   renderServices();
 
-}
+});
 
-function removeService(index) {
 
-  siteData.services.splice(
-    index,
-    1
-  );
-
-  renderServices();
-
-}
-
-async function save() {
+$("saveButton").addEventListener("click", async () => {
 
   siteData.siteName =
-    document.getElementById(
-      "siteName"
-    ).value;
+    $("siteName").value;
 
   siteData.heroTitle =
-    document.getElementById(
-      "heroTitle"
-    ).value;
+    $("heroTitle").value;
 
   siteData.heroText =
-    document.getElementById(
-      "heroText"
-    ).value;
+    $("heroText").value;
 
   siteData.heroButton =
-    document.getElementById(
-      "heroButton"
-    ).value;
+    $("heroButton").value;
 
   siteData.aboutTitle =
-    document.getElementById(
-      "aboutTitle"
-    ).value;
+    $("aboutTitle").value;
 
   siteData.aboutText =
-    document.getElementById(
-      "aboutText"
-    ).value;
+    $("aboutText").value;
 
   siteData.contactTitle =
-    document.getElementById(
-      "contactTitle"
-    ).value;
+    $("contactTitle").value;
 
   siteData.contactText =
-    document.getElementById(
-      "contactText"
-    ).value;
+    $("contactText").value;
 
   siteData.contactEmail =
-    document.getElementById(
-      "contactEmail"
-    ).value;
+    $("contactEmail").value;
 
   siteData.footer =
-    document.getElementById(
-      "footer"
-    ).value;
+    $("footer").value;
 
-  const response =
-    await fetch(
-      "/api/admin/save",
-      {
+
+  const button =
+    $("saveButton");
+
+  button.disabled = true;
+  button.textContent = "Publishing...";
+
+
+  try {
+
+    const response =
+      await fetch("/api/admin/save", {
 
         method: "POST",
 
         headers: {
-          "Content-Type":
-            "application/json"
+          "Content-Type": "application/json"
         },
 
         body: JSON.stringify({
           content: siteData
         })
 
-      }
-    );
+      });
 
-  const data =
-    await response.json();
 
-  document.getElementById(
-    "message"
-  ).textContent =
-    data.success
-      ? "✓ Changes published successfully!"
-      : "Error: " + data.error;
+    const data =
+      await response.json();
 
-}
 
-async function logout() {
+    if (!response.ok) {
 
-  await fetch(
-    "/api/logout",
-    {
-      method: "POST"
+      throw new Error(
+        data.error || "Publish failed."
+      );
+
     }
-  );
+
+
+    $("message").className = "success";
+    $("message").textContent =
+      "✓ Published successfully!";
+
+  } catch (error) {
+
+    $("message").className = "error";
+    $("message").textContent =
+      error.message;
+
+  } finally {
+
+    button.disabled = false;
+    button.textContent = "Publish Changes";
+
+  }
+
+});
+
+
+$("logoutButton").addEventListener("click", async () => {
+
+  await fetch("/api/logout", {
+    method: "POST"
+  });
 
   location.reload();
 
-}
+});
+
 
 checkSession();
 
 </script>
 
 </body>
-
 </html>
-```
