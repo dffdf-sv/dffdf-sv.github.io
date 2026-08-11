@@ -1,6 +1,6 @@
 {
   "siteName": "yes",
-  "defaultTheme": "light",
+  "defaultTheme": "midnight",
   "themes": {
     "midnight": {
       "background": "#07070b",
