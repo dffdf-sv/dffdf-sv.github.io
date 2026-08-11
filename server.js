@@ -1,4 +1,3 @@
-```js
 require("dotenv").config();
 
 const express = require("express");
@@ -194,4 +193,3 @@ app.post("/api/admin/save", requireAdmin, async (req, res) => {
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`DFFDF website running on port ${PORT}`);
 });
-```
