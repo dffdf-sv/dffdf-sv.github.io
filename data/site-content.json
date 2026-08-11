@@ -4,7 +4,7 @@
   "heroText": "A modern website built for the future.",
   "heroButton": "Get Started",
   "aboutTitle": "About Us",
-  "aboutText": "Welcome to DFFDF. This section can be edited from your admin panel.",
+  "aboutText": "",
   "services": [
     {
       "title": "Creative",
@@ -24,4 +24,3 @@
   "contactEmail": "hello@example.com",
   "footer": "© 2026 DFFDF. All rights reserved."
 }
-
