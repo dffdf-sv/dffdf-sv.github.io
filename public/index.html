@@ -1,0 +1,98 @@
+function setTheme(mode) {
+  let theme;
+
+  if (mode === "light") {
+    theme = themes.light;
+  } else if (mode === "dark") {
+    theme = themes.midnight;
+  } else {
+    const themeName =
+      page.theme !== "inherit"
+        ? page.theme
+        : site.defaultTheme;
+
+    theme =
+      site.themes?.[themeName] ||
+      themes[themeName] ||
+      themes.midnight;
+  }
+
+  Object.entries(theme).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(
+      `--${key}`,
+      value
+    );
+  });
+
+  const glass = site.glass || {};
+
+  document.documentElement.style.setProperty(
+    "--glass-blur",
+    glass.blur || "30px"
+  );
+
+  document.documentElement.style.setProperty(
+    "--glass-opacity",
+    glass.transparency ?? ".09"
+  );
+
+  document.documentElement.style.setProperty(
+    "--glass-border-opacity",
+    glass.borderOpacity ?? ".12"
+  );
+
+  document.documentElement.style.setProperty(
+    "--glass-shadow",
+    glass.shadowStrength ?? ".20"
+  );
+
+  document.documentElement.style.setProperty(
+    "--glass-radius",
+    glass.cornerRadius || "22px"
+  );
+
+  document.documentElement.style.setProperty(
+    "--glass-animation",
+    glass.animationSpeed || ".25s"
+  );
+
+  document.documentElement.style.setProperty(
+    "--glass-glow",
+    glass.glowStrength ?? ".30"
+  );
+
+  localStorage.setItem(
+    "dffdf-visitor-theme",
+    mode
+  );
+
+  const button =
+    document.getElementById("themeButton");
+
+  if (button) {
+    button.textContent =
+      mode === "default"
+        ? "◐ Default"
+        : mode === "light"
+        ? "☀ Light"
+        : "☾ Dark";
+  }
+}
+
+document
+  .getElementById("themeButton")
+  .addEventListener("click", () => {
+    const current =
+      localStorage.getItem(
+        "dffdf-visitor-theme"
+      ) || "default";
+
+    const next =
+      current === "default"
+        ? "light"
+        : current === "light"
+        ? "dark"
+        : "default";
+
+    setTheme(next);
+  });
