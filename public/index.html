@@ -1,3 +1,5 @@
+<script>
+
 function setTheme(mode) {
   let theme;
 
@@ -79,9 +81,13 @@ function setTheme(mode) {
   }
 }
 
-document
-  .getElementById("themeButton")
-  .addEventListener("click", () => {
+function setupThemeButton() {
+  const button =
+    document.getElementById("themeButton");
+
+  if (!button) return;
+
+  button.addEventListener("click", () => {
     const current =
       localStorage.getItem(
         "dffdf-visitor-theme"
@@ -96,3 +102,8 @@ document
 
     setTheme(next);
   });
+}
+
+/* Your load() function should be below here */
+
+</script>
