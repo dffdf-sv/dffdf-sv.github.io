@@ -1,269 +1,1049 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>DFFDF</title>
+<meta charset="UTF-8">
 
-  <meta
-    name="description"
-    content="DFFDF - Build something amazing."
-  >
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
 
-  <link rel="stylesheet" href="/style.css">
+<title>DFFDF</title>
+
+<style>
+
+:root{
+  --bg:#07070b;
+  --surface:#11121a;
+  --text:#fff;
+  --muted:#999baa;
+  --accent:#8065ff;
+  --accent2:#b19cff;
+  --border:rgba(255,255,255,.1);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+
+  color:var(--text);
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      color-mix(
+        in srgb,
+        var(--accent) 24%,
+        transparent
+      ),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      color-mix(
+        in srgb,
+        var(--accent2) 15%,
+        transparent
+      ),
+      transparent 30%
+    ),
+    var(--bg);
+
+  transition:
+    background .35s,
+    color .35s;
+
+  overflow-x:hidden;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.glass{
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.09),
+      rgba(255,255,255,.025)
+    );
+
+  border:
+    1px solid var(--border);
+
+  backdrop-filter:
+    blur(30px)
+    saturate(140%);
+
+  -webkit-backdrop-filter:
+    blur(30px)
+    saturate(140%);
+
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.08),
+    0 30px 80px rgba(0,0,0,.2);
+}
+
+nav{
+  position:sticky;
+
+  top:14px;
+
+  z-index:50;
+
+  width:min(1180px,calc(100% - 28px));
+
+  margin:14px auto;
+
+  padding:12px 15px;
+
+  border-radius:18px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:900;
+}
+
+.logo-mark{
+  width:34px;
+  height:34px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--accent),
+      var(--accent2)
+    );
+}
+
+.links{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.links a,
+.theme{
+  padding:9px 12px;
+  border-radius:10px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.links a:hover,
+.theme:hover{
+  color:var(--text);
+  background:rgba(255,255,255,.06);
+}
+
+.theme{
+  border:1px solid var(--border);
+  background:transparent;
+  cursor:pointer;
+}
+
+main{
+  width:min(1180px,calc(100% - 28px));
+  margin:auto;
+}
+
+.hero{
+  min-height:76vh;
+
+  display:grid;
+  place-items:center;
+
+  text-align:center;
+
+  padding:100px 20px;
+}
+
+.hero-box{
+  max-width:950px;
+}
+
+.badge{
+  display:inline-flex;
+
+  padding:8px 13px;
+
+  border-radius:999px;
+
+  color:var(--muted);
+
+  font-size:11px;
+
+  letter-spacing:2px;
+
+  background:rgba(255,255,255,.04);
+
+  border:1px solid var(--border);
+}
+
+.hero h1{
+  margin:25px 0;
+
+  font-size:
+    clamp(52px,8vw,105px);
+
+  line-height:.94;
+
+  letter-spacing:-6px;
+}
+
+.hero h1 span,
+.section h2 span{
+  color:var(--accent);
+
+  text-shadow:
+    0 0 50px
+    color-mix(
+      in srgb,
+      var(--accent) 40%,
+      transparent
+    );
+}
+
+.hero p{
+  max-width:650px;
+
+  margin:0 auto 30px;
+
+  color:var(--muted);
+
+  font-size:18px;
+}
+
+.buttons{
+  display:flex;
+
+  justify-content:center;
+
+  gap:12px;
+
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:13px 18px;
+
+  border-radius:12px;
+
+  border:1px solid var(--border);
+
+  background:rgba(255,255,255,.04);
+
+  font-weight:800;
+}
+
+.btn.primary{
+  border:0;
+
+  color:#fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--accent),
+      var(--accent2)
+    );
+
+  box-shadow:
+    0 18px 45px
+    color-mix(
+      in srgb,
+      var(--accent) 30%,
+      transparent
+    );
+}
+
+.section{
+  padding:100px 0;
+}
+
+.section-card{
+  padding:35px;
+
+  border-radius:26px;
+}
+
+.section h2{
+  font-size:
+    clamp(40px,6vw,72px);
+
+  line-height:1;
+
+  letter-spacing:-4px;
+
+  margin:0 0 25px;
+}
+
+.section p{
+  color:var(--muted);
+
+  font-size:18px;
+
+  line-height:1.7;
+}
+
+.section-image{
+  width:100%;
+
+  max-height:550px;
+
+  object-fit:cover;
+
+  border-radius:22px;
+
+  margin-top:25px;
+}
+
+.cards{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:16px;
+
+  margin-top:35px;
+}
+
+.card{
+  padding:28px;
+
+  min-height:220px;
+
+  border-radius:22px;
+
+  transition:
+    transform .25s,
+    border-color .25s;
+}
+
+.card:hover{
+  transform:translateY(-7px);
+
+  border-color:
+    color-mix(
+      in srgb,
+      var(--accent) 55%,
+      transparent
+    );
+}
+
+.card-icon{
+  width:45px;
+  height:45px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:13px;
+
+  color:var(--accent);
+
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 13%,
+      transparent
+    );
+
+  margin-bottom:30px;
+}
+
+.card h3{
+  font-size:22px;
+}
+
+.contact{
+  text-align:center;
+  padding:130px 20px;
+}
+
+.contact .section-card{
+  max-width:850px;
+  margin:auto;
+}
+
+footer{
+  width:min(1180px,calc(100% - 28px));
+
+  margin:auto;
+
+  padding:35px 0;
+
+  border-top:
+    1px solid var(--border);
+
+  color:var(--muted);
+
+  font-size:12px;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:20px;
+}
+
+@media(max-width:750px){
+
+  .links a{
+    display:none;
+  }
+
+  .hero h1{
+    letter-spacing:-3px;
+  }
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .section{
+    padding:70px 0;
+  }
+
+  footer{
+    flex-direction:column;
+  }
+}
+
+</style>
 </head>
 
 <body>
 
-<header class="navbar">
+<nav class="glass">
 
-  <a href="/" class="logo" id="site-name">
-    DFFDF
+  <a
+    href="/"
+    class="logo"
+  >
+    <span class="logo-mark">
+      D
+    </span>
+
+    <span id="siteName">
+      DFFDF
+    </span>
   </a>
 
-  <nav>
-    <a href="#about">About</a>
-    <a href="#services">Services</a>
-    <a href="#contact">Contact</a>
-    <a href="/admin" class="admin-link">Admin</a>
-  </nav>
 
-</header>
+  <div
+    id="navLinks"
+    class="links"
+  ></div>
 
-<main>
 
-<section class="hero">
+  <button
+    id="themeButton"
+    class="theme"
+  >
+    ◐ Default
+  </button>
 
-  <div class="hero-content">
+</nav>
 
-    <span class="eyebrow">
-      WELCOME
-    </span>
 
-    <h1 id="hero-title">
-      Build something amazing.
-    </h1>
+<main id="content">
 
-    <p id="hero-text">
-      A modern website built for the future.
-    </p>
+  <section class="hero">
 
-    <a
-      href="#contact"
-      class="button"
-      id="hero-button"
-    >
-      Get Started
-    </a>
+    <div class="hero-box">
 
-  </div>
+      <div
+        id="badge"
+        class="badge"
+      ></div>
 
-</section>
+      <h1 id="heroTitle"></h1>
 
-<section id="about" class="section">
+      <p id="heroText"></p>
 
-  <div class="container">
+      <div
+        id="heroButtons"
+        class="buttons"
+      ></div>
 
-    <span class="eyebrow">
-      ABOUT
-    </span>
+    </div>
 
-    <h2 id="about-title">
-      About Us
-    </h2>
+  </section>
 
-    <p
-      class="large-text"
-      id="about-text"
-    ></p>
 
-  </div>
-
-</section>
-
-<section
-  id="services"
-  class="section services"
->
-
-  <div class="container">
-
-    <span class="eyebrow">
-      WHAT WE DO
-    </span>
-
-    <h2>Services</h2>
-
-    <div
-      id="services-list"
-      class="cards"
-    ></div>
-
-  </div>
-
-</section>
-
-<section
-  id="contact"
-  class="section contact"
->
-
-  <div class="container">
-
-    <span class="eyebrow">
-      CONTACT
-    </span>
-
-    <h2 id="contact-title">
-      Let's connect
-    </h2>
-
-    <p id="contact-text"></p>
-
-    <a
-      id="contact-email"
-      class="button"
-    >
-      Contact
-    </a>
-
-  </div>
-
-</section>
+  <div id="sections"></div>
 
 </main>
 
+
 <footer>
 
-  <p id="footer"></p>
+  <span id="footer">
+    © 2026 DFFDF
+  </span>
+
+  <span>
+    Liquid Glass
+  </span>
 
 </footer>
 
+
 <script>
 
-async function loadSite() {
+let site;
+let page;
 
-  try {
+const themes = {
+  midnight:{
+    background:"#07070b",
+    surface:"#11121a",
+    text:"#fff",
+    muted:"#999baa",
+    accent:"#8065ff",
+    accent2:"#b19cff"
+  },
 
-    const response =
-      await fetch("/api/content");
+  aurora:{
+    background:"#06100e",
+    surface:"#0d1c19",
+    text:"#fff",
+    muted:"#9bb8af",
+    accent:"#48e6b2",
+    accent2:"#9bffe0"
+  },
 
-    const data =
-      await response.json();
+  ocean:{
+    background:"#06101a",
+    surface:"#0d1925",
+    text:"#fff",
+    muted:"#9bb2c7",
+    accent:"#38a9ff",
+    accent2:"#8bd1ff"
+  },
 
-    document.title =
-      data.siteName;
+  sunset:{
+    background:"#13090d",
+    surface:"#211117",
+    text:"#fff",
+    muted:"#c4a1aa",
+    accent:"#ff6b7a",
+    accent2:"#ffb36b"
+  },
 
-    document.getElementById(
-      "site-name"
-    ).textContent =
-      data.siteName;
-
-    document.getElementById(
-      "hero-title"
-    ).textContent =
-      data.heroTitle;
-
-    document.getElementById(
-      "hero-text"
-    ).textContent =
-      data.heroText;
-
-    document.getElementById(
-      "hero-button"
-    ).textContent =
-      data.heroButton;
-
-    document.getElementById(
-      "about-title"
-    ).textContent =
-      data.aboutTitle;
-
-    document.getElementById(
-      "about-text"
-    ).textContent =
-      data.aboutText;
-
-    document.getElementById(
-      "contact-title"
-    ).textContent =
-      data.contactTitle;
-
-    document.getElementById(
-      "contact-text"
-    ).textContent =
-      data.contactText;
-
-    const email =
-      document.getElementById(
-        "contact-email"
-      );
-
-    email.textContent =
-      data.contactEmail;
-
-    email.href =
-      "mailto:" + data.contactEmail;
-
-    document.getElementById(
-      "footer"
-    ).textContent =
-      data.footer;
-
-    const services =
-      document.getElementById(
-        "services-list"
-      );
-
-    services.innerHTML = "";
-
-    data.services.forEach(service => {
-
-      const card =
-        document.createElement("article");
-
-      card.className = "card";
-
-      const icon =
-        document.createElement("div");
-
-      icon.className = "card-icon";
-      icon.textContent = "✦";
-
-      const title =
-        document.createElement("h3");
-
-      title.textContent =
-        service.title;
-
-      const text =
-        document.createElement("p");
-
-      text.textContent =
-        service.text;
-
-      card.appendChild(icon);
-      card.appendChild(title);
-      card.appendChild(text);
-
-      services.appendChild(card);
-
-    });
-
-  } catch (error) {
-
-    console.error(error);
-
+  light:{
+    background:"#f4f5f8",
+    surface:"#fff",
+    text:"#101015",
+    muted:"#686975",
+    accent:"#6246e8",
+    accent2:"#927cff"
   }
+};
+
+
+function setTheme(mode){
+
+  let theme;
+
+  if(mode === "light"){
+    theme = themes.light;
+  }
+
+  else if(mode === "dark"){
+    theme = themes.midnight;
+  }
+
+  else{
+
+    const themeName =
+      page.theme !== "inherit"
+        ? page.theme
+        : site.defaultTheme;
+
+    theme =
+      site.themes[
+        themeName
+      ] ||
+      themes[
+        themeName
+      ] ||
+      themes.midnight;
+  }
+
+  Object.entries(theme)
+    .forEach(
+      ([key,value]) => {
+
+        document.documentElement
+          .style
+          .setProperty(
+            `--${key}`,
+            value
+          );
+
+      }
+    );
+
+  localStorage.setItem(
+    "dffdf-visitor-theme",
+    mode
+  );
+
+  document.getElementById(
+    "themeButton"
+  ).textContent =
+    mode === "default"
+      ? "◐ Default"
+      : mode === "light"
+        ? "☀ Light"
+        : "☾ Dark";
 
 }
 
-loadSite();
+
+document
+  .getElementById(
+    "themeButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      const current =
+        localStorage.getItem(
+          "dffdf-visitor-theme"
+        ) || "default";
+
+      const next =
+        current === "default"
+          ? "light"
+          : current === "light"
+            ? "dark"
+            : "default";
+
+      setTheme(next);
+
+    }
+  );
+
+
+async function load(){
+
+  const slug =
+    location.pathname
+      .replace(/^\/+/,"")
+      .replace(/\/+$/,"") ||
+    "home";
+
+  const response =
+    await fetch(
+      `/api/site?page=${encodeURIComponent(slug)}`
+    );
+
+  if(!response.ok){
+
+    document.getElementById(
+      "content"
+    ).innerHTML = `
+      <section class="hero">
+        <div class="hero-box">
+          <h1>Page not found.</h1>
+          <p>
+            This page doesn't exist yet.
+          </p>
+          <a class="btn primary" href="/">
+            Go Home
+          </a>
+        </div>
+      </section>
+    `;
+
+    return;
+  }
+
+  const data =
+    await response.json();
+
+  site =
+    data.site;
+
+  page =
+    data.page;
+
+
+  document.title =
+    `${page.title} · ${site.siteName}`;
+
+
+  document.getElementById(
+    "siteName"
+  ).textContent =
+    site.siteName;
+
+
+  renderNavigation();
+
+  renderPage();
+
+
+  const saved =
+    localStorage.getItem(
+      "dffdf-visitor-theme"
+    ) || "default";
+
+  setTheme(saved);
+
+
+  document.getElementById(
+    "footer"
+  ).textContent =
+    `© 2026 ${site.siteName}. All rights reserved.`;
+
+}
+
+
+function renderNavigation(){
+
+  const nav =
+    document.getElementById(
+      "navLinks"
+    );
+
+  nav.innerHTML = "";
+
+  const items =
+    site.navigation || [];
+
+  items.forEach(item => {
+
+    const a =
+      document.createElement("a");
+
+    a.href =
+      item.href;
+
+    a.textContent =
+      item.label;
+
+    nav.appendChild(a);
+
+  });
+
+}
+
+
+function renderPage(){
+
+  const sections =
+    page.sections || [];
+
+  const hero =
+    sections.find(
+      s => s.type === "hero"
+    );
+
+  if(hero){
+
+    document.getElementById(
+      "badge"
+    ).textContent =
+      hero.badge || "DFFDF";
+
+
+    document.getElementById(
+      "heroTitle"
+    ).innerHTML =
+      formatTitle(
+        hero.title
+      );
+
+
+    document.getElementById(
+      "heroText"
+    ).textContent =
+      hero.text || "";
+
+
+    const buttons =
+      document.getElementById(
+        "heroButtons"
+      );
+
+    buttons.innerHTML = "";
+
+    if(hero.buttonText){
+
+      buttons.innerHTML = `
+        <a
+          class="btn primary"
+          href="${safeAttr(hero.buttonUrl || "#")}"
+        >
+          ${escapeHTML(hero.buttonText)}
+          →
+        </a>
+      `;
+
+    }
+
+  }
+
+
+  const container =
+    document.getElementById(
+      "sections"
+    );
+
+  container.innerHTML = "";
+
+
+  sections
+    .filter(
+      s => s.type !== "hero"
+    )
+    .forEach(
+      renderSection
+    );
+
+}
+
+
+function renderSection(section){
+
+  const wrapper =
+    document.createElement(
+      "section"
+    );
+
+  wrapper.className =
+    "section";
+
+
+  if(section.type === "text"){
+
+    wrapper.innerHTML = `
+      <div class="section-card glass">
+        <h2>
+          ${formatTitle(section.title || "")}
+        </h2>
+
+        <p>
+          ${escapeHTML(section.text || "")}
+        </p>
+
+        ${
+          section.image
+            ? `<img
+                class="section-image"
+                src="${safeAttr(section.image)}"
+                alt=""
+              >`
+            : ""
+        }
+      </div>
+    `;
+
+  }
+
+
+  else if(section.type === "image"){
+
+    wrapper.innerHTML = `
+      <div class="section-card glass">
+        <h2>
+          ${formatTitle(section.title || "")}
+        </h2>
+
+        ${
+          section.image
+            ? `<img
+                class="section-image"
+                src="${safeAttr(section.image)}"
+                alt=""
+              >`
+            : ""
+        }
+
+        <p>
+          ${escapeHTML(section.text || "")}
+        </p>
+      </div>
+    `;
+
+  }
+
+
+  else if(section.type === "cards"){
+
+    const cards =
+      section.cards || [];
+
+    wrapper.innerHTML = `
+      <div class="section-card glass">
+
+        <h2>
+          ${formatTitle(section.title || "")}
+        </h2>
+
+        <p>
+          ${escapeHTML(section.text || "")}
+        </p>
+
+        <div class="cards">
+
+          ${cards.map(
+            (card,index) => `
+
+              <article class="card glass">
+
+                <div class="card-icon">
+                  ${["✦","◈","∞","◆"][index % 4]}
+                </div>
+
+                <h3>
+                  ${escapeHTML(card.title || "")}
+                </h3>
+
+                <p>
+                  ${escapeHTML(card.text || "")}
+                </p>
+
+              </article>
+
+            `
+          ).join("")}
+
+        </div>
+
+      </div>
+    `;
+
+  }
+
+
+  else if(section.type === "contact"){
+
+    wrapper.className =
+      "contact";
+
+    wrapper.innerHTML = `
+      <div class="section-card glass">
+
+        <h2>
+          ${formatTitle(section.title || "")}
+        </h2>
+
+        <p>
+          ${escapeHTML(section.text || "")}
+        </p>
+
+        ${
+          section.email
+            ? `
+              <div class="buttons">
+                <a
+                  class="btn primary"
+                  href="mailto:${safeAttr(section.email)}"
+                >
+                  ${escapeHTML(section.email)}
+                  ↗
+                </a>
+              </div>
+            `
+            : ""
+        }
+
+      </div>
+    `;
+
+  }
+
+
+  document
+    .getElementById("sections")
+    .appendChild(wrapper);
+
+}
+
+
+function formatTitle(value){
+
+  const words =
+    String(value || "")
+      .trim()
+      .split(/\s+/);
+
+  if(words.length < 2)
+    return escapeHTML(value);
+
+  const last =
+    escapeHTML(words.pop());
+
+  return `
+    ${escapeHTML(words.join(" "))}
+    <span>${last}</span>
+  `;
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function safeAttr(value){
+
+  return escapeHTML(value)
+    .replace(/javascript:/gi,"");
+
+}
+
+
+load();
 
 </script>
 
 </body>
 </html>
-```
