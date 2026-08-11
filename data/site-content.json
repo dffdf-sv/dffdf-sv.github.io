@@ -1,1 +1,29 @@
+```json
+{
+  "siteName": "DFFDF",
+  "heroTitle": "Build something amazing.",
+  "heroText": "A modern website built for the future.",
+  "heroButton": "Get Started",
+  "aboutTitle": "About Us",
+  "aboutText": "Welcome to DFFDF. This section can be edited from your admin panel.",
+  "services": [
+    {
+      "title": "Creative",
+      "text": "Beautiful and modern digital experiences."
+    },
+    {
+      "title": "Fast",
+      "text": "Fast, responsive and optimized for every device."
+    },
+    {
+      "title": "Simple",
+      "text": "Easy content management through your admin panel."
+    }
+  ],
+  "contactTitle": "Let's connect",
+  "contactText": "Have a question? Get in touch with us.",
+  "contactEmail": "hello@example.com",
+  "footer": "© 2026 DFFDF. All rights reserved."
+}
+```
 
