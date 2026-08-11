@@ -1,739 +1,1757 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DFFDF Admin</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DFFDF Studio</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+:root{
+  --bg:#07070b;
+  --glass:rgba(20,20,30,.68);
+  --glass2:rgba(255,255,255,.055);
+  --border:rgba(255,255,255,.1);
+  --text:#fff;
+  --muted:#999baa;
+  --accent:#8065ff;
+  --accent2:#b19cff;
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at 20% 10%, rgba(124, 92, 255, .2), transparent 35%),
-        radial-gradient(circle at 90% 80%, rgba(0, 200, 255, .08), transparent 30%),
-        #07070b;
-      color: #fff;
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
+*{box-sizing:border-box}
 
-    button, input, textarea {
-      font: inherit;
-    }
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:Inter,system-ui,sans-serif;
+  background:
+    radial-gradient(circle at 10% 10%,rgba(128,101,255,.22),transparent 30%),
+    radial-gradient(circle at 90% 90%,rgba(56,169,255,.12),transparent 30%),
+    var(--bg);
+}
 
-    .login-page {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-    }
+button,input,textarea,select{font:inherit}
 
-    .login-card {
-      width: 100%;
-      max-width: 430px;
-      padding: 38px;
-      background: rgba(18, 18, 27, .88);
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 24px;
-      box-shadow: 0 30px 100px rgba(0,0,0,.5);
-      backdrop-filter: blur(20px);
-    }
+button{
+  cursor:pointer;
+}
 
-    .brand {
-      width: 52px;
-      height: 52px;
-      display: grid;
-      place-items: center;
-      margin-bottom: 25px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #8065ff, #4c36d9);
-      font-weight: 900;
-      font-size: 20px;
-    }
+.login{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:20px;
+}
 
-    h1 {
-      margin: 0 0 8px;
-      font-size: 32px;
-      letter-spacing: -1.5px;
-    }
+.login-card,.panel,.sidebar{
+  background:var(--glass);
+  border:1px solid var(--border);
+  box-shadow:0 30px 100px rgba(0,0,0,.4);
+  backdrop-filter:blur(30px);
+  -webkit-backdrop-filter:blur(30px);
+}
 
-    .subtitle {
-      margin: 0 0 30px;
-      color: #9496a5;
-    }
+.login-card{
+  width:min(430px,100%);
+  padding:35px;
+  border-radius:28px;
+}
 
-    label {
-      display: block;
-      margin: 18px 0 8px;
-      color: #c8c9d1;
-      font-size: 13px;
-      font-weight: 600;
-    }
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:900;
+  font-size:20px;
+}
 
-    input, textarea {
-      width: 100%;
-      padding: 14px 15px;
-      color: #fff;
-      background: #0b0c11;
-      border: 1px solid #292b36;
-      border-radius: 12px;
-      outline: none;
-      transition: .2s;
-    }
+.logo-mark{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
 
-    input:focus, textarea:focus {
-      border-color: #8065ff;
-      box-shadow: 0 0 0 3px rgba(128,101,255,.12);
-    }
+h1,h2,h3{letter-spacing:-1px}
 
-    textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
+.muted{color:var(--muted)}
 
-    .primary {
-      width: 100%;
-      margin-top: 24px;
-      padding: 14px;
-      border: 0;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #8065ff, #5c42e8);
-      color: white;
-      font-weight: 800;
-      cursor: pointer;
-      transition: .2s;
-    }
+label{
+  display:block;
+  margin:18px 0 8px;
+  color:#c9cad4;
+  font-size:13px;
+  font-weight:700;
+}
 
-    .primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 30px rgba(92,66,232,.3);
-    }
+input,textarea,select{
+  width:100%;
+  padding:13px 14px;
+  color:var(--text);
+  background:rgba(0,0,0,.24);
+  border:1px solid var(--border);
+  border-radius:12px;
+  outline:none;
+}
 
-    .primary:disabled {
-      opacity: .6;
-      cursor: wait;
-    }
+textarea{
+  min-height:150px;
+  resize:vertical;
+}
 
-    .error {
-      margin-top: 15px;
-      color: #ff7788;
-      font-size: 14px;
-    }
+input:focus,textarea:focus,select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(128,101,255,.12);
+}
 
-    .success {
-      margin-top: 15px;
-      color: #69e59a;
-      font-size: 14px;
-    }
+.primary{
+  width:100%;
+  margin-top:22px;
+  padding:14px;
+  border:0;
+  border-radius:12px;
+  color:#fff;
+  font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
 
-    .dashboard {
-      display: none;
-      max-width: 1050px;
-      margin: auto;
-      padding: 35px 22px 80px;
-    }
+.error{color:#ff7185;margin-top:15px}
+.success{color:#55e69b;margin-top:15px}
 
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      margin-bottom: 25px;
-    }
+.app{
+  display:none;
+  min-height:100vh;
+}
 
-    .topbar h1 {
-      font-size: 38px;
-    }
+.sidebar{
+  position:fixed;
+  left:18px;
+  top:18px;
+  bottom:18px;
+  width:230px;
+  padding:20px;
+  border-radius:24px;
+}
 
-    .logout {
-      padding: 11px 16px;
-      border: 1px solid #30323d;
-      border-radius: 10px;
-      background: #11121a;
-      color: white;
-      cursor: pointer;
-    }
+.nav{
+  margin-top:30px;
+  display:grid;
+  gap:8px;
+}
 
-    .panel {
-      padding: 30px;
-      margin-bottom: 20px;
-      background: rgba(17,18,26,.9);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 20px;
-    }
+.nav button{
+  width:100%;
+  padding:12px;
+  border:1px solid transparent;
+  border-radius:12px;
+  background:transparent;
+  color:var(--muted);
+  text-align:left;
+}
 
-    .panel h2 {
-      margin: 0 0 20px;
-      font-size: 21px;
-    }
+.nav button:hover,
+.nav button.active{
+  color:#fff;
+  background:var(--glass2);
+  border-color:var(--border);
+}
 
-    .service {
-      padding: 20px;
-      margin-bottom: 15px;
-      background: #0b0c11;
-      border: 1px solid #272a35;
-      border-radius: 14px;
-    }
+.main{
+  margin-left:270px;
+  padding:30px 30px 80px;
+  max-width:1450px;
+}
 
-    .remove {
-      margin-top: 12px;
-      padding: 9px 13px;
-      border: 0;
-      border-radius: 9px;
-      background: #8e2e42;
-      color: white;
-      cursor: pointer;
-    }
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:25px;
+}
 
-    .actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 25px;
-    }
+.top h1{
+  margin:0;
+  font-size:36px;
+}
 
-    .save {
-      padding: 13px 20px;
-      border: 0;
-      border-radius: 11px;
-      background: #8065ff;
-      color: white;
-      font-weight: 800;
-      cursor: pointer;
-    }
+.top-actions{
+  display:flex;
+  gap:10px;
+}
 
-    .view {
-      display: inline-flex;
-      align-items: center;
-      padding: 13px 20px;
-      border: 1px solid #30323d;
-      border-radius: 11px;
-      color: white;
-    }
+.btn{
+  padding:11px 15px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  color:#fff;
+  background:var(--glass2);
+}
 
-    @media (max-width: 600px) {
-      .login-card {
-        padding: 28px 22px;
-      }
+.btn.primary-btn{
+  border:0;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
 
-      .panel {
-        padding: 22px;
-      }
+.panel{
+  display:none;
+  padding:25px;
+  border-radius:22px;
+}
 
-      .topbar {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-    }
-  </style>
+.panel.active{
+  display:block;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+}
+
+.card{
+  padding:20px;
+  border:1px solid var(--border);
+  border-radius:18px;
+  background:rgba(255,255,255,.035);
+}
+
+.page-list{
+  display:grid;
+  gap:10px;
+  margin-top:15px;
+}
+
+.page-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:rgba(255,255,255,.035);
+}
+
+.page-item button{
+  padding:8px 11px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  color:#fff;
+  background:rgba(255,255,255,.05);
+}
+
+.theme-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+  margin-top:15px;
+}
+
+.theme{
+  min-height:105px;
+  padding:15px;
+  border:1px solid var(--border);
+  border-radius:16px;
+  color:#fff;
+  text-align:left;
+}
+
+.theme.active{
+  outline:2px solid var(--accent);
+}
+
+.theme-midnight{background:linear-gradient(135deg,#09090e,#8065ff)}
+.theme-aurora{background:linear-gradient(135deg,#06100e,#48e6b2)}
+.theme-ocean{background:linear-gradient(135deg,#06101a,#38a9ff)}
+.theme-sunset{background:linear-gradient(135deg,#13090d,#ff6b7a)}
+.theme-light{background:linear-gradient(135deg,#eee,#6246e8);color:#111}
+
+.media-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+}
+
+.media-preview{
+  max-width:180px;
+  max-height:120px;
+  margin-top:15px;
+  border-radius:14px;
+  border:1px solid var(--border);
+}
+
+.ai{
+  display:grid;
+  grid-template-columns:1fr 340px;
+  gap:18px;
+}
+
+.chat{
+  min-height:450px;
+  display:flex;
+  flex-direction:column;
+}
+
+.messages{
+  flex:1;
+  overflow:auto;
+  padding:15px;
+}
+
+.msg{
+  padding:12px 14px;
+  margin-bottom:10px;
+  border-radius:14px;
+  max-width:85%;
+}
+
+.msg.user{
+  margin-left:auto;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
+
+.msg.ai{
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--border);
+}
+
+.chat-input{
+  display:flex;
+  gap:10px;
+  padding-top:15px;
+}
+
+.chat-input input{
+  flex:1;
+}
+
+@media(max-width:900px){
+  .sidebar{
+    position:static;
+    width:auto;
+    margin:12px;
+    height:auto;
+  }
+
+  .nav{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .main{
+    margin-left:0;
+    padding:20px;
+  }
+
+  .grid,.ai{
+    grid-template-columns:1fr;
+  }
+
+  .theme-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:500px){
+  .nav{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .top{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <section id="loginPage" class="login-page">
-    <div class="login-card">
+<div id="login" class="login">
 
-      <div class="brand">D</div>
+  <div class="login-card">
 
-      <h1>Welcome back</h1>
-
-      <p class="subtitle">
-        Sign in to manage your DFFDF website.
-      </p>
-
-      <form id="loginForm">
-
-        <label for="username">Username</label>
-        <input
-          id="username"
-          type="text"
-          autocomplete="username"
-          required
-        >
-
-        <label for="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          autocomplete="current-password"
-          required
-        >
-
-        <button
-          id="loginButton"
-          class="primary"
-          type="submit"
-        >
-          Sign In
-        </button>
-
-        <div id="loginMessage"></div>
-
-      </form>
+    <div class="logo">
+      <span class="logo-mark">D</span>
+      DFFDF Studio
     </div>
-  </section>
+
+    <h1>Welcome back</h1>
+
+    <p class="muted">
+      Manage your Liquid Glass website.
+    </p>
+
+    <form id="loginForm">
+
+      <label>Username</label>
+      <input id="username" required>
+
+      <label>Password</label>
+      <input id="password" type="password" required>
+
+      <button class="primary">
+        Sign In
+      </button>
+
+      <div id="loginError"></div>
+
+    </form>
+
+  </div>
+
+</div>
 
 
-  <main id="dashboard" class="dashboard">
+<div id="app" class="app">
 
-    <div class="topbar">
+  <aside class="sidebar">
+
+    <div class="logo">
+      <span class="logo-mark">D</span>
+      DFFDF
+    </div>
+
+    <div class="nav">
+
+      <button class="active" data-panel="dashboard">
+        ◈ Dashboard
+      </button>
+
+      <button data-panel="pages">
+        □ Pages
+      </button>
+
+      <button data-panel="appearance">
+        ◐ Appearance
+      </button>
+
+      <button data-panel="media">
+        ▧ Media
+      </button>
+
+      <button data-panel="ai">
+        ✦ AI Builder
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <main class="main">
+
+    <div class="top">
 
       <div>
-        <h1>Dashboard</h1>
-        <p class="subtitle">Manage your website content.</p>
+        <h1 id="heading">
+          Dashboard
+        </h1>
+
+        <div class="muted">
+          DFFDF Liquid Glass CMS
+        </div>
       </div>
 
-      <button id="logoutButton" class="logout">
-        Log out
-      </button>
+      <div class="top-actions">
+
+        <a
+          href="/"
+          target="_blank"
+          class="btn"
+        >
+          View Site ↗
+        </a>
+
+        <button
+          id="logout"
+          class="btn"
+        >
+          Logout
+        </button>
+
+      </div>
 
     </div>
 
 
-    <section class="panel">
+    <!-- DASHBOARD -->
 
-      <h2>Website</h2>
+    <section
+      id="dashboard"
+      class="panel active"
+    >
 
-      <label>Site Name</label>
-      <input id="siteName">
+      <div class="grid">
 
-    </section>
+        <div class="card">
 
+          <h2>Website</h2>
 
-    <section class="panel">
+          <label>Site name</label>
 
-      <h2>Hero Section</h2>
+          <input id="siteName">
 
-      <label>Title</label>
-      <input id="heroTitle">
+          <button
+            id="saveSite"
+            class="btn primary-btn"
+            style="margin-top:18px"
+          >
+            Save Site
+          </button>
 
-      <label>Description</label>
-      <textarea id="heroText"></textarea>
+          <div id="siteMessage"></div>
 
-      <label>Button Text</label>
-      <input id="heroButton">
+        </div>
 
-    </section>
+        <div class="card">
 
+          <h2>Quick actions</h2>
 
-    <section class="panel">
+          <button
+            class="btn"
+            onclick="openPanel('pages')"
+          >
+            Manage Pages
+          </button>
 
-      <h2>About</h2>
+          <button
+            class="btn"
+            onclick="openPanel('appearance')"
+          >
+            Change Theme
+          </button>
 
-      <label>Title</label>
-      <input id="aboutTitle">
+          <button
+            class="btn"
+            onclick="openPanel('ai')"
+          >
+            Open AI Builder
+          </button>
 
-      <label>Description</label>
-      <textarea id="aboutText"></textarea>
-
-    </section>
-
-
-    <section class="panel">
-
-      <h2>Services</h2>
-
-      <div id="services"></div>
-
-      <button id="addService" class="save" type="button">
-        + Add Service
-      </button>
-
-    </section>
-
-
-    <section class="panel">
-
-      <h2>Contact</h2>
-
-      <label>Title</label>
-      <input id="contactTitle">
-
-      <label>Description</label>
-      <textarea id="contactText"></textarea>
-
-      <label>Email</label>
-      <input id="contactEmail" type="email">
-
-    </section>
-
-
-    <section class="panel">
-
-      <h2>Footer</h2>
-
-      <input id="footer">
-
-      <div class="actions">
-
-        <button id="saveButton" class="save">
-          Publish Changes
-        </button>
-
-        <a href="/" target="_blank" class="view">
-          View Website ↗
-        </a>
+        </div>
 
       </div>
 
-      <div id="message"></div>
+    </section>
+
+
+    <!-- PAGES -->
+
+    <section
+      id="pages"
+      class="panel"
+    >
+
+      <div class="grid">
+
+        <div class="card">
+
+          <h2>Pages</h2>
+
+          <p class="muted">
+            Create unlimited pages.
+          </p>
+
+          <div
+            id="pageList"
+            class="page-list"
+          ></div>
+
+          <h3>New page</h3>
+
+          <input
+            id="newTitle"
+            placeholder="Page title"
+          >
+
+          <input
+            id="newSlug"
+            placeholder="URL slug e.g. pricing"
+            style="margin-top:10px"
+          >
+
+          <button
+            id="createPage"
+            class="btn primary-btn"
+            style="margin-top:10px"
+          >
+            + Create Page
+          </button>
+
+          <div id="pageMessage"></div>
+
+        </div>
+
+
+        <div class="card">
+
+          <h2>Page editor</h2>
+
+          <label>Current page</label>
+
+          <select id="pageSelect"></select>
+
+          <label>Page JSON</label>
+
+          <textarea
+            id="pageJson"
+            spellcheck="false"
+          ></textarea>
+
+          <button
+            id="savePage"
+            class="btn primary-btn"
+            style="margin-top:10px"
+          >
+            Save Page
+          </button>
+
+          <button
+            id="deletePage"
+            class="btn"
+            style="margin-top:10px"
+          >
+            Delete Page
+          </button>
+
+          <div id="editorMessage"></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- APPEARANCE -->
+
+    <section
+      id="appearance"
+      class="panel"
+    >
+
+      <h2>Liquid Glass Appearance</h2>
+
+      <p class="muted">
+        Choose the site's default theme.
+        Visitors can override it with Light or Dark.
+      </p>
+
+      <div
+        id="themes"
+        class="theme-grid"
+      ></div>
+
+      <div class="grid" style="margin-top:25px">
+
+        <div class="card">
+
+          <h3>Custom colors</h3>
+
+          <label>Background</label>
+          <input
+            id="background"
+            type="color"
+          >
+
+          <label>Accent</label>
+          <input
+            id="accent"
+            type="color"
+          >
+
+          <label>Secondary accent</label>
+          <input
+            id="accent2"
+            type="color"
+          >
+
+          <button
+            id="saveTheme"
+            class="btn primary-btn"
+            style="margin-top:15px"
+          >
+            Save Custom Theme
+          </button>
+
+        </div>
+
+        <div class="card">
+
+          <h3>Visitor mode</h3>
+
+          <p class="muted">
+            Visitors see your selected default,
+            but can switch to Light or Dark.
+          </p>
+
+          <select id="visitorDefault">
+            <option value="default">Default</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- MEDIA -->
+
+    <section
+      id="media"
+      class="panel"
+    >
+
+      <h2>Media</h2>
+
+      <p class="muted">
+        Upload an image to GitHub or use an external image URL.
+      </p>
+
+      <div class="grid">
+
+        <div class="card">
+
+          <h3>Upload image</h3>
+
+          <input
+            id="imageFile"
+            type="file"
+            accept="image/*"
+          >
+
+          <button
+            id="uploadImage"
+            class="btn primary-btn"
+            style="margin-top:15px"
+          >
+            Upload
+          </button>
+
+          <div id="uploadMessage"></div>
+
+        </div>
+
+
+        <div class="card">
+
+          <h3>Use image URL</h3>
+
+          <div class="media-row">
+
+            <input
+              id="imageUrl"
+              placeholder="https://example.com/image.jpg"
+            >
+
+            <button
+              id="useUrl"
+              class="btn primary-btn"
+            >
+              Use
+            </button>
+
+          </div>
+
+          <div id="urlResult"></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- AI -->
+
+    <section
+      id="ai"
+      class="panel"
+    >
+
+      <div class="ai">
+
+        <div class="card chat">
+
+          <h2>✦ AI Site Builder</h2>
+
+          <p class="muted">
+            Ask the AI to modify the selected page.
+          </p>
+
+          <div
+            id="messages"
+            class="messages"
+          ></div>
+
+          <div class="chat-input">
+
+            <input
+              id="aiInput"
+              placeholder="e.g. Add a pricing section..."
+            >
+
+            <button
+              id="sendAI"
+              class="btn primary-btn"
+            >
+              Send
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <h3>Selected page</h3>
+
+          <select id="aiPage"></select>
+
+          <p class="muted">
+            AI changes are returned as a preview.
+            You can apply them to the editor before publishing.
+          </p>
+
+          <button
+            id="applyAI"
+            class="btn primary-btn"
+          >
+            Apply Last AI Change
+          </button>
+
+          <div id="aiStatus"></div>
+
+        </div>
+
+      </div>
 
     </section>
 
   </main>
 
+</div>
+
 
 <script>
 
-let siteData = null;
+let site = null;
+let pages = [];
+let currentPage = null;
+let lastAIPage = null;
 
-const $ = id => document.getElementById(id);
 
+const $ = id =>
+  document.getElementById(id);
 
-async function checkSession() {
 
-  try {
+/* LOGIN */
 
-    const response = await fetch("/api/admin/session");
-    const data = await response.json();
+$("loginForm").addEventListener(
+  "submit",
+  async e => {
 
-    if (data.authenticated) {
-      await showDashboard();
-    }
-
-  } catch (error) {
-    console.error(error);
-  }
-
-}
-
-
-$("loginForm").addEventListener("submit", async function(event) {
-
-  event.preventDefault();
-
-  const button = $("loginButton");
-  const message = $("loginMessage");
-
-  button.disabled = true;
-  button.textContent = "Signing in...";
-  message.className = "";
-  message.textContent = "";
-
-  try {
-
-    const response = await fetch("/api/login", {
-
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify({
-        username: $("username").value.trim(),
-        password: $("password").value
-      })
-
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || !data.success) {
-
-      message.className = "error";
-      message.textContent =
-        data.error || "Login failed.";
-
-      button.disabled = false;
-      button.textContent = "Sign In";
-
-      return;
-    }
-
-    await showDashboard();
-
-  } catch (error) {
-
-    message.className = "error";
-    message.textContent =
-      "Unable to connect to the server.";
-
-    button.disabled = false;
-    button.textContent = "Sign In";
-
-  }
-
-});
-
-
-async function showDashboard() {
-
-  const response =
-    await fetch("/api/admin/content");
-
-  if (!response.ok) {
-
-    $("loginMessage").textContent =
-      "Unable to load the dashboard.";
-
-    return;
-
-  }
-
-  siteData =
-    await response.json();
-
-  $("loginPage").style.display = "none";
-  $("dashboard").style.display = "block";
-
-  populate();
-
-}
-
-
-function populate() {
-
-  $("siteName").value =
-    siteData.siteName || "";
-
-  $("heroTitle").value =
-    siteData.heroTitle || "";
-
-  $("heroText").value =
-    siteData.heroText || "";
-
-  $("heroButton").value =
-    siteData.heroButton || "";
-
-  $("aboutTitle").value =
-    siteData.aboutTitle || "";
-
-  $("aboutText").value =
-    siteData.aboutText || "";
-
-  $("contactTitle").value =
-    siteData.contactTitle || "";
-
-  $("contactText").value =
-    siteData.contactText || "";
-
-  $("contactEmail").value =
-    siteData.contactEmail || "";
-
-  $("footer").value =
-    siteData.footer || "";
-
-  renderServices();
-
-}
-
-
-function renderServices() {
-
-  const container = $("services");
-
-  container.innerHTML = "";
-
-  siteData.services.forEach((service, index) => {
-
-    const wrapper =
-      document.createElement("div");
-
-    wrapper.className = "service";
-
-    const title =
-      document.createElement("input");
-
-    title.value =
-      service.title || "";
-
-    title.placeholder =
-      "Service title";
-
-    title.addEventListener("input", () => {
-      siteData.services[index].title =
-        title.value;
-    });
-
-
-    const text =
-      document.createElement("textarea");
-
-    text.value =
-      service.text || "";
-
-    text.placeholder =
-      "Service description";
-
-    text.addEventListener("input", () => {
-      siteData.services[index].text =
-        text.value;
-    });
-
-
-    const remove =
-      document.createElement("button");
-
-    remove.type = "button";
-    remove.className = "remove";
-    remove.textContent = "Remove";
-
-    remove.addEventListener("click", () => {
-
-      siteData.services.splice(index, 1);
-
-      renderServices();
-
-    });
-
-
-    const titleLabel =
-      document.createElement("label");
-
-    titleLabel.textContent =
-      "Title";
-
-
-    const textLabel =
-      document.createElement("label");
-
-    textLabel.textContent =
-      "Description";
-
-
-    wrapper.appendChild(titleLabel);
-    wrapper.appendChild(title);
-    wrapper.appendChild(textLabel);
-    wrapper.appendChild(text);
-    wrapper.appendChild(remove);
-
-    container.appendChild(wrapper);
-
-  });
-
-}
-
-
-$("addService").addEventListener("click", () => {
-
-  siteData.services.push({
-    title: "New Service",
-    text: "Describe this service."
-  });
-
-  renderServices();
-
-});
-
-
-$("saveButton").addEventListener("click", async () => {
-
-  siteData.siteName =
-    $("siteName").value;
-
-  siteData.heroTitle =
-    $("heroTitle").value;
-
-  siteData.heroText =
-    $("heroText").value;
-
-  siteData.heroButton =
-    $("heroButton").value;
-
-  siteData.aboutTitle =
-    $("aboutTitle").value;
-
-  siteData.aboutText =
-    $("aboutText").value;
-
-  siteData.contactTitle =
-    $("contactTitle").value;
-
-  siteData.contactText =
-    $("contactText").value;
-
-  siteData.contactEmail =
-    $("contactEmail").value;
-
-  siteData.footer =
-    $("footer").value;
-
-
-  const button =
-    $("saveButton");
-
-  button.disabled = true;
-  button.textContent = "Publishing...";
-
-
-  try {
+    e.preventDefault();
 
     const response =
-      await fetch("/api/admin/save", {
-
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-          content: siteData
-        })
-
-      });
-
+      await fetch(
+        "/api/login",
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+          body:JSON.stringify({
+            username:
+              $("username").value,
+            password:
+              $("password").value
+          })
+        }
+      );
 
     const data =
       await response.json();
 
-
     if (!response.ok) {
 
-      throw new Error(
-        data.error || "Publish failed."
-      );
+      $("loginError").className =
+        "error";
 
+      $("loginError").textContent =
+        data.error;
+
+      return;
     }
 
+    await startApp();
 
-    $("message").className = "success";
-    $("message").textContent =
-      "✓ Published successfully!";
+  }
+);
 
-  } catch (error) {
 
-    $("message").className = "error";
-    $("message").textContent =
-      error.message;
+/* NAV */
 
-  } finally {
+document
+  .querySelectorAll(".nav button")
+  .forEach(button => {
 
-    button.disabled = false;
-    button.textContent = "Publish Changes";
+    button.addEventListener(
+      "click",
+      () => openPanel(
+        button.dataset.panel
+      )
+    );
+
+  });
+
+
+function openPanel(name){
+
+  document
+    .querySelectorAll(".panel")
+    .forEach(p =>
+      p.classList.remove("active")
+    );
+
+  document
+    .querySelectorAll(".nav button")
+    .forEach(b =>
+      b.classList.remove("active")
+    );
+
+  $(name)
+    .classList.add("active");
+
+  const button =
+    document.querySelector(
+      `[data-panel="${name}"]`
+    );
+
+  if(button)
+    button.classList.add("active");
+
+  $("heading").textContent =
+    name === "ai"
+      ? "AI Builder"
+      : name.charAt(0).toUpperCase() +
+        name.slice(1);
+
+}
+
+
+/* START */
+
+async function startApp(){
+
+  $("login").style.display =
+    "none";
+
+  $("app").style.display =
+    "block";
+
+  const siteResponse =
+    await fetch(
+      "/api/admin/site"
+    );
+
+  site =
+    await siteResponse.json();
+
+  $("siteName").value =
+    site.siteName || "";
+
+  renderThemes();
+
+  await loadPages();
+
+}
+
+
+/* SITE */
+
+$("saveSite").addEventListener(
+  "click",
+  async () => {
+
+    site.siteName =
+      $("siteName").value;
+
+    const response =
+      await fetch(
+        "/api/admin/site",
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+          body:JSON.stringify(site)
+        }
+      );
+
+    const data =
+      await response.json();
+
+    $("siteMessage").className =
+      response.ok
+        ? "success"
+        : "error";
+
+    $("siteMessage").textContent =
+      response.ok
+        ? "✓ Site saved."
+        : data.error;
+
+  }
+);
+
+
+/* PAGES */
+
+async function loadPages(){
+
+  const response =
+    await fetch(
+      "/api/admin/pages"
+    );
+
+  pages =
+    await response.json();
+
+  renderPageLists();
+
+  if(pages.length){
+
+    await loadPage(
+      pages[0].slug
+    );
 
   }
 
-});
+}
 
 
-$("logoutButton").addEventListener("click", async () => {
+function renderPageLists(){
 
-  await fetch("/api/logout", {
-    method: "POST"
+  const list =
+    $("pageList");
+
+  list.innerHTML = "";
+
+  const select =
+    $("pageSelect");
+
+  const aiSelect =
+    $("aiPage");
+
+  select.innerHTML = "";
+  aiSelect.innerHTML = "";
+
+  pages.forEach(page => {
+
+    const item =
+      document.createElement(
+        "div"
+      );
+
+    item.className =
+      "page-item";
+
+    item.innerHTML = `
+      <span>
+        <strong>${page.slug}</strong>
+        <br>
+        <small class="muted">
+          /${page.slug === "home"
+            ? ""
+            : page.slug}
+        </small>
+      </span>
+
+      <button
+        onclick="loadPage('${page.slug}')"
+      >
+        Edit
+      </button>
+    `;
+
+    list.appendChild(item);
+
+
+    const option =
+      document.createElement(
+        "option"
+      );
+
+    option.value =
+      page.slug;
+
+    option.textContent =
+      page.slug;
+
+    select.appendChild(option);
+
+
+    const aiOption =
+      option.cloneNode(true);
+
+    aiSelect.appendChild(
+      aiOption
+    );
+
   });
 
-  location.reload();
-
-});
+}
 
 
-checkSession();
+async function loadPage(slug){
+
+  $("pageSelect").value =
+    slug;
+
+  $("aiPage").value =
+    slug;
+
+  const response =
+    await fetch(
+      `/api/admin/pages/${slug}`
+    );
+
+  currentPage =
+    await response.json();
+
+  $("pageJson").value =
+    JSON.stringify(
+      currentPage,
+      null,
+      2
+    );
+
+}
+
+
+$("pageSelect")
+  .addEventListener(
+    "change",
+    e =>
+      loadPage(e.target.value)
+  );
+
+
+$("aiPage")
+  .addEventListener(
+    "change",
+    e =>
+      loadPage(e.target.value)
+  );
+
+
+$("createPage")
+  .addEventListener(
+    "click",
+    async () => {
+
+      const title =
+        $("newTitle").value.trim();
+
+      const slug =
+        $("newSlug").value.trim();
+
+      const response =
+        await fetch(
+          "/api/admin/pages",
+          {
+            method:"POST",
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+            body:JSON.stringify({
+              title,
+              slug
+            })
+          }
+        );
+
+      const data =
+        await response.json();
+
+      $("pageMessage").className =
+        response.ok
+          ? "success"
+          : "error";
+
+      $("pageMessage").textContent =
+        response.ok
+          ? "✓ Page created."
+          : data.error;
+
+      if(response.ok){
+
+        $("newTitle").value="";
+        $("newSlug").value="";
+
+        await loadPages();
+
+        openPanel("pages");
+
+      }
+
+    }
+  );
+
+
+$("savePage")
+  .addEventListener(
+    "click",
+    async () => {
+
+      try{
+
+        const page =
+          JSON.parse(
+            $("pageJson").value
+          );
+
+        const slug =
+          page.slug;
+
+        const response =
+          await fetch(
+            `/api/admin/pages/${slug}`,
+            {
+              method:"POST",
+              headers:{
+                "Content-Type":
+                  "application/json"
+              },
+              body:
+                JSON.stringify(page)
+            }
+          );
+
+        const data =
+          await response.json();
+
+        $("editorMessage").className =
+          response.ok
+            ? "success"
+            : "error";
+
+        $("editorMessage").textContent =
+          response.ok
+            ? "✓ Page published."
+            : data.error;
+
+      }catch(error){
+
+        $("editorMessage").className =
+          "error";
+
+        $("editorMessage").textContent =
+          "Invalid JSON.";
+
+      }
+
+    }
+  );
+
+
+$("deletePage")
+  .addEventListener(
+    "click",
+    async () => {
+
+      const slug =
+        $("pageSelect").value;
+
+      if(
+        slug === "home" ||
+        slug === "example"
+      ){
+
+        alert(
+          "Home and Example cannot be deleted."
+        );
+
+        return;
+
+      }
+
+      if(
+        !confirm(
+          `Delete /${slug}?`
+        )
+      ) return;
+
+      const response =
+        await fetch(
+          `/api/admin/pages/${slug}`,
+          {
+            method:"DELETE"
+          }
+        );
+
+      if(response.ok){
+
+        await loadPages();
+
+      }
+
+    }
+  );
+
+
+/* THEMES */
+
+function renderThemes(){
+
+  const container =
+    $("themes");
+
+  container.innerHTML = "";
+
+  const names = [
+    ["midnight","Midnight"],
+    ["aurora","Aurora"],
+    ["ocean","Ocean"],
+    ["sunset","Sunset"],
+    ["light","Light"]
+  ];
+
+  names.forEach(
+    ([key,label]) => {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.className =
+        `theme theme-${key}` +
+        (
+          site.defaultTheme === key
+            ? " active"
+            : ""
+        );
+
+      button.textContent =
+        label;
+
+      button.onclick =
+        () => {
+
+          site.defaultTheme =
+            key;
+
+          renderThemes();
+
+          saveThemeDefault();
+
+        };
+
+      container.appendChild(
+        button
+      );
+
+    }
+  );
+
+}
+
+
+async function saveThemeDefault(){
+
+  await fetch(
+    "/api/admin/site",
+    {
+      method:"POST",
+      headers:{
+        "Content-Type":
+          "application/json"
+      },
+      body:
+        JSON.stringify(site)
+    }
+  );
+
+}
+
+
+$("saveTheme")
+  .addEventListener(
+    "click",
+    async () => {
+
+      site.themes.custom = {
+
+        background:
+          $("background").value,
+
+        surface:"#161722",
+
+        text:"#ffffff",
+
+        muted:"#a4a4b2",
+
+        accent:
+          $("accent").value,
+
+        accent2:
+          $("accent2").value
+
+      };
+
+      site.defaultTheme =
+        "custom";
+
+      await saveThemeDefault();
+
+      renderThemes();
+
+      alert(
+        "Custom theme saved."
+      );
+
+    }
+  );
+
+
+/* MEDIA */
+
+$("uploadImage")
+  .addEventListener(
+    "click",
+    async () => {
+
+      const file =
+        $("imageFile").files[0];
+
+      if(!file){
+
+        $("uploadMessage").textContent =
+          "Choose an image first.";
+
+        return;
+
+      }
+
+      const form =
+        new FormData();
+
+      form.append(
+        "image",
+        file
+      );
+
+      $("uploadMessage").textContent =
+        "Uploading...";
+
+      const response =
+        await fetch(
+          "/api/admin/media/upload",
+          {
+            method:"POST",
+            body:form
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if(response.ok){
+
+        $("uploadMessage").className =
+          "success";
+
+        $("uploadMessage").textContent =
+          `✓ Uploaded: ${data.url}`;
+
+        navigator.clipboard
+          ?.writeText(
+            location.origin +
+            data.url
+          );
+
+      }else{
+
+        $("uploadMessage").className =
+          "error";
+
+        $("uploadMessage").textContent =
+          data.error;
+
+      }
+
+    }
+  );
+
+
+$("useUrl")
+  .addEventListener(
+    "click",
+    async () => {
+
+      const url =
+        $("imageUrl").value.trim();
+
+      const response =
+        await fetch(
+          "/api/admin/media/url",
+          {
+            method:"POST",
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+            body:
+              JSON.stringify({url})
+          }
+        );
+
+      const data =
+        await response.json();
+
+      $("urlResult").textContent =
+        response.ok
+          ? `✓ ${data.url}`
+          : data.error;
+
+    }
+  );
+
+
+/* AI */
+
+function addMessage(
+  text,
+  type
+){
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+  div.className =
+    `msg ${type}`;
+
+  div.textContent =
+    text;
+
+  $("messages")
+    .appendChild(div);
+
+  $("messages")
+    .scrollTop =
+      $("messages").scrollHeight;
+
+}
+
+
+$("sendAI")
+  .addEventListener(
+    "click",
+    sendAI
+  );
+
+
+$("aiInput")
+  .addEventListener(
+    "keydown",
+    e => {
+
+      if(e.key === "Enter")
+        sendAI();
+
+    }
+  );
+
+
+async function sendAI(){
+
+  const message =
+    $("aiInput")
+      .value
+      .trim();
+
+  if(!message)
+    return;
+
+  addMessage(
+    message,
+    "user"
+  );
+
+  $("aiInput").value = "";
+
+  addMessage(
+    "Thinking...",
+    "ai"
+  );
+
+  try{
+
+    const pageResponse =
+      await fetch(
+        `/api/admin/pages/${$("aiPage").value}`
+      );
+
+    const page =
+      await pageResponse.json();
+
+    const response =
+      await fetch(
+        "/api/admin/ai",
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+          body:
+            JSON.stringify({
+              message,
+              page,
+              site
+            })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    const messages =
+      document.querySelectorAll(
+        ".msg.ai"
+      );
+
+    const last =
+      messages[messages.length - 1];
+
+    if(!response.ok){
+
+      last.textContent =
+        data.error;
+
+      return;
+
+    }
+
+    last.textContent =
+      data.reply ||
+      "I created a page update.";
+
+    lastAIPage =
+      data.page;
+
+    $("aiStatus").className =
+      "success";
+
+    $("aiStatus").textContent =
+      "✓ AI change ready to apply.";
+
+  }catch(error){
+
+    const messages =
+      document.querySelectorAll(
+        ".msg.ai"
+      );
+
+    messages[
+      messages.length - 1
+    ].textContent =
+      error.message;
+
+  }
+
+}
+
+
+$("applyAI")
+  .addEventListener(
+    "click",
+    () => {
+
+      if(!lastAIPage){
+
+        $("aiStatus").className =
+          "error";
+
+        $("aiStatus").textContent =
+          "Ask the AI for a change first.";
+
+        return;
+
+      }
+
+      $("pageJson").value =
+        JSON.stringify(
+          lastAIPage,
+          null,
+          2
+        );
+
+      currentPage =
+        lastAIPage;
+
+      $("aiStatus").className =
+        "success";
+
+      $("aiStatus").textContent =
+        "✓ Applied to the editor. Click Save Page to publish.";
+
+      openPanel("pages");
+
+    }
+  );
+
+
+/* LOGOUT */
+
+$("logout")
+  .addEventListener(
+    "click",
+    async () => {
+
+      await fetch(
+        "/api/logout",
+        {
+          method:"POST"
+        }
+      );
+
+      location.reload();
+
+    }
+  );
+
+
+/* SESSION */
+
+(async function(){
+
+  const response =
+    await fetch(
+      "/api/admin/session"
+    );
+
+  const data =
+    await response.json();
+
+  if(data.authenticated)
+    await startApp();
+
+})();
 
 </script>
 
