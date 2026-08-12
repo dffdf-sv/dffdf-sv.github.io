@@ -30,9 +30,8 @@
         });
         if (!response.ok) throw new Error(`Logout failed (${response.status})`);
 
-        // The admin route shows the login form when the session is gone.
-        // Use replace so Back does not return to the authenticated admin page.
-        window.location.replace("/admin?loggedout=1");
+        // Logout succeeds first, then leave the admin area for the public home page.
+        window.location.replace("/");
       } catch (error) {
         console.error(error);
         button.disabled = false;
