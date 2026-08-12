@@ -1,0 +1,465 @@
+:root {
+  --background: #07070b;
+  --surface: #11121a;
+  --surface2: #181925;
+
+  --text: #ffffff;
+  --muted: #9b9ba8;
+
+  --accent: #8065ff;
+  --accent2: #b19cff;
+  --border: rgba(255,255,255,.14);
+
+  --glass-blur: 28px;
+  --glass-opacity: .10;
+  --glass-border-opacity: .16;
+  --glass-shadow: .24;
+  --glass-radius: 24px;
+  --glass-animation: .25s;
+  --glass-glow: .32;
+  --glass-saturation: 145%;
+  --glass-highlight: .12;
+  --glass-tint-strength: .08;
+  --glass-noise: .025;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  color: var(--text);
+
+  background:
+    radial-gradient(
+      900px 600px at 5% -10%,
+      color-mix(
+        in srgb,
+        var(--accent) 18%,
+        transparent
+      ),
+      transparent 65%
+    ),
+
+    radial-gradient(
+      900px 600px at 105% 100%,
+      color-mix(
+        in srgb,
+        var(--accent2) 13%,
+        transparent
+      ),
+      transparent 65%
+    ),
+
+    radial-gradient(
+      500px 400px at 50% 50%,
+      color-mix(
+        in srgb,
+        var(--accent) 5%,
+        transparent
+      ),
+      transparent 70%
+    ),
+
+    var(--background);
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  transition:
+    background var(--glass-animation) ease,
+    color var(--glass-animation) ease;
+}
+
+/* =========================================================
+   LIQUID GLASS
+   ========================================================= */
+
+.glass {
+  position: relative;
+  isolation: isolate;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+
+      rgba(
+        255,
+        255,
+        255,
+        var(--glass-opacity)
+      ),
+
+      rgba(
+        255,
+        255,
+        255,
+        .035
+      ),
+
+      rgba(
+        255,
+        255,
+        255,
+        .015
+      )
+    );
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--accent) 8%,
+      rgba(
+        255,
+        255,
+        255,
+        var(--glass-border-opacity)
+      )
+    );
+
+  backdrop-filter:
+    blur(var(--glass-blur))
+    saturate(var(--glass-saturation))
+    contrast(108%);
+
+  -webkit-backdrop-filter:
+    blur(var(--glass-blur))
+    saturate(var(--glass-saturation))
+    contrast(108%);
+
+  box-shadow:
+
+    inset 0 1px 0
+      rgba(
+        255,
+        255,
+        255,
+        var(--glass-highlight)
+      ),
+
+    inset 0 -1px 0
+      rgba(
+        0,
+        0,
+        0,
+        .12
+      ),
+
+    0 30px 90px
+      rgba(
+        0,
+        0,
+        0,
+        var(--glass-shadow)
+      );
+
+  border-radius:
+    var(--glass-radius);
+
+  transition:
+    transform var(--glass-animation) ease,
+    background var(--glass-animation) ease,
+    border-color var(--glass-animation) ease,
+    box-shadow var(--glass-animation) ease;
+}
+
+/* glass reflection */
+
+.glass::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      115deg,
+      rgba(255,255,255,.16),
+      transparent 22%,
+      transparent 68%,
+      rgba(255,255,255,.035)
+    );
+
+  opacity: .8;
+}
+
+/* coloured refraction */
+
+.glass::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  border-radius: inherit;
+
+  background:
+
+    radial-gradient(
+      circle at 0% 0%,
+      color-mix(
+        in srgb,
+        var(--accent) 28%,
+        transparent
+      ),
+      transparent 42%
+    ),
+
+    radial-gradient(
+      circle at 100% 100%,
+      color-mix(
+        in srgb,
+        var(--accent2) 22%,
+        transparent
+      ),
+      transparent 42%
+    );
+
+  opacity:
+    var(--glass-tint-strength);
+}
+
+/* subtle noise */
+
+.glass {
+  --noise-opacity:
+    var(--glass-noise);
+}
+
+.glass:hover {
+  transform:
+    translateY(-3px);
+
+  border-color:
+    color-mix(
+      in srgb,
+      var(--accent) 32%,
+      rgba(255,255,255,.14)
+    );
+
+  box-shadow:
+
+    inset 0 1px 0
+      rgba(255,255,255,.15),
+
+    0 40px 110px
+      rgba(0,0,0,.32),
+
+    0 0 55px
+      color-mix(
+        in srgb,
+        var(--accent) 9%,
+        transparent
+      );
+}
+
+/* =========================================================
+   GLASS BUTTONS
+   ========================================================= */
+
+.btn {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  min-height: 46px;
+
+  padding:
+    0 18px;
+
+  border-radius:
+    14px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.12);
+
+  background:
+    rgba(255,255,255,.055);
+
+  color:
+    var(--text);
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    .25s ease;
+
+  overflow: hidden;
+}
+
+.btn::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      120deg,
+      rgba(255,255,255,.14),
+      transparent 40%
+    );
+
+  opacity: .7;
+
+  pointer-events: none;
+}
+
+.btn:hover {
+  transform:
+    translateY(-2px);
+
+  border-color:
+    color-mix(
+      in srgb,
+      var(--accent) 40%,
+      white 10%
+    );
+
+  box-shadow:
+    0 15px 45px
+      color-mix(
+        in srgb,
+        var(--accent) 18%,
+        transparent
+      );
+}
+
+.btn.primary {
+  border-color:
+    transparent;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--accent),
+      var(--accent2)
+    );
+
+  box-shadow:
+    0 15px 45px
+      color-mix(
+        in srgb,
+        var(--accent) 25%,
+        transparent
+      );
+}
+
+/* =========================================================
+   GLASS PANELS
+   ========================================================= */
+
+.glass-panel {
+  background:
+    rgba(255,255,255,.035);
+
+  border:
+    1px solid
+    rgba(255,255,255,.08);
+
+  border-radius:
+    var(--glass-radius);
+
+  backdrop-filter:
+    blur(
+      calc(
+        var(--glass-blur) * .7
+      )
+    );
+
+  -webkit-backdrop-filter:
+    blur(
+      calc(
+        var(--glass-blur) * .7
+      )
+    );
+}
+
+/* =========================================================
+   SELECTION
+   ========================================================= */
+
+::selection {
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 55%,
+      transparent
+    );
+
+  color: white;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background:
+    rgba(255,255,255,.02);
+}
+
+::-webkit-scrollbar-thumb {
+  background:
+    linear-gradient(
+      var(--accent),
+      var(--accent2)
+    );
+
+  border-radius:
+    999px;
+
+  border:
+    3px solid
+    var(--background);
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media(prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
