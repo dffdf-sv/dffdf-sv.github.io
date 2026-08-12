@@ -1,0 +1,3558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <meta
+    name="description"
+    id="metaDescription"
+    content="DFFDF"
+  >
+
+  <meta
+    name="theme-color"
+    id="themeColor"
+    content="#07070b"
+  >
+
+  <meta
+    name="color-scheme"
+    content="dark light"
+  >
+
+  <link
+    rel="icon"
+    id="favicon"
+    href=""
+  >
+
+  <title id="pageTitle">
+    DFFDF
+  </title>
+
+  <style>
+    /* =========================================================
+       DFFDF
+       Premium Liquid Glass Public Website
+       ========================================================= */
+
+    :root {
+      --background: #07070b;
+      --surface: #11121a;
+      --surface2: #181925;
+
+      --text: #ffffff;
+      --muted: #9b9ba8;
+
+      --accent: #8065ff;
+      --accent2: #b19cff;
+
+      --border: rgba(255,255,255,.14);
+
+      /* Liquid Glass */
+      --glass-blur: 28px;
+      --glass-opacity: .10;
+      --glass-border-opacity: .16;
+      --glass-shadow: .24;
+      --glass-radius: 24px;
+      --glass-animation: .25s;
+      --glass-glow: .32;
+      --glass-saturation: 145%;
+      --glass-highlight: .12;
+      --glass-tint-strength: .08;
+      --glass-noise: .025;
+
+      --content-width: 1160px;
+      --page-padding: 20px;
+
+      --header-height: 66px;
+    }
+
+    /* =========================================================
+       RESET
+       ========================================================= */
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--background);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+
+      color: var(--text);
+
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background:
+        radial-gradient(
+          900px 650px at -5% -10%,
+          color-mix(
+            in srgb,
+            var(--accent) 18%,
+            transparent
+          ),
+          transparent 65%
+        ),
+
+        radial-gradient(
+          900px 650px at 105% 100%,
+          color-mix(
+            in srgb,
+            var(--accent2) 13%,
+            transparent
+          ),
+          transparent 65%
+        ),
+
+        radial-gradient(
+          650px 500px at 50% 50%,
+          color-mix(
+            in srgb,
+            var(--accent) 5%,
+            transparent
+          ),
+          transparent 70%
+        ),
+
+        var(--background);
+
+      transition:
+        background
+          var(--glass-animation)
+          ease,
+
+        color
+          var(--glass-animation)
+          ease;
+    }
+
+    body::before {
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+      z-index: -1;
+
+      opacity: .6;
+
+      background:
+        radial-gradient(
+          circle at 20% 20%,
+          color-mix(
+            in srgb,
+            var(--accent) 8%,
+            transparent
+          ),
+          transparent 25%
+        ),
+
+        radial-gradient(
+          circle at 80% 70%,
+          color-mix(
+            in srgb,
+            var(--accent2) 7%,
+            transparent
+          ),
+          transparent 25%
+        );
+    }
+
+    body::after {
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+      z-index: 9999;
+
+      opacity: var(--glass-noise);
+
+      mix-blend-mode: soft-light;
+
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    ::selection {
+      background:
+        color-mix(
+          in srgb,
+          var(--accent) 55%,
+          transparent
+        );
+
+      color: #fff;
+    }
+
+    /* =========================================================
+       CONTAINER
+       ========================================================= */
+
+    .container {
+      width:
+        min(
+          var(--content-width),
+          calc(100% - 40px)
+        );
+
+      margin-inline: auto;
+    }
+
+    /* =========================================================
+       LIQUID GLASS
+       ========================================================= */
+
+    .glass {
+      position: relative;
+      isolation: isolate;
+
+      overflow: hidden;
+
+      background:
+        linear-gradient(
+          135deg,
+
+          rgba(
+            255,
+            255,
+            255,
+            var(--glass-opacity)
+          ),
+
+          rgba(
+            255,
+            255,
+            255,
+            .038
+          ),
+
+          rgba(
+            255,
+            255,
+            255,
+            .014
+          )
+        );
+
+      border:
+        1px solid
+        color-mix(
+          in srgb,
+          var(--accent) 8%,
+          rgba(
+            255,
+            255,
+            255,
+            var(--glass-border-opacity)
+          )
+        );
+
+      backdrop-filter:
+        blur(var(--glass-blur))
+        saturate(var(--glass-saturation))
+        contrast(108%);
+
+      -webkit-backdrop-filter:
+        blur(var(--glass-blur))
+        saturate(var(--glass-saturation))
+        contrast(108%);
+
+      box-shadow:
+
+        inset
+        0 1px 0
+        rgba(
+          255,
+          255,
+          255,
+          var(--glass-highlight)
+        ),
+
+        inset
+        0 -1px 0
+        rgba(
+          0,
+          0,
+          0,
+          .12
+        ),
+
+        0 30px 90px
+        rgba(
+          0,
+          0,
+          0,
+          var(--glass-shadow)
+        );
+
+      border-radius:
+        var(--glass-radius);
+
+      transition:
+        transform
+          var(--glass-animation)
+          cubic-bezier(.2,.8,.2,1),
+
+        background
+          var(--glass-animation)
+          ease,
+
+        border-color
+          var(--glass-animation)
+          ease,
+
+        box-shadow
+          var(--glass-animation)
+          ease;
+    }
+
+    /* top reflection */
+
+    .glass::before {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      pointer-events: none;
+
+      border-radius: inherit;
+
+      background:
+        linear-gradient(
+          115deg,
+          rgba(255,255,255,.16),
+          transparent 22%,
+          transparent 68%,
+          rgba(255,255,255,.035)
+        );
+
+      opacity: .8;
+
+      z-index: -1;
+    }
+
+    /* coloured refraction */
+
+    .glass::after {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      pointer-events: none;
+
+      border-radius: inherit;
+
+      background:
+
+        radial-gradient(
+          circle at 0% 0%,
+          color-mix(
+            in srgb,
+            var(--accent) 28%,
+            transparent
+          ),
+          transparent 42%
+        ),
+
+        radial-gradient(
+          circle at 100% 100%,
+          color-mix(
+            in srgb,
+            var(--accent2) 22%,
+            transparent
+          ),
+          transparent 42%
+        );
+
+      opacity:
+        var(--glass-tint-strength);
+
+      z-index: -2;
+    }
+
+    .glass:hover {
+      transform:
+        translateY(-3px);
+
+      border-color:
+        color-mix(
+          in srgb,
+          var(--accent) 34%,
+          rgba(255,255,255,.14)
+        );
+
+      box-shadow:
+
+        inset
+        0 1px 0
+        rgba(255,255,255,.16),
+
+        0 40px 110px
+        rgba(0,0,0,.30),
+
+        0 0 55px
+        color-mix(
+          in srgb,
+          var(--accent) 10%,
+          transparent
+        );
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    header {
+      position: sticky;
+
+      top:
+        max(
+          10px,
+          env(safe-area-inset-top)
+        );
+
+      z-index: 100;
+
+      padding-top: 12px;
+    }
+
+    .nav {
+      min-height:
+        var(--header-height);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 18px;
+
+      padding:
+        10px 12px 10px 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+
+      gap: 12px;
+
+      min-width: 0;
+
+      font-weight: 850;
+
+      letter-spacing: -.02em;
+    }
+
+    .brand-name {
+      overflow: hidden;
+
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .logo {
+      position: relative;
+
+      width: 42px;
+      height: 42px;
+
+      flex: 0 0 42px;
+
+      display: grid;
+      place-items: center;
+
+      overflow: hidden;
+
+      border-radius: 14px;
+
+      color: #fff;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--accent),
+          var(--accent2)
+        );
+
+      box-shadow:
+        0 12px 40px
+        color-mix(
+          in srgb,
+          var(--accent)
+          calc(var(--glass-glow) * 100%),
+          transparent
+        );
+    }
+
+    .logo::before {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      background:
+        linear-gradient(
+          125deg,
+          rgba(255,255,255,.35),
+          transparent 35%
+        );
+    }
+
+    .logo img {
+      position: relative;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+    }
+
+    .logo-letter {
+      position: relative;
+
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      gap: 4px;
+
+      flex-wrap: wrap;
+    }
+
+    nav a,
+    .theme-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      min-height: 40px;
+
+      padding:
+        9px 12px;
+
+      border-radius: 12px;
+
+      color:
+        var(--muted);
+
+      background:
+        transparent;
+
+      cursor: pointer;
+
+      transition:
+        .2s ease;
+    }
+
+    nav a:hover,
+    .theme-button:hover {
+      color:
+        var(--text);
+
+      background:
+        rgba(255,255,255,.07);
+    }
+
+    .theme-button {
+      border:
+        1px solid
+        rgba(255,255,255,.07);
+    }
+
+    /* =========================================================
+       MAIN
+       ========================================================= */
+
+    main {
+      padding:
+        70px 0 40px;
+    }
+
+    .section {
+      margin:
+        24px 0;
+
+      animation:
+        sectionIn
+        .6s
+        cubic-bezier(.2,.8,.2,1)
+        both;
+    }
+
+    @keyframes sectionIn {
+      from {
+        opacity: 0;
+        transform:
+          translateY(18px)
+          scale(.985);
+      }
+
+      to {
+        opacity: 1;
+        transform:
+          translateY(0)
+          scale(1);
+      }
+    }
+
+    /* =========================================================
+       HERO
+       ========================================================= */
+
+    .hero {
+      min-height:
+        590px;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      text-align:
+        center;
+
+      padding:
+        80px 30px;
+
+      position:
+        relative;
+
+      overflow:
+        hidden;
+    }
+
+    .hero::before {
+      content: "";
+
+      position: absolute;
+
+      width:
+        520px;
+
+      height:
+        520px;
+
+      top:
+        -190px;
+
+      left:
+        50%;
+
+      transform:
+        translateX(-50%);
+
+      border-radius:
+        50%;
+
+      background:
+        radial-gradient(
+          circle,
+          color-mix(
+            in srgb,
+            var(--accent) 32%,
+            transparent
+          ),
+          transparent 68%
+        );
+
+      filter:
+        blur(20px);
+
+      opacity:
+        .7;
+
+      pointer-events:
+        none;
+
+      animation:
+        heroGlow
+        8s
+        ease-in-out
+        infinite alternate;
+    }
+
+    .hero::after {
+      content: "";
+
+      position: absolute;
+
+      width:
+        420px;
+
+      height:
+        420px;
+
+      right:
+        -180px;
+
+      bottom:
+        -200px;
+
+      border-radius:
+        50%;
+
+      background:
+        radial-gradient(
+          circle,
+          color-mix(
+            in srgb,
+            var(--accent2) 22%,
+            transparent
+          ),
+          transparent 68%
+        );
+
+      filter:
+        blur(25px);
+
+      pointer-events:
+        none;
+    }
+
+    @keyframes heroGlow {
+      from {
+        transform:
+          translateX(-50%)
+          translateY(0)
+          scale(1);
+      }
+
+      to {
+        transform:
+          translateX(-50%)
+          translateY(30px)
+          scale(1.12);
+      }
+    }
+
+    .hero-content {
+      position:
+        relative;
+
+      z-index:
+        2;
+
+      width:
+        100%;
+
+      max-width:
+        880px;
+    }
+
+    .badge {
+      display:
+        inline-flex;
+
+      align-items:
+        center;
+
+      gap:
+        7px;
+
+      padding:
+        8px 14px;
+
+      border-radius:
+        999px;
+
+      color:
+        var(--accent2);
+
+      background:
+        rgba(255,255,255,.055);
+
+      border:
+        1px solid
+        var(--border);
+
+      box-shadow:
+        inset
+        0 1px
+        rgba(255,255,255,.08);
+
+      font-size:
+        .76rem;
+
+      font-weight:
+        800;
+
+      letter-spacing:
+        .09em;
+
+      margin-bottom:
+        22px;
+    }
+
+    .badge::before {
+      content: "";
+
+      width:
+        7px;
+
+      height:
+        7px;
+
+      border-radius:
+        50%;
+
+      background:
+        var(--accent);
+
+      box-shadow:
+        0 0 12px
+        var(--accent);
+    }
+
+    h1,
+    h2,
+    h3 {
+      color:
+        var(--text);
+    }
+
+    h1 {
+      margin:
+        0 0 24px;
+
+      font-size:
+        clamp(
+          3.2rem,
+          9vw,
+          7rem
+        );
+
+      line-height:
+        .91;
+
+      letter-spacing:
+        -.065em;
+
+      font-weight:
+        900;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--text) 10%,
+          color-mix(
+            in srgb,
+            var(--accent2) 72%,
+            var(--text)
+          ) 70%,
+          var(--accent) 110%
+        );
+
+      -webkit-background-clip:
+        text;
+
+      background-clip:
+        text;
+
+      color:
+        transparent;
+    }
+
+    h2 {
+      margin:
+        0 0 14px;
+
+      font-size:
+        clamp(
+          2rem,
+          5vw,
+          3.4rem
+        );
+
+      line-height:
+        1;
+
+      letter-spacing:
+        -.045em;
+
+      font-weight:
+        850;
+    }
+
+    h3 {
+      margin:
+        0 0 8px;
+
+      font-size:
+        1.2rem;
+
+      letter-spacing:
+        -.025em;
+    }
+
+    p {
+      margin:
+        0;
+
+      color:
+        var(--muted);
+
+      line-height:
+        1.75;
+    }
+
+    .hero p {
+      max-width:
+        720px;
+
+      margin:
+        0 auto 30px;
+
+      font-size:
+        clamp(
+          1rem,
+          2vw,
+          1.15rem
+        );
+    }
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    .button-row {
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      flex-wrap:
+        wrap;
+
+      gap:
+        10px;
+    }
+
+    .btn {
+      position:
+        relative;
+
+      display:
+        inline-flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      gap:
+        8px;
+
+      min-height:
+        48px;
+
+      padding:
+        0 20px;
+
+      border-radius:
+        14px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.11);
+
+      color:
+        var(--text);
+
+      background:
+        rgba(255,255,255,.055);
+
+      box-shadow:
+        inset
+        0 1px
+        rgba(255,255,255,.08);
+
+      font-weight:
+        750;
+
+      transition:
+        .25s
+        cubic-bezier(.2,.8,.2,1);
+
+      overflow:
+        hidden;
+    }
+
+    .btn::before {
+      content: "";
+
+      position:
+        absolute;
+
+      inset:
+        0;
+
+      pointer-events:
+        none;
+
+      background:
+        linear-gradient(
+          120deg,
+          rgba(255,255,255,.16),
+          transparent 38%
+        );
+
+      opacity:
+        .75;
+    }
+
+    .btn:hover {
+      transform:
+        translateY(-3px);
+
+      border-color:
+        color-mix(
+          in srgb,
+          var(--accent) 35%,
+          rgba(255,255,255,.12)
+        );
+
+      box-shadow:
+        0 16px 45px
+        color-mix(
+          in srgb,
+          var(--accent) 14%,
+          transparent
+        );
+    }
+
+    .btn.primary {
+      color:
+        #fff;
+
+      border-color:
+        transparent;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--accent),
+          var(--accent2)
+        );
+
+      box-shadow:
+        0 18px 55px
+        color-mix(
+          in srgb,
+          var(--accent)
+          calc(var(--glass-glow) * 100%),
+          transparent
+        );
+    }
+
+    .btn.primary:hover {
+      box-shadow:
+        0 22px 70px
+        color-mix(
+          in srgb,
+          var(--accent) 35%,
+          transparent
+        );
+    }
+
+    /* =========================================================
+       TEXT SECTION
+       ========================================================= */
+
+    .text-section {
+      padding:
+        52px;
+
+      position:
+        relative;
+    }
+
+    .text-section p {
+      max-width:
+        800px;
+
+      font-size:
+        1.05rem;
+    }
+
+    /* =========================================================
+       CARDS
+       ========================================================= */
+
+    .cards {
+      padding:
+        52px;
+    }
+
+    .section-heading {
+      max-width:
+        780px;
+
+      margin-bottom:
+        30px;
+    }
+
+    .section-heading p {
+      font-size:
+        1.02rem;
+    }
+
+    .card-grid {
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(0,1fr)
+        );
+
+      gap:
+        16px;
+    }
+
+    .card {
+      position:
+        relative;
+
+      min-height:
+        210px;
+
+      padding:
+        27px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255,255,255,.065),
+          rgba(255,255,255,.022)
+        );
+    }
+
+    .card-icon {
+      width:
+        46px;
+
+      height:
+        46px;
+
+      display:
+        grid;
+
+      place-items:
+        center;
+
+      border-radius:
+        14px;
+
+      margin-bottom:
+        20px;
+
+      color:
+        var(--accent2);
+
+      background:
+        color-mix(
+          in srgb,
+          var(--accent) 14%,
+          rgba(255,255,255,.035)
+        );
+
+      border:
+        1px solid
+        color-mix(
+          in srgb,
+          var(--accent) 18%,
+          rgba(255,255,255,.08)
+        );
+
+      box-shadow:
+        inset
+        0 1px
+        rgba(255,255,255,.10),
+
+        0 10px 30px
+        color-mix(
+          in srgb,
+          var(--accent) 8%,
+          transparent
+        );
+    }
+
+    .card p {
+      font-size:
+        .95rem;
+    }
+
+    /* =========================================================
+       CONTACT
+       ========================================================= */
+
+    .contact {
+      position:
+        relative;
+
+      text-align:
+        center;
+
+      padding:
+        62px 45px;
+
+      overflow:
+        hidden;
+    }
+
+    .contact::before {
+      content: "";
+
+      position:
+        absolute;
+
+      width:
+        400px;
+
+      height:
+        400px;
+
+      left:
+        50%;
+
+      top:
+        50%;
+
+      transform:
+        translate(-50%,-50%);
+
+      border-radius:
+        50%;
+
+      background:
+        radial-gradient(
+          circle,
+          color-mix(
+            in srgb,
+            var(--accent) 14%,
+            transparent
+          ),
+          transparent 70%
+        );
+
+      filter:
+        blur(35px);
+
+      pointer-events:
+        none;
+    }
+
+    .contact > * {
+      position:
+        relative;
+
+      z-index:
+        1;
+    }
+
+    .contact p {
+      max-width:
+        650px;
+
+      margin:
+        0 auto 28px;
+    }
+
+    .contact-email {
+      display:
+        inline-block;
+
+      margin-top:
+        17px;
+
+      color:
+        var(--accent2);
+
+      font-size:
+        .92rem;
+    }
+
+    /* =========================================================
+       LOADING
+       ========================================================= */
+
+    .loading {
+      min-height:
+        65vh;
+
+      display:
+        grid;
+
+      place-items:
+        center;
+    }
+
+    .loader {
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
+      align-items:
+        center;
+
+      gap:
+        18px;
+
+      color:
+        var(--muted);
+    }
+
+    .spinner {
+      width:
+        46px;
+
+      height:
+        46px;
+
+      border:
+        3px solid
+        rgba(255,255,255,.08);
+
+      border-top-color:
+        var(--accent);
+
+      border-right-color:
+        var(--accent2);
+
+      border-radius:
+        50%;
+
+      animation:
+        spin
+        .8s
+        linear
+        infinite;
+
+      box-shadow:
+        0 0 30px
+        color-mix(
+          in srgb,
+          var(--accent) 20%,
+          transparent
+        );
+    }
+
+    @keyframes spin {
+      to {
+        transform:
+          rotate(360deg);
+      }
+    }
+
+    /* =========================================================
+       ERROR
+       ========================================================= */
+
+    .error {
+      text-align:
+        center;
+
+      padding:
+        80px 20px;
+    }
+
+    .error-panel {
+      max-width:
+        700px;
+
+      margin:
+        auto;
+
+      padding:
+        52px;
+    }
+
+    .error h1 {
+      font-size:
+        clamp(
+          2.5rem,
+          7vw,
+          5rem
+        );
+    }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    footer {
+      padding:
+        30px 0 50px;
+
+      text-align:
+        center;
+
+      color:
+        var(--muted);
+
+      font-size:
+        .88rem;
+    }
+
+    footer .footer-glass {
+      display:
+        inline-flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      gap:
+        8px;
+
+      padding:
+        10px 16px;
+
+      border-radius:
+        999px;
+
+      background:
+        rgba(255,255,255,.025);
+
+      border:
+        1px solid
+        rgba(255,255,255,.07);
+    }
+
+    /* =========================================================
+       ADMIN PREVIEW MODE
+       ========================================================= */
+
+    body.preview-mode {
+      min-height:
+        100%;
+
+      overflow-x:
+        hidden;
+    }
+
+    body.preview-mode header {
+      top:
+        8px;
+    }
+
+    body.preview-mode main {
+      padding-top:
+        45px;
+    }
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @media(max-width: 900px) {
+      .card-grid {
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0,1fr)
+          );
+      }
+    }
+
+    @media(max-width: 700px) {
+      :root {
+        --page-padding:
+          16px;
+
+        --glass-radius:
+          20px;
+      }
+
+      .container {
+        width:
+          min(
+            100% - 24px,
+            var(--content-width)
+          );
+      }
+
+      header {
+        top:
+          6px;
+
+        padding-top:
+          6px;
+      }
+
+      .nav {
+        min-height:
+          58px;
+
+        padding:
+          8px 9px;
+      }
+
+      .logo {
+        width:
+          38px;
+
+        height:
+          38px;
+
+        flex-basis:
+          38px;
+      }
+
+      nav {
+        gap:
+          2px;
+
+        max-width:
+          68%;
+      }
+
+      nav a,
+      .theme-button {
+        min-height:
+          36px;
+
+        padding:
+          7px 9px;
+
+        font-size:
+          .78rem;
+      }
+
+      main {
+        padding:
+          40px 0 20px;
+      }
+
+      .hero {
+        min-height:
+          500px;
+
+        padding:
+          60px 22px;
+      }
+
+      .hero::before {
+        width:
+          330px;
+
+        height:
+          330px;
+      }
+
+      h1 {
+        font-size:
+          clamp(
+            3rem,
+            16vw,
+            5rem
+          );
+      }
+
+      h2 {
+        font-size:
+          clamp(
+            2rem,
+            10vw,
+            3rem
+          );
+      }
+
+      .text-section,
+      .cards,
+      .contact {
+        padding:
+          30px 22px;
+      }
+
+      .card-grid {
+        grid-template-columns:
+          1fr;
+      }
+
+      .card {
+        min-height:
+          180px;
+
+        padding:
+          23px;
+      }
+
+      .contact {
+        padding:
+          44px 22px;
+      }
+
+      .error-panel {
+        padding:
+          34px 22px;
+      }
+    }
+
+    @media(max-width: 470px) {
+      .brand-name {
+        display:
+          none;
+      }
+
+      nav {
+        max-width:
+          none;
+      }
+
+      .theme-button {
+        padding:
+          7px 8px;
+      }
+
+      nav a {
+        padding:
+          7px 7px;
+      }
+
+      .hero {
+        min-height:
+          470px;
+      }
+
+      .button-row {
+        flex-direction:
+          column;
+
+        width:
+          100%;
+      }
+
+      .button-row .btn {
+        width:
+          100%;
+      }
+    }
+
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
+
+    @media(prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior:
+          auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration:
+          .01ms !important;
+
+        animation-iteration-count:
+          1 !important;
+
+        transition-duration:
+          .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =======================================================
+       HEADER
+       ======================================================= -->
+
+  <header>
+    <div class="container">
+
+      <div class="nav glass">
+
+        <a
+          class="brand"
+          href="/"
+          aria-label="DFFDF home"
+        >
+
+          <div
+            class="logo"
+            id="logo"
+            aria-hidden="true"
+          >
+            <span class="logo-letter">
+              D
+            </span>
+          </div>
+
+          <span
+            class="brand-name"
+            id="siteName"
+          >
+            DFFDF
+          </span>
+
+        </a>
+
+        <nav
+          id="navigation"
+          aria-label="Main navigation"
+        >
+
+          <button
+            class="theme-button"
+            id="themeButton"
+            type="button"
+            aria-label="Change theme"
+          >
+            ◐ Default
+          </button>
+
+        </nav>
+
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- =======================================================
+       MAIN
+       ======================================================= -->
+
+  <main
+    id="content"
+    aria-live="polite"
+  >
+
+    <div class="loading">
+
+      <div class="loader">
+
+        <div
+          class="spinner"
+          aria-hidden="true"
+        ></div>
+
+        <span>
+          Loading DFFDF…
+        </span>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- =======================================================
+       FOOTER
+       ======================================================= -->
+
+  <footer>
+
+    <div class="container">
+
+      <div class="footer-glass">
+
+        <span>
+          © 2026
+        </span>
+
+        <strong id="footerName">
+          DFFDF
+        </strong>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+
+  <script>
+    "use strict";
+
+    /* =========================================================
+       BUILT-IN THEMES
+       ========================================================= */
+
+    const themes = {
+
+      midnight: {
+        background: "#050507",
+        surface: "#101117",
+        surface2: "#171823",
+        text: "#ffffff",
+        muted: "#a1a1ae",
+        accent: "#8065ff",
+        accent2: "#bbaeff",
+        border: "rgba(255,255,255,.14)"
+      },
+
+      aurora: {
+        background: "#04100d",
+        surface: "#0c1916",
+        surface2: "#10221d",
+        text: "#f5fffb",
+        muted: "#9bbab0",
+        accent: "#42e6b0",
+        accent2: "#a1ffe2",
+        border: "rgba(66,230,176,.18)"
+      },
+
+      ocean: {
+        background: "#04101a",
+        surface: "#0b1927",
+        surface2: "#102536",
+        text: "#f5fbff",
+        muted: "#9bb5c9",
+        accent: "#39a9ff",
+        accent2: "#91d6ff",
+        border: "rgba(57,169,255,.18)"
+      },
+
+      sunset: {
+        background: "#13080d",
+        surface: "#211018",
+        surface2: "#2a1520",
+        text: "#fff7f8",
+        muted: "#c9a1aa",
+        accent: "#ff6378",
+        accent2: "#ffb86c",
+        border: "rgba(255,99,120,.18)"
+      },
+
+      light: {
+        background: "#eef1f7",
+        surface: "#ffffff",
+        surface2: "#f7f8fb",
+        text: "#11131a",
+        muted: "#646976",
+        accent: "#6955e8",
+        accent2: "#9b8cff",
+        border: "rgba(20,25,40,.12)"
+      },
+
+      graphite: {
+        background: "#0b0d10",
+        surface: "#15181d",
+        surface2: "#1b1f25",
+        text: "#f5f7fa",
+        muted: "#9ca3af",
+        accent: "#d7dbe2",
+        accent2: "#ffffff",
+        border: "rgba(255,255,255,.13)"
+      }
+
+    };
+
+
+    /* =========================================================
+       DEFAULT GLASS SETTINGS
+       ========================================================= */
+
+    const defaultGlass = {
+
+      blur: "28px",
+
+      transparency: 0.10,
+
+      borderOpacity: 0.16,
+
+      shadowStrength: 0.24,
+
+      cornerRadius: "24px",
+
+      animationSpeed: "0.25s",
+
+      glowStrength: 0.32,
+
+      saturation: 145,
+
+      highlightOpacity: 0.12,
+
+      tintStrength: 0.08,
+
+      noise: 0.025
+
+    };
+
+
+    /* =========================================================
+       STATE
+       ========================================================= */
+
+    let site = {};
+
+    let page = {};
+
+    let isPreviewMode = false;
+
+
+    /* =========================================================
+       UTILITIES
+       ========================================================= */
+
+    function escapeHTML(value) {
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+      div.textContent =
+        value ?? "";
+
+      return div.innerHTML;
+    }
+
+
+    function safeURL(value) {
+
+      const raw =
+        String(value || "#")
+          .trim();
+
+      /*
+       * Allow normal relative links,
+       * anchors, mailto and https/http.
+       */
+
+      if (
+        raw.startsWith("#") ||
+        raw.startsWith("/") ||
+        raw.startsWith("mailto:") ||
+        raw.startsWith("https://") ||
+        raw.startsWith("http://")
+      ) {
+        return raw;
+      }
+
+      return "#";
+    }
+
+
+    function normalizeGlass() {
+
+      return {
+        ...defaultGlass,
+        ...(site.glass || {})
+      };
+
+    }
+
+
+    /* =========================================================
+       APPLY THEME
+       ========================================================= */
+
+    function setTheme(mode = "default") {
+
+      let themeName;
+
+      /*
+       * Visitor light/dark overrides.
+       */
+
+      if (
+        mode === "light"
+      ) {
+
+        themeName =
+          "light";
+
+      }
+
+      else if (
+        mode === "dark"
+      ) {
+
+        themeName =
+          "midnight";
+
+      }
+
+      else {
+
+        themeName =
+          page.theme &&
+          page.theme !== "inherit"
+
+            ? page.theme
+
+            : site.defaultTheme ||
+              "midnight";
+
+      }
+
+
+      const theme =
+        site.themes?.[themeName] ||
+        themes[themeName] ||
+        themes.midnight;
+
+
+      /*
+       * Apply colours.
+       */
+
+      Object.entries(
+        theme
+      ).forEach(
+        ([key, value]) => {
+
+          document.documentElement
+            .style
+            .setProperty(
+              `--${key}`,
+              value
+            );
+
+        }
+      );
+
+
+      /*
+       * Apply Liquid Glass.
+       */
+
+      const glass =
+        normalizeGlass();
+
+
+      const root =
+        document.documentElement;
+
+
+      root.style.setProperty(
+        "--glass-blur",
+        glass.blur
+      );
+
+
+      root.style.setProperty(
+        "--glass-opacity",
+        glass.transparency
+      );
+
+
+      root.style.setProperty(
+        "--glass-border-opacity",
+        glass.borderOpacity
+      );
+
+
+      root.style.setProperty(
+        "--glass-shadow",
+        glass.shadowStrength
+      );
+
+
+      root.style.setProperty(
+        "--glass-radius",
+        glass.cornerRadius
+      );
+
+
+      root.style.setProperty(
+        "--glass-animation",
+        glass.animationSpeed
+      );
+
+
+      root.style.setProperty(
+        "--glass-glow",
+        glass.glowStrength
+      );
+
+
+      root.style.setProperty(
+        "--glass-saturation",
+        `${glass.saturation}%`
+      );
+
+
+      root.style.setProperty(
+        "--glass-highlight",
+        glass.highlightOpacity
+      );
+
+
+      root.style.setProperty(
+        "--glass-tint-strength",
+        glass.tintStrength
+      );
+
+
+      root.style.setProperty(
+        "--glass-noise",
+        glass.noise
+      );
+
+
+      const themeColor =
+        document.getElementById(
+          "themeColor"
+        );
+
+      if (themeColor) {
+
+        themeColor.setAttribute(
+          "content",
+          theme.background
+        );
+
+      }
+
+
+      /*
+       * Never save "preview" as the
+       * visitor's actual preference.
+       */
+
+      if (
+        mode !== "preview"
+      ) {
+
+        localStorage.setItem(
+          "dffdf-visitor-theme",
+          mode
+        );
+
+      }
+
+
+      updateThemeButton(
+        mode
+      );
+
+    }
+
+
+    /* =========================================================
+       THEME BUTTON LABEL
+       ========================================================= */
+
+    function updateThemeButton(
+      mode
+    ) {
+
+      const button =
+        document.getElementById(
+          "themeButton"
+        );
+
+      if (!button) {
+        return;
+      }
+
+
+      if (
+        mode === "light"
+      ) {
+
+        button.textContent =
+          "☀ Light";
+
+        return;
+
+      }
+
+
+      if (
+        mode === "dark"
+      ) {
+
+        button.textContent =
+          "☾ Dark";
+
+        return;
+
+      }
+
+
+      const name =
+        page.theme &&
+        page.theme !== "inherit"
+
+          ? page.theme
+
+          : site.defaultTheme ||
+            "midnight";
+
+
+      const labels = {
+
+        midnight:
+          "🌑 Midnight",
+
+        aurora:
+          "🌌 Aurora",
+
+        ocean:
+          "🌊 Ocean",
+
+        sunset:
+          "🌅 Sunset",
+
+        light:
+          "☀ Light",
+
+        graphite:
+          "◈ Graphite"
+
+      };
+
+
+      button.textContent =
+        labels[name] ||
+        "◐ Default";
+
+    }
+
+
+    /* =========================================================
+       THEME BUTTON
+       ========================================================= */
+
+    function setupThemeButton() {
+
+      const button =
+        document.getElementById(
+          "themeButton"
+        );
+
+      if (!button) {
+        return;
+      }
+
+
+      /*
+       * Prevent duplicate listeners.
+       */
+
+      if (
+        button.dataset.bound ===
+        "true"
+      ) {
+        return;
+      }
+
+
+      button.dataset.bound =
+        "true";
+
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const current =
+            localStorage.getItem(
+              "dffdf-visitor-theme"
+            ) || "default";
+
+
+          const next =
+            current === "default"
+
+              ? "light"
+
+              : current === "light"
+
+              ? "dark"
+
+              : "default";
+
+
+          setTheme(next);
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
+
+    function renderNavigation() {
+
+      const nav =
+        document.getElementById(
+          "navigation"
+        );
+
+      if (!nav) {
+        return;
+      }
+
+
+      nav.innerHTML =
+        "";
+
+
+      const links =
+        Array.isArray(
+          site.navigation
+        )
+
+          ? site.navigation
+
+          : [
+              {
+                label:
+                  "Home",
+
+                href:
+                  "/"
+              },
+
+              {
+                label:
+                  "Example",
+
+                href:
+                  "/example"
+              }
+            ];
+
+
+      links.forEach(
+        link => {
+
+          const a =
+            document.createElement(
+              "a"
+            );
+
+
+          a.href =
+            safeURL(
+              link.href
+            );
+
+
+          a.textContent =
+            link.label ||
+            "Page";
+
+
+          nav.appendChild(
+            a
+          );
+
+        }
+      );
+
+
+      /*
+       * Theme button.
+       */
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.id =
+        "themeButton";
+
+
+      button.className =
+        "theme-button";
+
+
+      button.type =
+        "button";
+
+
+      button.setAttribute(
+        "aria-label",
+        "Change theme"
+      );
+
+
+      button.textContent =
+        "◐ Default";
+
+
+      nav.appendChild(
+        button
+      );
+
+
+      setupThemeButton();
+
+
+      /*
+       * Visitor theme preference.
+       *
+       * In admin preview we do not
+       * let localStorage override the
+       * page theme.
+       */
+
+      if (
+        isPreviewMode
+      ) {
+
+        setTheme(
+          "preview"
+        );
+
+      }
+
+      else {
+
+        const saved =
+          localStorage.getItem(
+            "dffdf-visitor-theme"
+          ) || "default";
+
+
+        setTheme(
+          saved
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       HERO
+       ========================================================= */
+
+    function renderHero(
+      section
+    ) {
+
+      const title =
+        section.title ||
+        page.title ||
+        "Welcome";
+
+
+      const buttonURL =
+        safeURL(
+          section.buttonUrl ||
+          "#"
+        );
+
+
+      return `
+
+        <section
+          class="hero glass section"
+        >
+
+          <div
+            class="hero-content"
+          >
+
+            ${
+              section.badge
+                ? `
+
+                  <div
+                    class="badge"
+                  >
+                    ${escapeHTML(
+                      section.badge
+                    )}
+                  </div>
+
+                `
+                : ""
+            }
+
+
+            <h1>
+              ${escapeHTML(
+                title
+              )}
+            </h1>
+
+
+            ${
+              section.text
+                ? `
+
+                  <p>
+                    ${escapeHTML(
+                      section.text
+                    )}
+                  </p>
+
+                `
+                : ""
+            }
+
+
+            ${
+              section.buttonText
+                ? `
+
+                  <div
+                    class="button-row"
+                  >
+
+                    <a
+                      class="btn primary"
+                      href="${escapeHTML(
+                        buttonURL
+                      )}"
+                    >
+                      <span>
+                        ${escapeHTML(
+                          section.buttonText
+                        )}
+                      </span>
+
+                      <span
+                        aria-hidden="true"
+                      >
+                        →
+                      </span>
+
+                    </a>
+
+                  </div>
+
+                `
+                : ""
+            }
+
+          </div>
+
+        </section>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       TEXT SECTION
+       ========================================================= */
+
+    function renderText(
+      section
+    ) {
+
+      return `
+
+        <section
+          class="text-section glass section"
+        >
+
+          <h2>
+            ${escapeHTML(
+              section.title ||
+              ""
+            )}
+          </h2>
+
+
+          <p>
+            ${escapeHTML(
+              section.text ||
+              ""
+            )}
+          </p>
+
+        </section>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       CARDS
+       ========================================================= */
+
+    function renderCards(
+      section
+    ) {
+
+      const cards =
+        Array.isArray(
+          section.cards
+        )
+
+          ? section.cards
+
+          : [];
+
+
+      return `
+
+        <section
+          class="cards glass section"
+        >
+
+          <div
+            class="section-heading"
+          >
+
+            <h2>
+              ${escapeHTML(
+                section.title ||
+                ""
+              )}
+            </h2>
+
+
+            ${
+              section.text
+                ? `
+
+                  <p>
+                    ${escapeHTML(
+                      section.text
+                    )}
+                  </p>
+
+                `
+                : ""
+            }
+
+          </div>
+
+
+          <div
+            class="card-grid"
+          >
+
+            ${
+              cards
+                .map(
+                  (
+                    card,
+                    index
+                  ) => `
+
+                    <article
+                      class="card glass"
+                    >
+
+                      <div
+                        class="card-icon"
+                        aria-hidden="true"
+                      >
+                        ${index + 1}
+                      </div>
+
+
+                      <h3>
+                        ${escapeHTML(
+                          card.title ||
+                          ""
+                        )}
+                      </h3>
+
+
+                      <p>
+                        ${escapeHTML(
+                          card.text ||
+                          ""
+                        )}
+                      </p>
+
+                    </article>
+
+                  `
+                )
+                .join("")
+            }
+
+          </div>
+
+        </section>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       CONTACT
+       ========================================================= */
+
+    function renderContact(
+      section
+    ) {
+
+      let email =
+        section.email ||
+        "";
+
+
+      email =
+        String(email)
+          .replace(
+            /^\[/,
+            ""
+          )
+          .replace(
+            /\].*$/,
+            ""
+          )
+          .replace(
+            /^mailto:/i,
+            ""
+          )
+          .trim();
+
+
+      const safeEmail =
+        escapeHTML(
+          email
+        );
+
+
+      return `
+
+        <section
+          class="contact glass section"
+        >
+
+          <h2>
+            ${escapeHTML(
+              section.title ||
+              "Contact"
+            )}
+          </h2>
+
+
+          <p>
+            ${escapeHTML(
+              section.text ||
+              ""
+            )}
+          </p>
+
+
+          ${
+            email
+              ? `
+
+                <div
+                  class="button-row"
+                >
+
+                  <a
+                    class="btn primary"
+                    href="mailto:${safeEmail}"
+                  >
+                    Contact us
+                    <span
+                      aria-hidden="true"
+                    >
+                      →
+                    </span>
+                  </a>
+
+                </div>
+
+
+                <a
+                  class="contact-email"
+                  href="mailto:${safeEmail}"
+                >
+                  ${safeEmail}
+                </a>
+
+              `
+              : ""
+          }
+
+        </section>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       SECTION RENDERER
+       ========================================================= */
+
+    function renderSection(
+      section
+    ) {
+
+      if (!section) {
+        return "";
+      }
+
+
+      switch (
+        section.type
+      ) {
+
+        case "hero":
+          return renderHero(
+            section
+          );
+
+
+        case "text":
+          return renderText(
+            section
+          );
+
+
+        case "cards":
+          return renderCards(
+            section
+          );
+
+
+        case "contact":
+          return renderContact(
+            section
+          );
+
+
+        default:
+          return "";
+
+      }
+
+    }
+
+
+    /* =========================================================
+       PAGE RENDERER
+       ========================================================= */
+
+    function renderPage() {
+
+      const content =
+        document.getElementById(
+          "content"
+        );
+
+
+      if (!content) {
+        return;
+      }
+
+
+      const sections =
+        Array.isArray(
+          page.sections
+        )
+
+          ? page.sections
+
+          : [];
+
+
+      content.innerHTML =
+        sections
+          .map(
+            renderSection
+          )
+          .join("");
+
+
+      /*
+       * Page title.
+       */
+
+      const title =
+        page.title ||
+        site.siteName ||
+        "DFFDF";
+
+
+      document.title =
+        title;
+
+
+      const titleElement =
+        document.getElementById(
+          "pageTitle"
+        );
+
+
+      if (titleElement) {
+
+        titleElement.textContent =
+          title;
+
+      }
+
+
+      /*
+       * Meta description.
+       */
+
+      const description =
+        page.description ||
+        site.siteDescription ||
+        "DFFDF";
+
+
+      const meta =
+        document.getElementById(
+          "metaDescription"
+        );
+
+
+      if (meta) {
+
+        meta.setAttribute(
+          "content",
+          description
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       SITE RENDERER
+       ========================================================= */
+
+    function renderSite() {
+
+      const name =
+        site.siteName ||
+        "DFFDF";
+
+
+      const siteName =
+        document.getElementById(
+          "siteName"
+        );
+
+
+      if (siteName) {
+
+        siteName.textContent =
+          name;
+
+      }
+
+
+      const footerName =
+        document.getElementById(
+          "footerName"
+        );
+
+
+      if (footerName) {
+
+        footerName.textContent =
+          name;
+
+      }
+
+
+      /*
+       * Logo.
+       */
+
+      const logo =
+        document.getElementById(
+          "logo"
+        );
+
+
+      if (logo) {
+
+        if (site.logo) {
+
+          logo.innerHTML = `
+
+            <img
+              src="${escapeHTML(
+                site.logo
+              )}"
+              alt=""
+            >
+
+          `;
+
+        }
+
+        else {
+
+          logo.innerHTML = `
+
+            <span
+              class="logo-letter"
+            >
+              ${escapeHTML(
+                String(
+                  name
+                ).charAt(0)
+              )}
+            </span>
+
+          `;
+
+        }
+
+      }
+
+
+      /*
+       * Favicon.
+       */
+
+      const favicon =
+        document.getElementById(
+          "favicon"
+        );
+
+
+      if (
+        favicon &&
+        site.favicon
+      ) {
+
+        favicon.href =
+          site.favicon;
+
+      }
+
+    }
+
+
+    /* =========================================================
+       SLUG
+       ========================================================= */
+
+    function getSlug() {
+
+      return location.pathname
+        .replace(
+          /^\/+/,
+          ""
+        )
+        .replace(
+          /\/+$/,
+          ""
+        ) || "home";
+
+    }
+
+
+    /* =========================================================
+       ERROR UI
+       ========================================================= */
+
+    function renderError(
+      error
+    ) {
+
+      const content =
+        document.getElementById(
+          "content"
+        );
+
+
+      if (!content) {
+        return;
+      }
+
+
+      content.innerHTML = `
+
+        <section
+          class="error"
+        >
+
+          <div
+            class="error-panel glass"
+          >
+
+            <div
+              class="badge"
+            >
+              DFFDF
+            </div>
+
+
+            <h1>
+              Something went wrong.
+            </h1>
+
+
+            <p>
+              ${escapeHTML(
+                error.message ||
+                "Unable to load this page."
+              )}
+            </p>
+
+
+            <div
+              class="button-row"
+              style="margin-top:26px;"
+            >
+
+              <a
+                class="btn primary"
+                href="/"
+              >
+                Try Again
+              </a>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       REAL ADMIN PREVIEW
+       ========================================================= */
+
+    function enablePreviewMode() {
+
+      isPreviewMode =
+        true;
+
+
+      document.body
+        .classList
+        .add(
+          "preview-mode"
+        );
+
+
+      /*
+       * Ask the parent admin to send
+       * current state immediately.
+       */
+
+      try {
+
+        window.parent.postMessage(
+          {
+            type:
+              "DFFDF_PREVIEW_READY"
+          },
+          window.location.origin
+        );
+
+      }
+
+      catch {}
+
+    }
+
+
+    function handlePreviewMessage(
+      event
+    ) {
+
+      /*
+       * Only accept messages from
+       * the same origin.
+       */
+
+      if (
+        event.origin !==
+        window.location.origin
+      ) {
+        return;
+      }
+
+
+      const data =
+        event.data;
+
+
+      if (!data) {
+        return;
+      }
+
+
+      /*
+       * Admin live-preview update.
+       */
+
+      if (
+        data.type ===
+        "DFFDF_PREVIEW_UPDATE"
+      ) {
+
+        if (
+          !data.site ||
+          !data.page
+        ) {
+          return;
+        }
+
+
+        isPreviewMode =
+          true;
+
+
+        document.body
+          .classList
+          .add(
+            "preview-mode"
+          );
+
+
+        site =
+          data.site;
+
+
+        page =
+          data.page;
+
+
+        /*
+         * Update everything without
+         * performing another API call.
+         */
+
+        renderSite();
+
+        renderNavigation();
+
+        renderPage();
+
+        setTheme(
+          "preview"
+        );
+
+      }
+
+    }
+
+
+    window.addEventListener(
+      "message",
+      handlePreviewMessage
+    );
+
+
+    /* =========================================================
+       NORMAL API LOAD
+       ========================================================= */
+
+    async function load() {
+
+      /*
+       * If this page is inside the
+       * admin iframe, don't wait for
+       * the normal API response before
+       * allowing the parent to control it.
+       */
+
+      const query =
+        new URLSearchParams(
+          window.location.search
+        );
+
+
+      if (
+        query.get("preview") ===
+        "1"
+      ) {
+
+        enablePreviewMode();
+
+      }
+
+
+      try {
+
+        const slug =
+          getSlug();
+
+
+        const response =
+          await fetch(
+            `/api/site?page=${encodeURIComponent(
+              slug
+            )}`,
+            {
+              cache:
+                "no-store",
+
+              headers: {
+                Accept:
+                  "application/json"
+              }
+            }
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            `API returned HTTP ${response.status}`
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          !data.site ||
+          !data.page
+        ) {
+
+          throw new Error(
+            "API response is missing site or page data."
+          );
+
+        }
+
+
+        site =
+          data.site;
+
+
+        page =
+          data.page;
+
+
+        /*
+         * Render initial site.
+         */
+
+        renderSite();
+
+        renderNavigation();
+
+        renderPage();
+
+
+        /*
+         * Preview mode must always
+         * respect the parent editor.
+         */
+
+        if (
+          isPreviewMode
+        ) {
+
+          setTheme(
+            "preview"
+          );
+
+        }
+
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "DFFDF load error:",
+          error
+        );
+
+
+        /*
+         * In preview mode the parent
+         * may still send the real page,
+         * so don't display a permanent
+         * error immediately.
+         */
+
+        if (
+          isPreviewMode
+        ) {
+
+          const content =
+            document.getElementById(
+              "content"
+            );
+
+
+          if (content) {
+
+            content.innerHTML = `
+
+              <section
+                class="loading"
+              >
+
+                <div
+                  class="loader"
+                >
+
+                  <div
+                    class="spinner"
+                  ></div>
+
+                  <span>
+                    Waiting for preview…
+                  </span>
+
+                </div>
+
+              </section>
+
+            `;
+
+          }
+
+          return;
+
+        }
+
+
+        renderError(
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       PREVIEW READY BRIDGE
+       ========================================================= */
+
+    window.addEventListener(
+      "message",
+      event => {
+
+        if (
+          event.origin !==
+          window.location.origin
+        ) {
+          return;
+        }
+
+
+        if (
+          event.data?.type !==
+          "DFFDF_PREVIEW_UPDATE"
+        ) {
+          return;
+        }
+
+
+        /*
+         * Tell parent the update was
+         * accepted.
+         */
+
+        try {
+
+          window.parent.postMessage(
+            {
+              type:
+                "DFFDF_PREVIEW_APPLIED",
+
+              timestamp:
+                Date.now()
+            },
+            window.location.origin
+          );
+
+        }
+
+        catch {}
+
+      }
+    );
+
+
+    /* =========================================================
+       DOM READY
+       ========================================================= */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        load();
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
