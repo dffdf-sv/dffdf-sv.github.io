@@ -1,39 +1,27 @@
-```yaml
 services:
   - type: web
     name: dffdf-website
     runtime: node
     plan: free
-
     buildCommand: npm install
     startCommand: npm start
-
+    healthCheckPath: /api/site
     envVars:
-
       - key: NODE_ENV
         value: production
-
       - key: GITHUB_OWNER
         value: dffdf-sv
-
       - key: GITHUB_REPO
         value: dffdf-sv.github.io
-
       - key: GITHUB_BRANCH
         value: main
-
       - key: GITHUB_FILE
-        value: data/site-content.json
-
+        value: data/site.json
       - key: ADMIN_USER
         sync: false
-
       - key: ADMIN_PASSWORD
         sync: false
-
       - key: GITHUB_TOKEN
         sync: false
-
       - key: SESSION_SECRET
         generateValue: true
-```
