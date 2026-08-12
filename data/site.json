@@ -4,10 +4,8 @@
   "siteUrl": "",
   "logo": "",
   "favicon": "",
-
   "defaultPage": "home",
-  "defaultTheme": "midnight",
-
+  "defaultTheme": "aurora",
   "glass": {
     "blur": "30px",
     "transparency": 0.1,
@@ -21,7 +19,6 @@
     "tintStrength": 0.08,
     "noise": 0.025
   },
-
   "themes": {
     "midnight": {
       "background": "#07070b",
@@ -32,7 +29,6 @@
       "accent": "#8065ff",
       "accent2": "#b19cff"
     },
-
     "aurora": {
       "background": "#06100e",
       "surface": "#0d1c19",
@@ -42,7 +38,6 @@
       "accent": "#48e6b2",
       "accent2": "#9bffe0"
     },
-
     "ocean": {
       "background": "#06101a",
       "surface": "#0d1925",
@@ -52,7 +47,6 @@
       "accent": "#38a9ff",
       "accent2": "#8bd1ff"
     },
-
     "sunset": {
       "background": "#13090d",
       "surface": "#211117",
@@ -62,7 +56,6 @@
       "accent": "#ff6b7a",
       "accent2": "#ffb36b"
     },
-
     "light": {
       "background": "#f4f5f8",
       "surface": "#ffffff",
@@ -72,7 +65,6 @@
       "accent": "#6246e8",
       "accent2": "#927cff"
     },
-
     "graphite": {
       "background": "#0b0d10",
       "surface": "#15181d",
@@ -82,7 +74,6 @@
       "accent": "#d7dbe2",
       "accent2": "#ffffff"
     },
-
     "custom": {
       "background": "#0a0a0d",
       "surface": "#15151c",
@@ -93,7 +84,6 @@
       "accent2": "#b19cff"
     }
   },
-
   "navigation": [
     {
       "label": "Home",
@@ -104,6 +94,8 @@
       "href": "/example"
     }
   ],
-
-  "media": []
+  "media": [],
+  "visitor": {},
+  "seo": {},
+  "responsive": {}
 }
