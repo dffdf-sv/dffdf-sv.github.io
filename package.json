@@ -4,7 +4,7 @@
   "description": "DFFDF Liquid Glass website CMS",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node boot.js"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
