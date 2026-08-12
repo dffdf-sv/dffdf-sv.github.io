@@ -30,8 +30,8 @@
         });
         if (!response.ok) throw new Error(`Logout failed (${response.status})`);
 
-        // Logout succeeds first, then leave the admin area for the public home page.
-        window.location.replace("/");
+        // Go directly to the admin login screen after the session is destroyed.
+        window.location.replace("/admin");
       } catch (error) {
         console.error(error);
         button.disabled = false;
