@@ -26,15 +26,13 @@
         const response = await fetch("/api/logout", {
           method: "POST",
           credentials: "same-origin",
-          cache: "no-store",
-          headers: { "Content-Type": "application/json" }
+          cache: "no-store"
         });
-
         if (!response.ok) throw new Error(`Logout failed (${response.status})`);
 
-        // Do not reload /admin: that can immediately boot the login page back
-        // into the authenticated admin state due to browser/server caching.
-        window.location.assign("/admin?loggedout=1");
+        // The admin route shows the login form when the session is gone.
+        // Use replace so Back does not return to the authenticated admin page.
+        window.location.replace("/admin?loggedout=1");
       } catch (error) {
         console.error(error);
         button.disabled = false;
