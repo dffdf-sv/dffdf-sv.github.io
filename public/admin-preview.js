@@ -1,234 +1,198 @@
 (() => {
   "use strict";
-  if (window.__DFFDF_ADMIN_ENHANCED__) return;
-  window.__DFFDF_ADMIN_ENHANCED__ = true;
+  if (window.__DFFDF_ADMIN_ENHANCED_V2__) return;
+  window.__DFFDF_ADMIN_ENHANCED_V2__ = true;
 
   const $ = id => document.getElementById(id);
   const safe = (v, fallback = "") => v == null ? fallback : v;
   let preview = null;
   let previewTimer = null;
-  let sectionRendererInstalled = false;
+  let previewKeepAlive = null;
 
-  function ensureSiteShape() {
+  function ensureShape() {
+    if (typeof site === "undefined") return;
     site = site || {};
-    site.themes = site.themes || { ...builtInThemes };
-    site.glass = { ...(site.glass || {}) };
-    site.visitor = { ...(site.visitor || {}) };
-    site.responsive = { ...(site.responsive || {}) };
-    site.seo = { ...(site.seo || {}) };
+    site.themes = site.themes || (typeof builtInThemes !== "undefined" ? {...builtInThemes} : {});
+    site.glass = {...(site.glass || {})};
+    site.visitor = {...(site.visitor || {})};
+    site.seo = {...(site.seo || {})};
+    site.responsive = {...(site.responsive || {})};
     site.media = Array.isArray(site.media) ? site.media : [];
     site.navigation = Array.isArray(site.navigation) ? site.navigation : [];
   }
 
-  function bind(id, getter, setter) {
-    const el = $(id);
-    if (!el || el.dataset.dffdfBound) return;
-    el.dataset.dffdfBound = "1";
-    el.value = getter();
-    const update = () => { setter(el.value); schedulePreview(); };
-    el.addEventListener("input", update);
-    el.addEventListener("change", update);
+  function previewNow() {
+    clearTimeout(previewTimer);
+    previewTimer = setTimeout(sendPreview, 60);
   }
 
-  function bindCheck(id, getter, setter) {
-    const el = $(id);
-    if (!el || el.dataset.dffdfBound) return;
-    el.dataset.dffdfBound = "1";
-    el.checked = !!getter();
-    el.addEventListener("change", () => { setter(el.checked); schedulePreview(); });
-  }
-
-  function bindSettings() {
-    ensureSiteShape();
-    bind("siteNameInput", () => safe(site.siteName, "DFFDF"), v => site.siteName = v);
-    bind("logoInput", () => safe(site.logo), v => site.logo = v);
-    bind("faviconInput", () => safe(site.favicon), v => site.favicon = v);
-    bind("descriptionInput", () => safe(site.siteDescription), v => site.siteDescription = v);
-    bind("siteUrlInput", () => safe(site.siteUrl), v => site.siteUrl = v);
-    bind("defaultPageInput", () => safe(site.defaultPage, "home"), v => site.defaultPage = v);
-    bindCheck("maintenanceInput", () => site.maintenance, v => site.maintenance = v);
-    bindCheck("loadingInput", () => site.loadingScreen !== false, v => site.loadingScreen = v);
-    bindCheck("transitionsInput", () => site.pageTransitions !== false, v => site.pageTransitions = v);
-    bind("backgroundInput", () => safe(site.backgroundImage), v => site.backgroundImage = v);
-    bind("cursorInput", () => safe(site.cursor), v => site.cursor = v);
-
-    const visitor = site.visitor;
-    bind("visitorTheme", () => visitor.defaultTheme || "default", v => visitor.defaultTheme = v);
-    bindCheck("rememberTheme", () => visitor.remember !== false, v => visitor.remember = v);
-    bindCheck("themeSwitcher", () => visitor.themeSwitcher !== false, v => visitor.themeSwitcher = v);
-    bindCheck("reduceAnimations", () => visitor.reduceAnimations !== false, v => visitor.reduceAnimations = v);
-    bind("mobileLayout", () => visitor.mobileLayout || "Automatic", v => visitor.mobileLayout = v);
-
-    bind("seoTitle", () => site.seo.title || site.siteName || "DFFDF", v => site.seo.title = v);
-    bind("seoDescription", () => site.seo.description || site.siteDescription || "", v => site.seo.description = v);
-    bind("seoImage", () => site.seo.image || "", v => site.seo.image = v);
-    bind("seoRobots", () => site.seo.robots || "index,follow", v => site.seo.robots = v);
-    bind("seoMeta", () => site.seo.meta || "", v => site.seo.meta = v);
-
-    const glassMap = {
-      blur: ["blur", v => `${v}px`, v => parseFloat(v)],
-      transparency: ["transparency", v => v / 100, v => parseFloat(v) * 100],
-      borderOpacity: ["borderOpacity", v => v / 100, v => parseFloat(v) * 100],
-      shadowStrength: ["shadowStrength", v => v / 100, v => parseFloat(v) * 100],
-      cornerRadius: ["cornerRadius", v => `${v}px`, v => parseFloat(v)],
-      animationSpeed: ["animationSpeed", v => `${v / 100}s`, v => parseFloat(v) * 100],
-      glowStrength: ["glowStrength", v => v / 100, v => parseFloat(v) * 100]
-    };
-    document.querySelectorAll("[data-glass]").forEach(el => {
-      if (el.dataset.dffdfBound) return;
-      const key = el.dataset.glass, map = glassMap[key];
-      if (!map) return;
-      el.dataset.dffdfBound = "1";
-      const current = site.glass[map[0]];
-      if (current != null && !Number.isNaN(map[2](current))) el.value = map[2](current);
-      el.addEventListener("input", () => { site.glass[map[0]] = map[1](Number(el.value)); schedulePreview(); });
-    });
-  }
-
-  function wireCustomTheme() {
-    ensureSiteShape();
-    site.themes.custom = site.themes.custom || { ...builtInThemes.midnight };
-    const map = { customBackground:"background", customSurface:"surface", customText:"text", customAccent:"accent", customAccent2:"accent2" };
-    Object.entries(map).forEach(([id, key]) => {
-      const el = $(id);
-      if (!el || el.dataset.dffdfBound) return;
-      el.dataset.dffdfBound = "1";
-      el.value = site.themes.custom[key] || el.value;
-      el.addEventListener("input", () => { site.themes.custom[key] = el.value; site.defaultTheme = "custom"; renderThemes(); schedulePreview(); });
-    });
+  function sendPreview() {
+    if (!preview || !document.body.contains(preview) || typeof pages === "undefined") return;
+    const frame = preview.querySelector("iframe");
+    if (!frame?.contentWindow) return;
+    const slug = $("sectionPage")?.value || site.defaultPage || "home";
+    const page = pages.find(p => p.slug === slug) || pages.find(p => p.slug === "home") || pages[0];
+    if (!page) return;
+    frame.contentWindow.postMessage({type:"DFFDF_PREVIEW_UPDATE", site: JSON.parse(JSON.stringify(site)), page: JSON.parse(JSON.stringify(page))}, location.origin);
   }
 
   function openPreview() {
     if (!preview) {
       preview = document.createElement("div");
       preview.id = "dffdf-live-preview";
-      preview.innerHTML = `<div class="dffdf-preview-backdrop"></div><div class="dffdf-preview-window"><div class="dffdf-preview-toolbar"><strong>Live Preview</strong><div><button type="button" class="button" data-preview-refresh>↻ Refresh</button><button type="button" class="button" data-preview-close>Close</button></div></div><iframe title="DFFDF live preview" src="/?preview=1" loading="eager"></iframe></div>`;
+      preview.innerHTML = `
+        <div class="dffdf-preview-backdrop"></div>
+        <div class="dffdf-preview-window">
+          <div class="dffdf-preview-toolbar">
+            <strong>Live Preview</strong>
+            <div class="actions">
+              <button type="button" class="button" data-preview-refresh>↻ Refresh</button>
+              <button type="button" class="button primary" data-preview-close>Close</button>
+            </div>
+          </div>
+          <iframe title="DFFDF live preview" src="/?preview=1" loading="eager"></iframe>
+        </div>`;
       document.body.appendChild(preview);
       const style = document.createElement("style");
-      style.textContent = `#dffdf-live-preview{position:fixed;inset:0;z-index:9999;display:grid;place-items:center}.dffdf-preview-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.74);backdrop-filter:blur(12px)}.dffdf-preview-window{position:relative;width:min(1440px,96vw);height:min(900px,94vh);background:#09090d;border:1px solid rgba(255,255,255,.14);border-radius:22px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.6);display:flex;flex-direction:column}.dffdf-preview-toolbar{height:58px;flex:0 0 58px;display:flex;align-items:center;justify-content:space-between;padding:0 12px 0 18px;background:rgba(17,18,26,.95);border-bottom:1px solid rgba(255,255,255,.1)}.dffdf-preview-toolbar>div{display:flex;gap:8px}.dffdf-preview-window iframe{border:0;width:100%;height:100%;background:#07070b}`;
+      style.textContent = `
+        #dffdf-live-preview{position:fixed;inset:0;z-index:99999;display:grid;place-items:center}
+        .dffdf-preview-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.76);backdrop-filter:blur(14px)}
+        .dffdf-preview-window{position:relative;width:min(1440px,96vw);height:min(900px,94vh);background:#09090d;border:1px solid rgba(255,255,255,.16);border-radius:22px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.7);display:flex;flex-direction:column}
+        .dffdf-preview-toolbar{height:58px;flex:0 0 58px;display:flex;align-items:center;justify-content:space-between;padding:0 12px 0 18px;background:rgba(17,18,26,.96);border-bottom:1px solid rgba(255,255,255,.1)}
+        .dffdf-preview-toolbar .actions{display:flex;gap:8px}.dffdf-preview-window iframe{border:0;width:100%;height:100%;background:#07070b}
+        @media(max-width:700px){.dffdf-preview-window{width:100vw;height:100vh;border-radius:0}.dffdf-preview-toolbar{height:52px;flex-basis:52px}}
+      `;
       document.head.appendChild(style);
-      preview.querySelector("[data-preview-close]").onclick = () => { preview.remove(); preview = null; };
-      preview.querySelector("[data-preview-refresh]").onclick = () => preview.querySelector("iframe").contentWindow.location.reload();
+      preview.querySelector("[data-preview-close]").onclick = closePreview;
+      preview.querySelector("[data-preview-refresh]").onclick = () => {
+        const frame = preview.querySelector("iframe");
+        frame.src = "/?preview=1&t=" + Date.now();
+      };
       preview.querySelector("iframe").addEventListener("load", sendPreview);
     }
     preview.style.display = "grid";
     sendPreview();
+    clearInterval(previewKeepAlive);
+    previewKeepAlive = setInterval(sendPreview, 250);
   }
 
-  function sendPreview() {
-    if (!preview || !document.body.contains(preview)) return;
-    const frame = preview.querySelector("iframe");
-    const selected = $("sectionPage")?.value || site.defaultPage || "home";
-    const page = pages.find(p => p.slug === selected) || pages.find(p => p.slug === "home") || pages[0];
-    if (frame?.contentWindow && page) frame.contentWindow.postMessage({ type:"DFFDF_PREVIEW_UPDATE", site, page }, location.origin);
+  function closePreview() {
+    clearInterval(previewKeepAlive);
+    previewKeepAlive = null;
+    if (preview) preview.remove();
+    preview = null;
   }
 
-  function schedulePreview() { clearTimeout(previewTimer); previewTimer = setTimeout(sendPreview, 80); }
-
-  function installPreviewButton() {
-    const old = document.querySelector('.topbar a[href="/"]');
-    if (!old || old.dataset.dffdfPreview) return;
-    old.dataset.dffdfPreview = "1";
-    old.removeAttribute("href"); old.removeAttribute("target");
-    old.addEventListener("click", e => { e.preventDefault(); openPreview(); });
+  function installReturnAndPreview() {
+    const actions = document.querySelector(".topbar .actions");
+    if (!actions) return;
+    const previewLink = actions.querySelector('a[href="/"]');
+    if (previewLink && !previewLink.dataset.dffdfBound) {
+      previewLink.dataset.dffdfBound = "1";
+      previewLink.removeAttribute("href");
+      previewLink.removeAttribute("target");
+      previewLink.textContent = "👁 Preview";
+      previewLink.addEventListener("click", e => { e.preventDefault(); openPreview(); });
+    }
+    if (!actions.querySelector("[data-return-site]")) {
+      const back = document.createElement("a");
+      back.className = "button";
+      back.href = "/";
+      back.dataset.returnSite = "1";
+      back.textContent = "↩ Return to Site";
+      back.title = "Open the live website";
+      actions.insertBefore(back, actions.firstChild);
+    }
   }
 
-  async function saveEverything() {
-    ensureSiteShape();
-    const button = $("saveButton");
-    if (button) { button.disabled = true; button.textContent = "Saving…"; }
-    try {
-      const sr = await fetch("/api/admin/site", { method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body:JSON.stringify(site) });
-      const sd = await sr.json().catch(() => ({}));
-      if (!sr.ok) throw new Error(sd.error || "Site settings could not be saved.");
-
-      for (const page of pages) {
-        let response = await fetch(`/api/admin/pages/${encodeURIComponent(page.slug)}`, { method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body:JSON.stringify(page) });
-        if (response.status === 404) {
-          response = await fetch("/api/admin/pages", { method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body:JSON.stringify(page) });
-          if (response.ok) response = await fetch(`/api/admin/pages/${encodeURIComponent(page.slug)}`, { method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body:JSON.stringify(page) });
-        }
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(data.error || `Could not save ${page.slug}.`);
-      }
-      toast("✓ All settings and pages saved");
-      schedulePreview();
-    } catch (error) { toast(`❌ ${error.message}`); }
-    finally { if (button) { button.disabled = false; button.textContent = "Save Changes"; } }
-  }
-
-  function replaceSaveHandler() {
-    const button = $("saveButton");
-    if (!button || button.dataset.dffdfSave) return;
-    button.dataset.dffdfSave = "1";
-    const fresh = button.cloneNode(true);
-    button.replaceWith(fresh);
-    fresh.addEventListener("click", saveEverything);
-  }
-
-  function loadAllPages() {
-    if (window.__DFFDF_PAGES_LOADING__) return;
-    window.__DFFDF_PAGES_LOADING__ = true;
-    fetch("/api/admin/pages", { credentials:"include", cache:"no-store" })
-      .then(r => r.ok ? r.json() : [])
-      .then(async list => {
-        const loaded = [];
-        for (const item of list) {
-          try {
-            const r = await fetch(`/api/admin/pages/${encodeURIComponent(item.slug)}`, { credentials:"include", cache:"no-store" });
-            if (r.ok) loaded.push(await r.json());
-          } catch {}
-        }
-        if (loaded.length) {
-          pages = loaded;
-          renderPages();
-          updateSectionPages();
-          schedulePreview();
-        }
-      })
-      .finally(() => { window.__DFFDF_PAGES_LOADING__ = false; });
-  }
-
-  function improveSections() {
-    if (sectionRendererInstalled || typeof window.renderSections !== "function") return;
-    sectionRendererInstalled = true;
-    const original = window.renderSections;
-    window.renderSections = function() {
-      original();
-      const page = typeof getEditingPage === "function" ? getEditingPage() : null;
-      const editor = $("sectionEditor");
-      if (!page || !editor) return;
-      page.sections.forEach((section, index) => {
-        const row = editor.children[index];
-        if (!row || row.querySelector("[data-sec-editor]")) return;
-        const box = document.createElement("div");
-        box.dataset.secEditor = "1";
-        box.style.cssText = "margin-top:10px;display:grid;gap:8px";
-        box.innerHTML = `<input placeholder="Title" value="${escapeAttr(section.title || "")}" data-sec-title><textarea placeholder="Text" data-sec-text>${escapeHTML(section.text || "")}</textarea>${section.type === "hero" ? `<input placeholder="Badge" value="${escapeAttr(section.badge || "")}" data-sec-badge><input placeholder="Button text" value="${escapeAttr(section.buttonText || "")}" data-sec-button><input placeholder="Button URL" value="${escapeAttr(section.buttonUrl || "")}" data-sec-url>` : ""}${section.type === "contact" ? `<input placeholder="Email" value="${escapeAttr(section.email || "")}" data-sec-email>` : ""}`;
-        row.appendChild(box);
-        box.querySelector("[data-sec-title]").oninput = e => { section.title = e.target.value; schedulePreview(); };
-        box.querySelector("[data-sec-text]").oninput = e => { section.text = e.target.value; schedulePreview(); };
-        box.querySelector("[data-sec-badge]")?.addEventListener("input", e => { section.badge = e.target.value; schedulePreview(); });
-        box.querySelector("[data-sec-button]")?.addEventListener("input", e => { section.buttonText = e.target.value; schedulePreview(); });
-        box.querySelector("[data-sec-url]")?.addEventListener("input", e => { section.buttonUrl = e.target.value; schedulePreview(); });
-        box.querySelector("[data-sec-email]")?.addEventListener("input", e => { section.email = e.target.value; schedulePreview(); });
-      });
+  function themeFor(name) {
+    const fallback = typeof builtInThemes !== "undefined" ? builtInThemes : {};
+    return site.themes?.[name] || fallback[name] || fallback.midnight || {
+      background:"#050507",surface:"#101117",surface2:"#171823",text:"#fff",muted:"#a1a1ae",accent:"#8065ff",accent2:"#bbaeff",border:"rgba(255,255,255,.14)"
     };
   }
 
-  function boot() {
-    if (typeof site === "undefined" || typeof pages === "undefined") return;
-    ensureSiteShape();
-    bindSettings();
-    wireCustomTheme();
-    installPreviewButton();
-    replaceSaveHandler();
-    loadAllPages();
-    improveSections();
-    window.addEventListener("message", e => { if (e.origin === location.origin && e.data?.type === "DFFDF_PREVIEW_READY") sendPreview(); });
-    $("sectionPage")?.addEventListener("change", schedulePreview);
+  function applyAdminTheme() {
+    if (typeof site === "undefined") return;
+    ensureShape();
+    const name = site.defaultTheme || "midnight";
+    const t = themeFor(name);
+    const root = document.documentElement;
+    const values = {bg:t.background,surface:t.surface,surface2:t.surface2,text:t.text,muted:t.muted,accent:t.accent,accent2:t.accent2};
+    Object.entries(values).forEach(([k,v]) => root.style.setProperty("--"+k,v));
+    const glass = site.glass || {};
+    root.style.setProperty("--glass-blur", glass.blur || "30px");
+    root.style.setProperty("--glass-opacity", glass.transparency ?? .08);
+    root.style.setProperty("--glass-border", glass.borderOpacity ?? .12);
+    root.style.setProperty("--glass-shadow", glass.shadowStrength ?? .25);
+    root.style.setProperty("--radius", glass.cornerRadius || "20px");
+    document.body.dataset.dffdfTheme = name;
+    const label = $("currentTheme");
+    if (label) label.textContent = name;
   }
 
-  setTimeout(boot, 700);
-  setTimeout(boot, 1800);
+  function hookThemes() {
+    const grid = $("themeGrid");
+    if (!grid || grid.dataset.dffdfThemeHook) return;
+    grid.dataset.dffdfThemeHook = "1";
+    grid.addEventListener("click", e => {
+      const card = e.target.closest(".theme-card");
+      if (!card) return;
+      const name = card.dataset.theme || card.getAttribute("data-name") || card.getAttribute("data-theme-name");
+      if (name) {
+        site.defaultTheme = name;
+        applyAdminTheme();
+        previewNow();
+      }
+    });
+  }
+
+  function bindInputs() {
+    ensureShape();
+    const fields = {
+      siteNameInput:["siteName"],logoInput:["logo"],faviconInput:["favicon"],descriptionInput:["siteDescription"],siteUrlInput:["siteUrl"],defaultPageInput:["defaultPage"],backgroundInput:["backgroundImage"],cursorInput:["cursor"]
+    };
+    Object.entries(fields).forEach(([id,path]) => {
+      const el=$(id); if(!el || el.dataset.dffdfBound) return;
+      el.dataset.dffdfBound="1"; el.value=safe(site[path[0]],"");
+      const set=()=>{site[path[0]]=el.value; previewNow();}; el.addEventListener("input",set); el.addEventListener("change",set);
+    });
+    const checks={maintenanceInput:"maintenance",loadingInput:"loadingScreen",transitionsInput:"pageTransitions"};
+    Object.entries(checks).forEach(([id,key])=>{const el=$(id);if(!el||el.dataset.dffdfBound)return;el.dataset.dffdfBound="1";el.checked=key==="loadingScreen"?site[key]!==false:site[key]!==false;el.addEventListener("change",()=>{site[key]=el.checked;previewNow();});});
+    const visitor=site.visitor;
+    const vs={visitorTheme:"defaultTheme",mobileLayout:"mobileLayout"};
+    Object.entries(vs).forEach(([id,key])=>{const el=$(id);if(!el||el.dataset.dffdfBound)return;el.dataset.dffdfBound="1";el.value=visitor[key]||el.value;el.addEventListener("change",()=>{visitor[key]=el.value;previewNow();});});
+    const vc={rememberTheme:"remember",themeSwitcher:"themeSwitcher",reduceAnimations:"reduceAnimations"};
+    Object.entries(vc).forEach(([id,key])=>{const el=$(id);if(!el||el.dataset.dffdfBound)return;el.dataset.dffdfBound="1";el.checked=visitor[key]!==false;el.addEventListener("change",()=>{visitor[key]=el.checked;previewNow();});});
+    const seo={seoTitle:"title",seoDescription:"description",seoImage:"image",seoRobots:"robots",seoMeta:"meta"};
+    Object.entries(seo).forEach(([id,key])=>{const el=$(id);if(!el||el.dataset.dffdfBound)return;el.dataset.dffdfBound="1";el.value=site.seo[key]||"";el.addEventListener("input",()=>{site.seo[key]=el.value;previewNow();});});
+    const glass={blur:["blur",v=>v+"px"],transparency:["transparency",v=>v/100],borderOpacity:["borderOpacity",v=>v/100],shadowStrength:["shadowStrength",v=>v/100],cornerRadius:["cornerRadius",v=>v+"px"],animationSpeed:["animationSpeed",v=>v/100+"s"],glowStrength:["glowStrength",v=>v/100]};
+    document.querySelectorAll("[data-glass]").forEach(el=>{if(el.dataset.dffdfBound)return;const key=el.dataset.glass,map=glass[key];if(!map)return;el.dataset.dffdfBound="1";const old=parseFloat(site.glass[map[0]]);if(!Number.isNaN(old))el.value=key==="transparency"||key==="borderOpacity"||key==="shadowStrength"||key==="glowStrength"?old*100:key==="animationSpeed"?old*100:old;el.addEventListener("input",()=>{site.glass[map[0]]=map[1](Number(el.value));applyAdminTheme();previewNow();});});
+  }
+
+  async function saveEverything() {
+    ensureShape();
+    const b=$("saveButton"); if(b){b.disabled=true;b.textContent="Saving…";}
+    try{
+      const r=await fetch("/api/admin/site",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify(site)});
+      const d=await r.json().catch(()=>({})); if(!r.ok)throw new Error(d.error||"Site settings could not be saved.");
+      if(typeof pages!=="undefined") for(const p of pages){const pr=await fetch(`/api/admin/pages/${encodeURIComponent(p.slug)}`,{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify(p)});if(!pr.ok)throw new Error(`Could not save ${p.slug}.`);}
+      if(typeof toast==="function")toast("✓ Saved");
+      sendPreview();
+    }catch(e){if(typeof toast==="function")toast("❌ "+e.message);}
+    finally{if(b){b.disabled=false;b.textContent="Save Changes";}}
+  }
+
+  function hookSave(){const b=$("saveButton");if(!b||b.dataset.dffdfSave)return;b.dataset.dffdfSave="1";const n=b.cloneNode(true);b.replaceWith(n);n.addEventListener("click",saveEverything);}
+
+  function boot(){
+    if(typeof site==="undefined")return;
+    ensureShape(); bindInputs(); applyAdminTheme(); hookThemes(); installReturnAndPreview(); hookSave();
+    document.addEventListener("input",e=>{if(e.target.matches("input,textarea,select"))previewNow();},{passive:true});
+    $("sectionPage")?.addEventListener("change",previewNow);
+    setTimeout(()=>{installReturnAndPreview();hookThemes();applyAdminTheme();},500);
+    setTimeout(()=>{installReturnAndPreview();hookThemes();applyAdminTheme();},1500);
+  }
+  setTimeout(boot,500);
+  setTimeout(boot,1500);
 })();
