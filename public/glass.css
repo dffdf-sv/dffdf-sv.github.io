@@ -1,102 +1,172 @@
-/* DFFDF — Liquid Glass controls
-   Apple-inspired interaction language: lensing, flexing, illumination and morphing.
-   Keep the page/background normal; glass is reserved for floating controls and UI. */
-:root{
-  --glass-blur:16px;
-  --glass-saturation:180%;
-  --glass-radius:24px;
-  --glass-ease:cubic-bezier(.22,1,.36,1);
-  --glass-speed:.32s;
+/* =========================================================
+   DFFDF — Liquid Glass material
+   The .glass class owns the glass material.
+   Background/page styling stays in index.html.
+   ========================================================= */
+
+.glass {
+  --glass-x: 50%;
+  --glass-y: 50%;
+  --glass-flex: 0;
+  --glass-light: 0;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      180px 120px at var(--glass-x) var(--glass-y),
+      color-mix(in srgb, var(--accent) 16%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,var(--glass-opacity, .10)),
+      rgba(255,255,255,.038),
+      rgba(255,255,255,.014)
+    );
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--accent) 8%,
+      rgba(255,255,255,var(--glass-border-opacity, .16))
+    );
+
+  border-radius: var(--glass-radius, 24px);
+
+  backdrop-filter:
+    blur(var(--glass-blur, 28px))
+    saturate(var(--glass-saturation, 145%))
+    contrast(108%);
+  -webkit-backdrop-filter:
+    blur(var(--glass-blur, 28px))
+    saturate(var(--glass-saturation, 145%))
+    contrast(108%);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,var(--glass-highlight, .12)),
+    inset 0 -1px 0 rgba(0,0,0,.12),
+    0 30px 90px rgba(0,0,0,var(--glass-shadow, .24));
+
+  transition:
+    transform var(--glass-animation, .25s) cubic-bezier(.2,.8,.2,1),
+    background var(--glass-animation, .25s) ease,
+    border-color var(--glass-animation, .25s) ease,
+    box-shadow var(--glass-animation, .25s) ease,
+    filter var(--glass-animation, .25s) ease;
+
+  transform:
+    translate3d(0, calc(var(--glass-flex) * -2px), 0)
+    scale(calc(1 + var(--glass-flex) * .008));
 }
 
-/* Floating UI only — do not turn the entire page into glass. */
-header,nav,.glass,button,.button,.btn,.menu,.dropdown,.popover,.drawer,.modal,.dialog,
-input,textarea,select,.badge,.cta{
-  position:relative;
-  isolation:isolate;
-  overflow:hidden;
-  background:linear-gradient(145deg,rgba(255,255,255,.20),rgba(255,255,255,.08) 52%,rgba(255,255,255,.045))!important;
-  border:1px solid rgba(255,255,255,.28)!important;
-  border-radius:var(--glass-radius);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.38),inset 0 -1px 0 rgba(0,0,0,.10),0 14px 45px rgba(0,0,0,.20);
-  backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturation)) contrast(108%);
-  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-saturation)) contrast(108%);
-  transition:transform var(--glass-speed) var(--glass-ease),box-shadow var(--glass-speed) var(--glass-ease),border-color var(--glass-speed) var(--glass-ease),background var(--glass-speed) var(--glass-ease),filter var(--glass-speed) var(--glass-ease);
+/* Specular reflection that follows the interaction point. */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+
+  background:
+    radial-gradient(
+      140px 90px at var(--glass-x) var(--glass-y),
+      rgba(255,255,255,calc(.10 + var(--glass-light) * .20)),
+      transparent 72%
+    ),
+    linear-gradient(
+      115deg,
+      rgba(255,255,255,.16),
+      transparent 22%,
+      transparent 68%,
+      rgba(255,255,255,.035)
+    );
+
+  opacity: .9;
+  transition: opacity .18s ease;
 }
 
-/* Lensing highlight: a moving specular edge, not a generic shimmer. */
-header::before,nav::before,.glass::before,button::before,.button::before,.btn::before,.menu::before,
-.dropdown::before,.popover::before,.drawer::before,.modal::before,.dialog::before,.badge::before,.cta::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:inherit;
-  pointer-events:none;
-  z-index:3;
-  background:radial-gradient(ellipse 32% 100% at var(--glass-x,50%) var(--glass-y,50%),rgba(255,255,255,.30),transparent 68%);
-  opacity:.72;
-  transition:opacity .25s var(--glass-ease);
+/* DFFDF purple/lavender refraction — no new colour language. */
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: -12%;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      color-mix(in srgb, var(--accent) 28%, transparent),
+      transparent 42%
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      color-mix(in srgb, var(--accent2) 22%, transparent),
+      transparent 42%
+    );
+
+  opacity: var(--glass-tint-strength, .08);
+  filter: blur(10px);
+  transform:
+    translate3d(
+      calc((var(--glass-x) - 50%) * .035),
+      calc((var(--glass-y) - 50%) * .035),
+      0
+    );
+  transition: transform .35s cubic-bezier(.2,.8,.2,1);
 }
 
-/* Internal illumination: the interaction point lights the material. */
-button::after,.button::after,.btn::after,.glass::after,.menu::after,.dropdown::after,.popover::after{
-  content:"";
-  position:absolute;
-  width:180px;height:180px;
-  left:var(--glass-x,50%);top:var(--glass-y,50%);
-  transform:translate(-50%,-50%) scale(.35);
-  border-radius:50%;
-  pointer-events:none;
-  z-index:2;
-  background:radial-gradient(circle,rgba(255,255,255,.28),rgba(145,135,255,.14) 25%,transparent 68%);
-  filter:blur(5px);
-  opacity:0;
-  transition:opacity .15s ease,transform .55s var(--glass-ease);
+.glass > * {
+  position: relative;
+  z-index: 2;
 }
 
-button:hover::after,.button:hover::after,.btn:hover::after,.glass:hover::after,
-.menu:hover::after,.dropdown:hover::after,.popover:hover::after{opacity:.85;transform:translate(-50%,-50%) scale(1)}
+.glass:hover {
+  --glass-light: 1;
+  transform:
+    translate3d(0,-3px,0)
+    scale(1.003);
 
-/* Pointer-following lens position. */
-button:hover,.button:hover,.btn:hover,.glass:hover,.menu:hover,.dropdown:hover,.popover:hover,.cta:hover{
-  --glass-x:var(--pointer-x,50%);
-  --glass-y:var(--pointer-y,50%);
-  transform:translateY(-2px) scale(1.012);
-  border-color:rgba(255,255,255,.48)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.48),0 20px 52px rgba(0,0,0,.25),0 0 30px rgba(150,125,255,.12);
+  border-color:
+    color-mix(
+      in srgb,
+      var(--accent) 34%,
+      rgba(255,255,255,.14)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    0 40px 110px rgba(0,0,0,.30),
+    0 0 55px color-mix(in srgb,var(--accent) 10%,transparent);
 }
 
-/* Flexing: press the material like a soft lens. */
-button:active,.button:active,.btn:active,.glass:active,.menu:active,.dropdown:active,.cta:active{
-  transform:scale(.965)!important;
-  filter:brightness(1.10) saturate(1.08);
-  transition-duration:.09s!important;
-  box-shadow:inset 0 2px 12px rgba(0,0,0,.15),inset 0 0 20px rgba(255,255,255,.10),0 8px 22px rgba(0,0,0,.20)!important;
+.glass:active {
+  --glass-flex: 1;
+  transform: scale(.985);
+  transition-duration: .08s;
+  filter: brightness(1.08);
 }
 
-/* Normal page background remains untouched. */
-body{background:var(--background,#07070b)!important;background-attachment:initial!important}
-body::before{content:none!important}
-.hero,.hero-card,.card,.card-item,.product-card,.feature-card,.drop-card,.panel,.section,.tile,.stat{
-  background:initial;
-  backdrop-filter:none;
-  -webkit-backdrop-filter:none;
-  box-shadow:none;
-  border-color:initial;
+/* Keep native focus inside the material crisp. */
+.glass :is(input, textarea, select):focus {
+  outline: none;
+  border-color:
+    color-mix(in srgb,var(--accent) 42%,rgba(255,255,255,.18));
+  box-shadow:
+    0 0 0 3px color-mix(in srgb,var(--accent) 12%,transparent),
+    inset 0 1px 0 rgba(255,255,255,.14);
 }
 
-/* Focus lens for fields. */
-input:focus,textarea:focus,select:focus{
-  outline:none!important;
-  border-color:rgba(180,205,255,.72)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.34),0 0 0 4px rgba(120,150,255,.10),0 14px 40px rgba(0,0,0,.20)!important;
-}
-
-/* Morph-friendly transitions for common open/active states. */
-[aria-expanded="true"],.active,.selected,.open{
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 18px 48px rgba(0,0,0,.24),0 0 34px rgba(145,120,255,.14);
-}
-
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important;}
+/* Respect the existing DFFDF motion language/accessibility. */
+@media (prefers-reduced-motion: reduce) {
+  .glass,
+  .glass::before,
+  .glass::after {
+    transition: none !important;
+  }
 }
