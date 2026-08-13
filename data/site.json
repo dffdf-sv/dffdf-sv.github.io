@@ -148,5 +148,53 @@
         }
       ]
     }
-  ]
+  ],
+  "themes": {
+    "midnight": {
+      "background": "#07070b",
+      "surface": "#11121a",
+      "text": "#ffffff",
+      "muted": "#9b9ba8",
+      "accent": "#8065ff",
+      "accent2": "#b19cff"
+    },
+    "aurora": {
+      "background": "#06100e",
+      "surface": "#0d1c19",
+      "text": "#ffffff",
+      "muted": "#9bb8af",
+      "accent": "#48e6b2",
+      "accent2": "#9bffe0"
+    },
+    "ocean": {
+      "background": "#06101a",
+      "surface": "#0d1925",
+      "text": "#ffffff",
+      "muted": "#9bb2c7",
+      "accent": "#38a9ff",
+      "accent2": "#8bd1ff"
+    },
+    "sunset": {
+      "background": "#13090d",
+      "surface": "#211117",
+      "text": "#ffffff",
+      "muted": "#c4a1aa",
+      "accent": "#ff6b7a",
+      "accent2": "#ffb36b"
+    },
+    "light": {
+      "background": "#f4f5f8",
+      "surface": "#ffffff",
+      "text": "#101015",
+      "muted": "#686975",
+      "accent": "#6246e8",
+      "accent2": "#927cff"
+    }
+  },
+  "navigation": [],
+  "glass": {},
+  "visitor": {},
+  "seo": {},
+  "responsive": {},
+  "media": []
 }
