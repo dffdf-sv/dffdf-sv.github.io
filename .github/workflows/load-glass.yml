@@ -1,0 +1,45 @@
+name: Ensure external glass stylesheet
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  load-glass:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add glass.css link
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path("public/index.html")
+          s = p.read_text(encoding="utf-8")
+          link = '<link rel="stylesheet" href="/glass.css">'
+          if link not in s:
+              marker = "</head>"
+              if marker not in s:
+                  raise SystemExit("Could not find </head> in public/index.html")
+              s = s.replace(marker, f"  {link}\n{marker}", 1)
+              p.write_text(s, encoding="utf-8")
+              print("Added /glass.css")
+          else:
+              print("/glass.css already loaded")
+
+      - name: Commit change
+        shell: bash
+        run: |
+          if git diff --quiet -- public/index.html; then
+            echo "No change needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/index.html
+          git commit -m "Load external glass.css"
+          git push
