@@ -5,7 +5,7 @@
   "logo": "",
   "favicon": "",
   "defaultPage": "home",
-  "defaultTheme": "aurora",
+  "defaultTheme": "sunset",
   "glass": {
     "blur": "30px",
     "transparency": 0.1,
