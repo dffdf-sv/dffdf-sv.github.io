@@ -1,60 +1,92 @@
-/* DFFDF site-wide Liquid Glass — crisp, refractive, animated */
+/* DFFDF site-wide Liquid Glass — stronger glass, crisp depth, animated interactions */
 :root{
-  --lg-blur:10px;
-  --lg-sat:170%;
-  --lg-white:.13;
+  --lg-blur:12px;
+  --lg-sat:180%;
+  --lg-white:.16;
   --lg-line:.24;
-  --lg-shadow:.22;
+  --lg-shadow:.26;
   --lg-radius:24px;
   --lg-ease:cubic-bezier(.22,1,.36,1);
 }
 
 body{
   background:
-    radial-gradient(circle at 12% 8%,rgba(74,144,255,.20),transparent 30%),
-    radial-gradient(circle at 88% 18%,rgba(173,92,255,.18),transparent 30%),
-    radial-gradient(circle at 50% 100%,rgba(0,210,190,.12),transparent 35%),
+    radial-gradient(circle at 12% 8%,rgba(74,144,255,.22),transparent 30%),
+    radial-gradient(circle at 88% 18%,rgba(173,92,255,.20),transparent 30%),
+    radial-gradient(circle at 50% 100%,rgba(0,210,190,.13),transparent 35%),
     var(--background,#08090d)!important;
   background-attachment:fixed;
 }
 
-/* Apply glass to common site surfaces without destroying existing layouts. */
+/* Site-wide glass surfaces. */
 header,nav,footer,
 .card,.card-item,.product-card,.feature-card,.drop-card,.hero-card,
 .panel,.section,.modal,.dialog,.menu,.dropdown,.popover,
 .search,.newsletter,.contact-card,.about-card,
 button,.button,a.button,input,textarea,select{
   position:relative;
-  background:linear-gradient(145deg,rgba(255,255,255,.145),rgba(255,255,255,.045))!important;
-  border:1px solid rgba(255,255,255,.18)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.045))!important;
+  border:1px solid rgba(255,255,255,.20)!important;
   border-radius:var(--lg-radius);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.035),0 16px 45px rgba(0,0,0,var(--lg-shadow));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.04),0 18px 50px rgba(0,0,0,var(--lg-shadow));
   backdrop-filter:blur(var(--lg-blur)) saturate(var(--lg-sat));
   -webkit-backdrop-filter:blur(var(--lg-blur)) saturate(var(--lg-sat));
-  transition:transform .28s var(--lg-ease),box-shadow .28s var(--lg-ease),border-color .28s var(--lg-ease),background .28s var(--lg-ease);
+  transition:transform .28s var(--lg-ease),box-shadow .28s var(--lg-ease),border-color .28s var(--lg-ease),background .28s var(--lg-ease),filter .28s var(--lg-ease);
+  overflow:hidden;
 }
 
-.card::before,.product-card::before,.feature-card::before,.drop-card::before,.hero-card::before,header::before,nav::before,footer::before{
+.card::before,.product-card::before,.feature-card::before,.drop-card::before,.hero-card::before,header::before,nav::before,footer::before,
+button::before,.button::before,a.button::before{
   content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-  background:linear-gradient(120deg,rgba(255,255,255,.18),transparent 24%,transparent 68%,rgba(255,255,255,.06));
-  opacity:.8;
+  background:linear-gradient(120deg,rgba(255,255,255,.20),transparent 24%,transparent 65%,rgba(255,255,255,.07));
+  opacity:.85;
+  transition:opacity .28s var(--lg-ease),transform .45s var(--lg-ease);
+}
+
+/* Glass catches a moving reflection on hover. */
+.card:hover::before,.product-card:hover::before,.feature-card:hover::before,.drop-card:hover::before,
+.hero-card:hover::before,header:hover::before,nav:hover::before,button:hover::before,.button:hover::before,a.button:hover::before{
+  opacity:1;
+  transform:translateX(3%) scale(1.02);
 }
 
 button:hover,.button:hover,.product-card:hover,.feature-card:hover,.drop-card:hover,.card:hover{
   transform:translateY(-3px);
-  border-color:rgba(255,255,255,.32)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 22px 55px rgba(0,0,0,.26),0 0 35px rgba(110,160,255,.10);
+  border-color:rgba(255,255,255,.34)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 24px 60px rgba(0,0,0,.28),0 0 38px rgba(110,160,255,.12);
 }
-button:active,.button:active{transform:translateY(0) scale(.975)}
 
-/* Refractive color bloom */
+/* Satisfying click/press animation. */
+button:active,.button:active,a.button:active{
+  transform:translateY(1px) scale(.965)!important;
+  filter:brightness(1.12);
+  border-color:rgba(255,255,255,.42)!important;
+  box-shadow:inset 0 2px 8px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.28),0 8px 24px rgba(0,0,0,.20)!important;
+}
+
+button:active::after,.button:active::after,a.button:active::after{
+  content:"";position:absolute;left:50%;top:50%;width:12px;height:12px;border-radius:50%;
+  background:rgba(255,255,255,.32);transform:translate(-50%,-50%) scale(1);
+  animation:lgClick .42s var(--lg-ease) forwards;pointer-events:none;
+}
+
+@keyframes lgClick{
+  from{opacity:.65;transform:translate(-50%,-50%) scale(1)}
+  to{opacity:0;transform:translate(-50%,-50%) scale(18)}
+}
+
+/* Refractive color bloom. */
 .hero-card::after,.product-card::after,.feature-card::after,.drop-card::after{
   content:"";position:absolute;inset:-35%;pointer-events:none;border-radius:inherit;z-index:-1;
-  background:radial-gradient(circle at 20% 20%,rgba(50,160,255,.18),transparent 28%),radial-gradient(circle at 82% 72%,rgba(190,90,255,.14),transparent 30%);
-  filter:blur(22px);opacity:.7;animation:lgFloat 8s ease-in-out infinite alternate;
+  background:radial-gradient(circle at 20% 20%,rgba(50,160,255,.20),transparent 28%),radial-gradient(circle at 82% 72%,rgba(190,90,255,.16),transparent 30%);
+  filter:blur(22px);opacity:.75;animation:lgFloat 8s ease-in-out infinite alternate;
 }
 
-input:focus,textarea:focus,select:focus{outline:none!important;border-color:rgba(150,190,255,.52)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 0 0 4px rgba(100,150,255,.08),0 12px 35px rgba(0,0,0,.18)!important}
+input:focus,textarea:focus,select:focus{
+  outline:none!important;
+  border-color:rgba(150,190,255,.58)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 0 0 4px rgba(100,150,255,.10),0 12px 35px rgba(0,0,0,.20)!important;
+}
 
 @keyframes lgFloat{from{transform:translate3d(-2%,-1%,0) scale(1)}to{transform:translate3d(2%,1%,0) scale(1.04)}}
 @keyframes lgShimmer{0%,100%{background-position:0 0}50%{background-position:100% 50%}}
@@ -62,8 +94,11 @@ input:focus,textarea:focus,select:focus{outline:none!important;border-color:rgba
 /* Ambient light follows the pointer. */
 body::before{
   content:"";position:fixed;left:var(--lg-x,50%);top:var(--lg-y,20%);width:420px;height:420px;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;z-index:0;
-  background:radial-gradient(circle,rgba(120,170,255,.10),transparent 65%);filter:blur(18px);transition:left .45s ease,top .45s ease;
+  background:radial-gradient(circle,rgba(120,170,255,.12),transparent 65%);filter:blur(18px);transition:left .45s ease,top .45s ease;
 }
 body>*{position:relative;z-index:1}
+
+/* Keep controls crisp while preserving the glass layer. */
+img,video{position:relative;z-index:1}
 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
