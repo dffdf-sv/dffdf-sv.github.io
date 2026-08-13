@@ -1,35 +1,14 @@
 {
   "slug": "example",
-  "title": "Example",
-  "theme": "ocean",
+  "title": "New Page",
+  "theme": "inherit",
   "sections": [
     {
       "type": "hero",
-      "badge": "DEMO PAGE",
-      "title": "This is the example page.",
-      "text": "Use this page to experiment with themes, sections, images and the AI builder.",
-      "buttonText": "Back Home",
-      "buttonUrl": "/",
-      "image": ""
-    },
-    {
-      "type": "cards",
-      "title": "Try the builder",
-      "text": "Create another page from the admin panel.",
-      "cards": [
-        {
-          "title": "New pages",
-          "text": "Create unlimited custom pages."
-        },
-        {
-          "title": "Themes",
-          "text": "Use Midnight, Aurora, Ocean, Sunset or Custom."
-        },
-        {
-          "title": "AI",
-          "text": "Ask the AI builder to change your page."
-        }
-      ]
+      "title": "New Page",
+      "text": "Welcome to your new page.",
+      "buttonText": "",
+      "buttonUrl": ""
     }
   ]
 }
