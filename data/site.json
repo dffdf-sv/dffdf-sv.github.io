@@ -1,30 +1,159 @@
 {
   "site": {
-    "siteName": "DFFDF",
-    "siteDescription": "A modern Liquid Glass experience built to look beautiful, feel fast and work everywhere.",
-    "siteUrl": "",
-    "logo": "",
-    "favicon": "",
-    "defaultPage": "home",
-    "defaultTheme": "sunset",
-    "glass": {
-      "blur": "30px",
-      "transparency": 0.1,
-      "borderOpacity": 0.16,
-      "shadowStrength": 0.24,
-      "cornerRadius": "24px",
-      "animationSpeed": "0.25s",
-      "glowStrength": 0.32,
-      "saturation": 145,
-      "highlightOpacity": 0.12,
-      "tintStrength": 0.08,
-      "noise": 0.025
+    "site": {
+      "siteName": "DFFDF",
+      "siteDescription": "A modern Liquid Glass experience built to look beautiful, feel fast and work everywhere.",
+      "siteUrl": "",
+      "logo": "",
+      "favicon": "",
+      "defaultPage": "home",
+      "defaultTheme": "sunset",
+      "glass": {
+        "blur": "30px",
+        "transparency": 0.1,
+        "borderOpacity": 0.16,
+        "shadowStrength": 0.24,
+        "cornerRadius": "24px",
+        "animationSpeed": "0.25s",
+        "glowStrength": 0.32,
+        "saturation": 145,
+        "highlightOpacity": 0.12,
+        "tintStrength": 0.08,
+        "noise": 0.025
+      },
+      "themes": {
+        "midnight": {
+          "background": "#07070b",
+          "surface": "#11121a",
+          "surface2": "#181925",
+          "text": "#ffffff",
+          "muted": "#9b9ba8",
+          "accent": "#8065ff",
+          "accent2": "#b19cff"
+        },
+        "aurora": {
+          "background": "#06100e",
+          "surface": "#0d1c19",
+          "surface2": "#11231f",
+          "text": "#ffffff",
+          "muted": "#9bb8af",
+          "accent": "#48e6b2",
+          "accent2": "#9bffe0"
+        },
+        "ocean": {
+          "background": "#06101a",
+          "surface": "#0d1925",
+          "surface2": "#102536",
+          "text": "#ffffff",
+          "muted": "#9bb2c7",
+          "accent": "#38a9ff",
+          "accent2": "#8bd1ff"
+        },
+        "sunset": {
+          "background": "#13090d",
+          "surface": "#211117",
+          "surface2": "#2a1520",
+          "text": "#ffffff",
+          "muted": "#c4a1aa",
+          "accent": "#ff6b7a",
+          "accent2": "#ffb36b"
+        },
+        "light": {
+          "background": "#f4f5f8",
+          "surface": "#ffffff",
+          "surface2": "#ffffff",
+          "text": "#101015",
+          "muted": "#686975",
+          "accent": "#6246e8",
+          "accent2": "#927cff"
+        },
+        "graphite": {
+          "background": "#0b0d10",
+          "surface": "#15181d",
+          "surface2": "#1c2026",
+          "text": "#f5f7fa",
+          "muted": "#9ca3af",
+          "accent": "#d7dbe2",
+          "accent2": "#ffffff"
+        },
+        "custom": {
+          "background": "#0a0a0d",
+          "surface": "#15151c",
+          "surface2": "#1d1d27",
+          "text": "#ffffff",
+          "muted": "#a4a4b2",
+          "accent": "#8065ff",
+          "accent2": "#b19cff"
+        }
+      },
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/"
+        },
+        {
+          "label": "Example",
+          "href": "/example"
+        }
+      ],
+      "media": [],
+      "visitor": {},
+      "seo": {},
+      "responsive": {}
     },
+    "pages": [
+      {
+        "slug": "home",
+        "title": "Home",
+        "theme": "inherit",
+        "sections": [
+          {
+            "type": "hero",
+            "badge": "WELCOME TO DFFDF",
+            "title": "Create something people remember.",
+            "text": "A modern Liquid Glass experience built to look beautiful, feel fast and work everywhere.",
+            "buttonText": "Explore",
+            "buttonUrl": "#features",
+            "image": ""
+          },
+          {
+            "type": "text",
+            "title": "Built with purpose.",
+            "text": "DFFDF is a modern website platform with a powerful admin panel, flexible themes and AI-assisted editing.",
+            "image": ""
+          },
+          {
+            "type": "cards",
+            "title": "What we do",
+            "text": "Everything you need to create something remarkable.",
+            "cards": [
+              {
+                "title": "Creative",
+                "text": "Beautiful interfaces designed around your brand."
+              },
+              {
+                "title": "Fast",
+                "text": "Responsive experiences for every device."
+              },
+              {
+                "title": "Simple",
+                "text": "Manage your website without editing code."
+              }
+            ]
+          },
+          {
+            "type": "contact",
+            "title": "Let's build something.",
+            "text": "Have an idea, question or project? We'd love to hear from you.",
+            "email": "hello@example.com"
+          }
+        ]
+      }
+    ],
     "themes": {
       "midnight": {
         "background": "#07070b",
         "surface": "#11121a",
-        "surface2": "#181925",
         "text": "#ffffff",
         "muted": "#9b9ba8",
         "accent": "#8065ff",
@@ -33,7 +162,6 @@
       "aurora": {
         "background": "#06100e",
         "surface": "#0d1c19",
-        "surface2": "#11231f",
         "text": "#ffffff",
         "muted": "#9bb8af",
         "accent": "#48e6b2",
@@ -42,7 +170,6 @@
       "ocean": {
         "background": "#06101a",
         "surface": "#0d1925",
-        "surface2": "#102536",
         "text": "#ffffff",
         "muted": "#9bb2c7",
         "accent": "#38a9ff",
@@ -51,7 +178,6 @@
       "sunset": {
         "background": "#13090d",
         "surface": "#211117",
-        "surface2": "#2a1520",
         "text": "#ffffff",
         "muted": "#c4a1aa",
         "accent": "#ff6b7a",
@@ -60,45 +186,19 @@
       "light": {
         "background": "#f4f5f8",
         "surface": "#ffffff",
-        "surface2": "#ffffff",
         "text": "#101015",
         "muted": "#686975",
         "accent": "#6246e8",
         "accent2": "#927cff"
-      },
-      "graphite": {
-        "background": "#0b0d10",
-        "surface": "#15181d",
-        "surface2": "#1c2026",
-        "text": "#f5f7fa",
-        "muted": "#9ca3af",
-        "accent": "#d7dbe2",
-        "accent2": "#ffffff"
-      },
-      "custom": {
-        "background": "#0a0a0d",
-        "surface": "#15151c",
-        "surface2": "#1d1d27",
-        "text": "#ffffff",
-        "muted": "#a4a4b2",
-        "accent": "#8065ff",
-        "accent2": "#b19cff"
       }
     },
-    "navigation": [
-      {
-        "label": "Home",
-        "href": "/"
-      },
-      {
-        "label": "Example",
-        "href": "/example"
-      }
-    ],
-    "media": [],
+    "navigation": [],
+    "glass": {},
     "visitor": {},
     "seo": {},
-    "responsive": {}
+    "responsive": {},
+    "media": [],
+    "defaultTheme": "sunset"
   },
   "pages": [
     {
@@ -147,55 +247,20 @@
           "email": "hello@example.com"
         }
       ]
+    },
+    {
+      "slug": "ex",
+      "title": "New Page",
+      "theme": "inherit",
+      "sections": [
+        {
+          "type": "hero",
+          "title": "New Page",
+          "text": "Welcome to your new page.",
+          "buttonText": "",
+          "buttonUrl": ""
+        }
+      ]
     }
-  ],
-  "themes": {
-    "midnight": {
-      "background": "#07070b",
-      "surface": "#11121a",
-      "text": "#ffffff",
-      "muted": "#9b9ba8",
-      "accent": "#8065ff",
-      "accent2": "#b19cff"
-    },
-    "aurora": {
-      "background": "#06100e",
-      "surface": "#0d1c19",
-      "text": "#ffffff",
-      "muted": "#9bb8af",
-      "accent": "#48e6b2",
-      "accent2": "#9bffe0"
-    },
-    "ocean": {
-      "background": "#06101a",
-      "surface": "#0d1925",
-      "text": "#ffffff",
-      "muted": "#9bb2c7",
-      "accent": "#38a9ff",
-      "accent2": "#8bd1ff"
-    },
-    "sunset": {
-      "background": "#13090d",
-      "surface": "#211117",
-      "text": "#ffffff",
-      "muted": "#c4a1aa",
-      "accent": "#ff6b7a",
-      "accent2": "#ffb36b"
-    },
-    "light": {
-      "background": "#f4f5f8",
-      "surface": "#ffffff",
-      "text": "#101015",
-      "muted": "#686975",
-      "accent": "#6246e8",
-      "accent2": "#927cff"
-    }
-  },
-  "navigation": [],
-  "glass": {},
-  "visitor": {},
-  "seo": {},
-  "responsive": {},
-  "media": [],
-  "defaultTheme": "sunset"
+  ]
 }
